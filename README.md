@@ -1,2 +1,2 @@
 # P_Objektowe
-Repozytorium zawierają zadania na ćwiczenia z programowania objektowego.
+Repozytorium zawierające zadania na ćwiczenia z programowania objektowego.
