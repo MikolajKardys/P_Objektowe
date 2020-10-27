@@ -17,7 +17,7 @@ public class Vector2d {
         if (this.x >= other.x && this.y >= other.y) return true;
         return false;
     }
-    public Vector2d upperRight(Vector2d other){
+    public Vector2d upperRight(Vector2d other){ // Math.max
         int max_x;
         int max_y;
         if (this.x > other.x){
