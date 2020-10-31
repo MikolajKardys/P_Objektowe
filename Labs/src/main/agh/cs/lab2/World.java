@@ -1,8 +1,4 @@
 package agh.cs.lab2;
-
-import agh.cs.lab3.Animal;
-import agh.cs.lab3.OptionParser;
-
 public class World {
     public static void main (String [] args){
         /*               -------laby 2 - pozostałości
@@ -20,7 +16,7 @@ public class World {
         frog.move(MoveDirection.FORWARD);
         */
         MoveDirection [] arguments = OptionParser.parse(args);
-        for (MoveDirection arg : arguments){
+        for (MoveDirection arg : arguments) {
             frog.move(arg);
         }
         System.out.println(frog.to_string());

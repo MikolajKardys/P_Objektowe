@@ -1,9 +1,5 @@
-package agh.cs.lab3;
-
-import agh.cs.lab2.MoveDirection;
-
+package agh.cs.lab2;
 import java.util.Arrays;
-
 public class OptionParser {
     public static MoveDirection[] parse(String[] args) {
         MoveDirection[] results = new MoveDirection[args.length];

@@ -1,9 +1,4 @@
-package agh.cs.lab3;
-
-import agh.cs.lab2.MapDirection;
-import agh.cs.lab2.Vector2d;
-import agh.cs.lab2.MoveDirection;
-
+package agh.cs.lab2;
 public class Animal {
     private MapDirection direction = MapDirection.NORTH;
     private Vector2d position = new Vector2d(2, 2);
