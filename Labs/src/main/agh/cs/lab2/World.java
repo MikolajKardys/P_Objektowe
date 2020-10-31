@@ -1,6 +1,7 @@
 package agh.cs.lab2;
 
 import agh.cs.lab3.Animal;
+import agh.cs.lab3.OptionParser;
 
 public class World {
     public static void main (String [] args){
@@ -12,13 +13,16 @@ public class World {
         System.out.println(position1.add(position2));
          */
         Animal frog = new Animal();
-        //RIGHT, FORWARD, FORWARD, FORWARD
+        /*
         frog.move(MoveDirection.RIGHT);
         frog.move(MoveDirection.FORWARD);
         frog.move(MoveDirection.FORWARD);
         frog.move(MoveDirection.FORWARD);
+        */
+        MoveDirection [] arguments = OptionParser.parse(args);
+        for (MoveDirection arg : arguments){
+            frog.move(arg);
+        }
         System.out.println(frog.to_string());
-
     }
-
 }
