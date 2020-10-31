@@ -1,5 +1,5 @@
 package agh.cs.lab1;
-
+/*
 public class World {
     public static void print_comm(Dir c){
         switch(c){
@@ -42,11 +42,14 @@ public class World {
         }
         return arg_tab;
     }
+
     public static void main(String [] args) {
         System.out.println("Start Systemu");
         Dir [] arg_tab = replace(args);
         run(arg_tab);
         System.out.println("Stop Systemu");
     }
+
 }
 
+*/

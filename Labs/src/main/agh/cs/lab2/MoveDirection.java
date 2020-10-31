@@ -1,5 +1,5 @@
 package agh.cs.lab2;
-enum MoveDirection {
+public enum MoveDirection {
     FORWARD,
     BACKWARD,
     RIGHT,
