@@ -1,16 +1,18 @@
 package agh.cs.lab2;
+
 public class Animal {
     private MapDirection direction = MapDirection.NORTH;
     private Vector2d position = new Vector2d(2, 2);
 
-    public String to_string(){
+    public String to_string() { // raczej camelCase
         return "(" + this.position.x + "," + this.position.y + "), " + this.direction;
     }
+
     private void move_forward() { //Przesuwamy się w odpowiednim kierunku
-        switch (this.direction) {
+        switch (this.direction) {   // a gdyby kierunków było 8?
             case NORTH:
                 if (this.position.y < 4) {
-                    this.position = this.position.add(new Vector2d(0, 1));
+                    this.position = this.position.add(new Vector2d(0, 1)); // ten wektor wygląda znajomo
                 }
                 return;
             case SOUTH:

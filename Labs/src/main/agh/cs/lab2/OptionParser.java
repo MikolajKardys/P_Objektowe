@@ -1,5 +1,7 @@
 package agh.cs.lab2;
+
 import java.util.Arrays;
+
 public class OptionParser {
     public static MoveDirection[] parse(String[] args) {
         MoveDirection[] results = new MoveDirection[args.length];
@@ -9,7 +11,7 @@ public class OptionParser {
                 case "f":
                 case "forward":
                     results[elements] = MoveDirection.FORWARD;
-                    elements += 1;
+                    elements += 1;  // elements++
                     break;
                 case "b":
                 case "backward":
