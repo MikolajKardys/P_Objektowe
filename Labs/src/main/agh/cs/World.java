@@ -1,4 +1,4 @@
-package agh.cs.lab2;
+package agh.cs;
 public class World {
     public static void main (String [] args){
         /*               -------laby 2 - pozostałości

@@ -1,4 +1,4 @@
-import agh.cs.lab2.*;
+import agh.cs.*;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 public class AnimalMovementTest {

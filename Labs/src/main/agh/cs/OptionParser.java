@@ -1,4 +1,4 @@
-package agh.cs.lab2;
+package agh.cs;
 import java.util.Arrays;
 public class OptionParser {
     public static MoveDirection[] parse(String[] args) {
