@@ -23,11 +23,35 @@ public class Vector2d {
     }
 
     public Vector2d upperRight(Vector2d other) {
-        return new Vector2d(Math.max(this.x, other.x), Math.max(this.y, other.y));
+        int max_x;
+        int max_y;
+        if (this.x > other.x) {
+            max_x = this.x;
+        } else {
+            max_x = other.x;
+        }
+        if (this.y > other.y) {
+            max_y = this.y;
+        } else {
+            max_y = other.y;
+        }
+        return new Vector2d(max_x, max_y);
     }
 
     public Vector2d lowerLeft(Vector2d other) {
-        return new Vector2d(Math.min(this.x, other.x), Math.min(this.y, other.y));
+        int min_x;
+        int min_y;
+        if (this.x < other.x) {
+            min_x = this.x;
+        } else {
+            min_x = other.x;
+        }
+        if (this.y < other.y) {
+            min_y = this.y;
+        } else {
+            min_y = other.y;
+        }
+        return new Vector2d(min_x, min_y);
     }
 
     public Vector2d add(Vector2d other) {
