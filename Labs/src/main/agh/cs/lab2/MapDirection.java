@@ -8,11 +8,11 @@ public enum MapDirection{
 
     public String toString(){
         switch(this) {
-            case NORTH: return "Północ";
-            case EAST: return "Wschód";
-            case SOUTH: return "Południe";
+            case NORTH: return "N";
+            case EAST: return "E";
+            case SOUTH: return "S";
         }
-        return "Zachód";
+        return "W";
     }
     public MapDirection next(){
         switch(this) {
