@@ -3,29 +3,15 @@ public class Animal {
     private MapDirection direction = MapDirection.NORTH;
     private Vector2d position = new Vector2d(2, 2);
 
-    public String to_string(){
+    public String to_String(){
         return "(" + this.position.x + "," + this.position.y + "), " + this.direction;
     }
+
     private void move_forward() { //Przesuwamy się w odpowiednim kierunku
-        switch (this.direction) {
-            case NORTH:
-                if (this.position.y < 4) {
-                    this.position = this.position.add(new Vector2d(0, 1));
-                }
-                return;
-            case SOUTH:
-                if (this.position.y > 0) {
-                    this.position = this.position.add(new Vector2d(0, -1));
-                }
-                return;
-            case EAST:
-                if (this.position.x < 4) {
-                    this.position = this.position.add(new Vector2d(1, 0));
-                }
-                return;
-        }
-        if (this.position.x > 0) {
-            this.position = this.position.add(new Vector2d(-1, 0));
+        Vector2d movement = this.direction.toUnitVector();
+        if ( this.position.add(movement).precedes(new Vector2d(4, 4)) &&
+            this.position.add(movement).follows(new Vector2d(0, 0))) {
+            this.position = this.position.add(movement);
         }
     }
 

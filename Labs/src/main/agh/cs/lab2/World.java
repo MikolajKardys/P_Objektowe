@@ -19,6 +19,6 @@ public class World {
         for (MoveDirection arg : arguments) {
             frog.move(arg);
         }
-        System.out.println(frog.to_string());
+        System.out.println(frog.to_String());
     }
 }

@@ -11,7 +11,7 @@ public class AnimalMovementTest {
         for (MoveDirection arg : arguments) {
             lion.move(arg);
         }
-        assertEquals(expected_position, lion.to_string());
+        assertEquals(expected_position, lion.to_String());
     }
     @Test
     public void All_good_no_2() {               //poprawne polecenia, bez możliwosci wyjścia poza mapę
@@ -22,7 +22,7 @@ public class AnimalMovementTest {
         for (MoveDirection arg : arguments) {
             lion.move(arg);
         }
-        assertEquals(expected_position, lion.to_string());
+        assertEquals(expected_position, lion.to_String());
     }
     @Test
     public void All_good_no_3() {               //poprawne polecenia, bez możliwosci wyjścia poza mapę
@@ -33,7 +33,7 @@ public class AnimalMovementTest {
         for (MoveDirection arg : arguments) {
             lion.move(arg);
         }
-        assertEquals(expected_position, lion.to_string());
+        assertEquals(expected_position, lion.to_String());
     }
     @Test
     public void All_good_no_4() {               //poprawne polecenia, bez możliwosci wyjścia poza mapę
@@ -44,7 +44,7 @@ public class AnimalMovementTest {
         for (MoveDirection arg : arguments) {
             lion.move(arg);
         }
-        assertEquals(expected_position, lion.to_string());
+        assertEquals(expected_position, lion.to_String());
     }
     @Test
     public void Border_test_no1() {               //poprawne polecenia, możliwość wyjścia poza mapę
@@ -55,7 +55,7 @@ public class AnimalMovementTest {
         for (MoveDirection arg : arguments) {
             lion.move(arg);
         }
-        assertEquals(expected_position, lion.to_string());
+        assertEquals(expected_position, lion.to_String());
     }
     @Test
     public void Border_test_no2() {               //poprawne polecenia, możliwość wyjścia poza mapę
@@ -66,7 +66,7 @@ public class AnimalMovementTest {
         for (MoveDirection arg : arguments) {
             lion.move(arg);
         }
-        assertEquals(expected_position, lion.to_string());
+        assertEquals(expected_position, lion.to_String());
     }
     @Test
     public void Gibberish_command_test_no1() {               //niepoprawne polecenia
@@ -77,7 +77,7 @@ public class AnimalMovementTest {
         for (MoveDirection arg : arguments) {
             lion.move(arg);
         }
-        assertEquals(expected_position, lion.to_string());
+        assertEquals(expected_position, lion.to_String());
     }
     @Test
     public void Gibberish_command_test_no2() {               //niepoprawne polecenia
@@ -88,6 +88,6 @@ public class AnimalMovementTest {
         for (MoveDirection arg : arguments) {
             lion.move(arg);
         }
-        assertEquals(expected_position, lion.to_string());
+        assertEquals(expected_position, lion.to_String());
     }
 }
