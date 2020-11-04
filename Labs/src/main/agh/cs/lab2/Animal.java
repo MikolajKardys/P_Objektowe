@@ -14,7 +14,7 @@ public class Animal {
     public Vector2d getPosition(){
         return this.position;
     }
-    public String to_String(){
+    public String toString(){
         return this.direction.toString();
     }
 

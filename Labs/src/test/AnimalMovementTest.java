@@ -8,12 +8,12 @@ public class AnimalMovementTest {
         RectangularMap map = new RectangularMap(4, 4);
         Animal lion = new Animal(map);
         String [] movement = {"f", "backward", "left", "forward", "left", "backward"};
-        String expected_position = "(1,3), S";
-        MoveDirection[] arguments = OptionParser.parse(movement);
+        String expected_position = "(1,3), v";
+        MoveDirection[] arguments = OptionsParser.parse(movement);
         for (MoveDirection arg : arguments) {
             lion.move(arg);
         }
-        String real_position = lion.getPosition().toString() + ", " + lion.to_String();
+        String real_position = lion.getPosition().toString() + ", " + lion.toString();
         assertEquals(expected_position, real_position);
     }
     @Test
@@ -21,12 +21,12 @@ public class AnimalMovementTest {
         RectangularMap map = new RectangularMap(4, 4);
         Animal lion = new Animal(map);
         String [] movement = {"right", "forward", "forward", "left", "backward", "backward", "left"};
-        String expected_position = "(4,0), W";
-        MoveDirection[] arguments = OptionParser.parse(movement);
+        String expected_position = "(4,0), <";
+        MoveDirection[] arguments = OptionsParser.parse(movement);
         for (MoveDirection arg : arguments) {
             lion.move(arg);
         }
-        String real_position = lion.getPosition().toString() + ", " + lion.to_String();
+        String real_position = lion.getPosition().toString() + ", " + lion.toString();
         assertEquals(expected_position, real_position);
     }
     @Test
@@ -34,12 +34,12 @@ public class AnimalMovementTest {
         RectangularMap map = new RectangularMap(4, 4);
         Animal lion = new Animal(map);
         String [] movement = {"l", "forward", "f", "right", "backward", "b"};
-        String expected_position = "(0,0), N";
-        MoveDirection[] arguments = OptionParser.parse(movement);
+        String expected_position = "(0,0), ^";
+        MoveDirection[] arguments = OptionsParser.parse(movement);
         for (MoveDirection arg : arguments) {
             lion.move(arg);
         }
-        String real_position = lion.getPosition().toString() + ", " + lion.to_String();
+        String real_position = lion.getPosition().toString() + ", " + lion.toString();
         assertEquals(expected_position, real_position);
     }
     @Test
@@ -47,12 +47,12 @@ public class AnimalMovementTest {
         RectangularMap map = new RectangularMap(4, 4);
         Animal lion = new Animal(map);
         String [] movement = {"r", "forward", "left", "forward", "forward", "right", "b"};
-        String expected_position = "(2,4), E";
-        MoveDirection[] arguments = OptionParser.parse(movement);
+        String expected_position = "(2,4), >";
+        MoveDirection[] arguments = OptionsParser.parse(movement);
         for (MoveDirection arg : arguments) {
             lion.move(arg);
         }
-        String real_position = lion.getPosition().toString() + ", " + lion.to_String();
+        String real_position = lion.getPosition().toString() + ", " + lion.toString();
         assertEquals(expected_position, real_position);
     }
     @Test
@@ -60,12 +60,12 @@ public class AnimalMovementTest {
         RectangularMap map = new RectangularMap(4, 4);
         Animal lion = new Animal(map);
         String [] movement = {"l", "forward", "f", "forward", "right", "b", "left", "left", "forward", "forward"};
-        String expected_position = "(0,0), S";
-        MoveDirection[] arguments = OptionParser.parse(movement);
+        String expected_position = "(0,0), v";
+        MoveDirection[] arguments = OptionsParser.parse(movement);
         for (MoveDirection arg : arguments) {
             lion.move(arg);
         }
-        String real_position = lion.getPosition().toString() + ", " + lion.to_String();
+        String real_position = lion.getPosition().toString() + ", " + lion.toString();
         assertEquals(expected_position, real_position);
     }
     @Test
@@ -73,12 +73,12 @@ public class AnimalMovementTest {
         RectangularMap map = new RectangularMap(4, 4);
         Animal lion = new Animal(map);
         String [] movement = {"r", "forward", "f", "forward", "left", "f", "right", "right", "b", "backward"};
-        String expected_position = "(4,4), S";
-        MoveDirection[] arguments = OptionParser.parse(movement);
+        String expected_position = "(4,4), v";
+        MoveDirection[] arguments = OptionsParser.parse(movement);
         for (MoveDirection arg : arguments) {
             lion.move(arg);
         }
-        String real_position = lion.getPosition().toString() + ", " + lion.to_String();
+        String real_position = lion.getPosition().toString() + ", " + lion.toString();
         assertEquals(expected_position, real_position);
     }
     @Test
@@ -86,12 +86,12 @@ public class AnimalMovementTest {
         RectangularMap map = new RectangularMap(4, 4);
         Animal lion = new Animal(map);
         String [] movement = {"r", "forwards", "l", "forasd", "rihj", "backward", "l", "lft", "b", "backward"};
-        String expected_position = "(4,1), W";
-        MoveDirection[] arguments = OptionParser.parse(movement);
+        String expected_position = "(4,1), <";
+        MoveDirection[] arguments = OptionsParser.parse(movement);
         for (MoveDirection arg : arguments) {
             lion.move(arg);
         }
-        String real_position = lion.getPosition().toString() + ", " + lion.to_String();
+        String real_position = lion.getPosition().toString() + ", " + lion.toString();
         assertEquals(expected_position, real_position);
     }
     @Test
@@ -99,12 +99,12 @@ public class AnimalMovementTest {
         RectangularMap map = new RectangularMap(4, 4);
         Animal lion = new Animal(map);
         String [] movement = {"forwad", "backwar", "l", "right", "backward", "left", "forward", "fordard"};
-        String expected_position = "(1,1), W";
-        MoveDirection[] arguments = OptionParser.parse(movement);
+        String expected_position = "(1,1), <";
+        MoveDirection[] arguments = OptionsParser.parse(movement);
         for (MoveDirection arg : arguments) {
             lion.move(arg);
         }
-        String real_position = lion.getPosition().toString() + ", " + lion.to_String();
+        String real_position = lion.getPosition().toString() + ", " + lion.toString();
         assertEquals(expected_position, real_position);
     }
 }
