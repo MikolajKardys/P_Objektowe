@@ -1,16 +1,26 @@
 package agh.cs.lab2;
 public class Animal {
-    private MapDirection direction = MapDirection.NORTH;
-    private Vector2d position = new Vector2d(2, 2);
-
-    public String to_String(){
-        return "(" + this.position.x + "," + this.position.y + "), " + this.direction;
+    private MapDirection direction;
+    private Vector2d position;
+    private IWorldMap map;
+    public Animal(IWorldMap map){
+        this(map, new Vector2d(2, 2));
+    }
+    public Animal(IWorldMap map, Vector2d initialPosition){
+        this.map = map;
+        this.position = initialPosition;
+        this.direction = MapDirection.NORTH;
+    }
+    public Vector2d getPosition(){
+        return this.position;
+    }
+    public String toString(){
+        return this.direction.toString();
     }
 
     private void move_forward() { //Przesuwamy się w odpowiednim kierunku
         Vector2d movement = this.direction.toUnitVector();
-        if ( this.position.add(movement).precedes(new Vector2d(4, 4)) &&
-            this.position.add(movement).follows(new Vector2d(0, 0))) {
+        if ( this.map.canMoveTo(this.position.add(movement)) ) {
             this.position = this.position.add(movement);
         }
     }
