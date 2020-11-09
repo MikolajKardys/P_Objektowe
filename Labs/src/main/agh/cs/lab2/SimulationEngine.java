@@ -19,7 +19,7 @@ public class SimulationEngine implements IEngine {
         int index = 0;
         int length = positions.length;
         for (MoveDirection movement : movements){
-            Animal CurrentAnimal = (Animal) this.map.objectAt(positions[index]);
+            Animal CurrentAnimal = (Animal) this.map.objectAt(positions[index]);    // nie łatwiej by było sobie zapamiętać zwierzęta w momencie tworzenia?
             CurrentAnimal.move(movement);
             positions[index] = CurrentAnimal.getPosition();
             index = (index + 1) % length;
