@@ -3,22 +3,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RectangularMap implements IWorldMap {
-    final private int width;
-    final private int height;
-    private List<Animal> Animals = new ArrayList<>();
+    final private Vector2d upperCorn;
+    final private Vector2d lowerCorn = new Vector2d(0 ,0);
+    final private List<Animal> animals = new ArrayList<>();
+
     public RectangularMap (int width, int height){
-        this.width = width;
-        this.height = height;
+        this.upperCorn = new Vector2d(width, height);
     }
 
     public String toString() {
         MapVisualizer viz = new MapVisualizer(this);
-        return viz.draw(new Vector2d(0,0), new Vector2d(this.width, this.height));
+        return viz.draw(lowerCorn, upperCorn);
     }
 
     @Override
     public boolean canMoveTo(Vector2d position) {
-        if (position.precedes(new Vector2d(this.width, this.height)) && position.follows(new Vector2d(0, 0))){
+        if (position.precedes(upperCorn) && position.follows(lowerCorn)){
             return (!isOccupied(position));
         }
         return false;
@@ -28,7 +28,7 @@ public class RectangularMap implements IWorldMap {
     public boolean place(Animal animal) {
         if(!canMoveTo(animal.getPosition()))
             return false;
-        Animals.add(animal);
+        animals.add(animal);
         return true;
     }
 
@@ -39,7 +39,7 @@ public class RectangularMap implements IWorldMap {
 
     @Override
     public Object objectAt(Vector2d position) {
-        for (Animal animal : Animals){
+        for (Animal animal : animals){
             if(animal.getPosition().equals(position)){
                 return animal;
             }

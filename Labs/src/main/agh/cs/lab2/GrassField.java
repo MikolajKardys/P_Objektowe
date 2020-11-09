@@ -4,12 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GrassField implements IWorldMap{
-    private int GrassNumber;
     private final List<Animal> Animals = new ArrayList<>();
     private final List<Grass> GrassList = new ArrayList<>();
+    private final Vector2d lowerCorn = new Vector2d(0 ,0);
     public GrassField(int GrassNumber){
-        this.GrassNumber = GrassNumber;
-        for (int i = 0; i < this.GrassNumber; i++){
+        for (int i = 0; i < GrassNumber; i++){
             Vector2d position = new Vector2d((int)(Math.random() * Math.sqrt(GrassNumber*10)),(int)(Math.random() * Math.sqrt(GrassNumber*10)));
             if (this.objectAt(position) == null){
                 GrassList.add(new Grass(position));
@@ -22,19 +21,19 @@ public class GrassField implements IWorldMap{
     }
     public String toString() {
         MapVisualizer viz = new MapVisualizer(this);
-        Vector2d UpperCorn = new Vector2d(0, 0);
+        Vector2d upperCorn = new Vector2d(0, 0);
         for (Animal animal : Animals){
-            UpperCorn = animal.getPosition().upperRight(UpperCorn);
+            upperCorn = animal.getPosition().upperRight(upperCorn);
         }
         for (Grass bunch : GrassList){
-            UpperCorn = bunch.getPosition().upperRight(UpperCorn);
+            upperCorn = bunch.getPosition().upperRight(upperCorn);
         }
-        return viz.draw(new Vector2d(0,0), UpperCorn);
+        return viz.draw(lowerCorn, upperCorn);
     }
 
     @Override
     public boolean canMoveTo(Vector2d position) {
-        if (position.follows(new Vector2d(0, 0))){
+        if (position.follows(lowerCorn)){
             if (isOccupied(position)){
                 return !(this.objectAt(position) instanceof Animal);
             }
