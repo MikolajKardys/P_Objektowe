@@ -5,7 +5,6 @@ import java.util.List;
 abstract class AbstractWorldMap implements IWorldMap{
     protected final List<Animal> animals = new ArrayList<>();
     protected final Vector2d lowerCorn = new Vector2d(0 ,0);
-
     public String toString() {
         MapVisualizer viz = new MapVisualizer(this);
         return viz.draw(lowerCorn, getUpperCorn());
