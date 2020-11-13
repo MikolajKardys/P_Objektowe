@@ -1,8 +1,7 @@
 package agh.cs.lab2;
-public class Animal {
+public class Animal extends AbstractWorldMapElement {
     private MapDirection direction;
-    private Vector2d position;
-    private IWorldMap map;
+    private final IWorldMap map;
     public Animal(IWorldMap map){
         this(map, new Vector2d(2, 2));
     }
@@ -11,17 +10,20 @@ public class Animal {
         this.position = initialPosition;
         this.direction = MapDirection.NORTH;
     }
-    public Vector2d getPosition(){
-        return this.position;
-    }
     public String toString(){
         return this.direction.toString();
     }
 
-    private void move_forward() { //Przesuwamy się w odpowiednim kierunku
-        Vector2d movement = this.direction.toUnitVector();
-        if ( this.map.canMoveTo(this.position.add(movement)) ) {
-            this.position = this.position.add(movement);
+    private void move_forward(boolean backward) { //Przesuwamy się w odpowiednim kierunku
+        Vector2d FinalPosition;
+        if (backward) {
+            FinalPosition = this.position.add(this.direction.toUnitVector().opposite());
+        }
+        else {
+            FinalPosition = this.position.add(this.direction.toUnitVector());
+        }
+        if ( this.map.canMoveTo(FinalPosition) ) {
+            this.position = FinalPosition;
         }
     }
 
@@ -34,14 +36,10 @@ public class Animal {
                 this.direction = this.direction.previous();
                 break;
             case FORWARD:
-                move_forward();
+                move_forward(false);
                 break;
             case BACKWARD:
-                this.move(MoveDirection.RIGHT);     //Obróć się o 180 stopni
-                this.move(MoveDirection.RIGHT);
-                move_forward();
-                this.move(MoveDirection.RIGHT);     //Obróć się z powrotem
-                this.move(MoveDirection.RIGHT);
+                move_forward(true);
                 break;
         }
 

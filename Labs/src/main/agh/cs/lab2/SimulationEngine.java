@@ -1,16 +1,20 @@
 package agh.cs.lab2;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SimulationEngine implements IEngine {
-    MoveDirection [] movements;
-    IWorldMap map;
-    Vector2d [] positions;
+    private final MoveDirection [] movements;
+    private final Vector2d [] positions;
+    private final List<Animal> animals = new ArrayList<>();
     public SimulationEngine(MoveDirection [] movements, IWorldMap map, Vector2d [] positions){
         this.movements = movements;
-        this.map = map;
         this.positions = positions;
 
         for (Vector2d position : positions){
-            this.map.place(new Animal(map, position));
+            Animal snek = new Animal(map, position);
+            map.place(snek);
+            animals.add(snek);
         }
     }
 
@@ -19,9 +23,7 @@ public class SimulationEngine implements IEngine {
         int index = 0;
         int length = positions.length;
         for (MoveDirection movement : movements){
-            Animal CurrentAnimal = (Animal) this.map.objectAt(positions[index]);
-            CurrentAnimal.move(movement);
-            positions[index] = CurrentAnimal.getPosition();
+            animals.get(index).move(movement);
             index = (index + 1) % length;
         }
     }
