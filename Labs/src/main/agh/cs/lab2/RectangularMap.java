@@ -3,7 +3,7 @@ package agh.cs.lab2;
 public class RectangularMap extends AbstractWorldMap {
     final private Vector2d upperCorn;
     public RectangularMap (int width, int height){
-        this.upperCorn = new Vector2d(width, height);
+        this.upperCorn = new Vector2d(width, height);   // width - 1
     }
 
     @Override

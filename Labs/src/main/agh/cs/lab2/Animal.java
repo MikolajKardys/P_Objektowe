@@ -15,7 +15,7 @@ public class Animal extends AbstractWorldMapElement {
     }
 
     private void move_forward(boolean backward) { //Przesuwamy się w odpowiednim kierunku
-        Vector2d FinalPosition;
+        Vector2d FinalPosition; // raczej camelCase
         if (backward) {
             FinalPosition = this.position.add(this.direction.toUnitVector().opposite());
         }
