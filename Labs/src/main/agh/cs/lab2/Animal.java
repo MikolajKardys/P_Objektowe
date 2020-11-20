@@ -6,8 +6,8 @@ public class Animal extends AbstractWorldMapElement {
         this(map, new Vector2d(2, 2));
     }
     public Animal(IWorldMap map, Vector2d initialPosition){
+        super(initialPosition);
         this.map = map;
-        this.position = initialPosition;
         this.direction = MapDirection.NORTH;
     }
     public String toString(){
@@ -15,15 +15,15 @@ public class Animal extends AbstractWorldMapElement {
     }
 
     private void move_forward(boolean backward) { //Przesuwamy się w odpowiednim kierunku
-        Vector2d FinalPosition;
+        Vector2d finalPosition; // raczej camelCase
         if (backward) {
-            FinalPosition = this.position.add(this.direction.toUnitVector().opposite());
+            finalPosition = this.position.add(this.direction.toUnitVector().opposite());
         }
         else {
-            FinalPosition = this.position.add(this.direction.toUnitVector());
+            finalPosition = this.position.add(this.direction.toUnitVector());
         }
-        if ( this.map.canMoveTo(FinalPosition) ) {
-            this.position = FinalPosition;
+        if ( this.map.canMoveTo(finalPosition) ) {
+            this.position = finalPosition;
         }
     }
 
