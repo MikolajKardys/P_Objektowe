@@ -7,11 +7,10 @@ public class GrassField extends AbstractWorldMap {
     private final List<Grass> GrassList = new ArrayList<>();
 
     public GrassField(int GrassNumber) {
+        double givenSqrt = Math.sqrt(GrassNumber * 10);
         for (int i = 0; i < GrassNumber; i++) {
-            Vector2d position = new Vector2d((int) (Math.random() * Math.sqrt(GrassNumber * 10)), (int) (Math.random() * Math.sqrt(GrassNumber * 10))); // może zapamiętać wartość tego pierwiastka w zmiennej? Zyska i czytelność, i wydajność
+            Vector2d position = new Vector2d((int) (Math.random() * givenSqrt), (int) (Math.random() * givenSqrt));
             if (!isOccupied(position)) {
-                GrassList.add(new Grass(position));
-            } else if (!(this.objectAt(position) instanceof Grass)) {   // to właściwie się nie może stać, bo na mapie jeszcze nie ma zwierząt; ale jeśli Pan chce to kontrolować, to połączyłbym oba warunki w jeden
                 GrassList.add(new Grass(position));
             } else i -= 1;
         }
@@ -19,7 +18,9 @@ public class GrassField extends AbstractWorldMap {
 
     @Override
     protected Vector2d getUpperCorn() {
-        Vector2d upperCorn = new Vector2d(0, 0);    // a gdyby wszystkie zwierzęta wyemigrowały na południe?
+        if (animals.size() == 0) return new Vector2d(0 ,0);
+
+        Vector2d upperCorn = animals.get(0).getPosition();
         for (Animal animal : animals) {
             upperCorn = animal.getPosition().upperRight(upperCorn);
         }
@@ -30,14 +31,25 @@ public class GrassField extends AbstractWorldMap {
     }
 
     @Override
-    public boolean canMoveTo(Vector2d position) {
-        if (position.follows(lowerCorn)) {  // a ujemne współrzędne?
-            if (isOccupied(position)) {
-                return !(this.objectAt(position) instanceof Animal);      //nie w jednym warunku dla ułatwienia czytelności
-            }
-            return true;
+    protected Vector2d getLowerCorn(){
+        if (animals.size() == 0) return new Vector2d(0 ,0);
+
+        Vector2d lowerCorn = animals.get(0).getPosition();
+        for (Animal animal : animals) {
+            lowerCorn = animal.getPosition().lowerLeft(lowerCorn);
         }
-        return false;
+        for (Grass bunch : GrassList) {
+            lowerCorn = bunch.getPosition().lowerLeft(lowerCorn);
+        }
+        return lowerCorn;
+    }
+
+    @Override
+    public boolean canMoveTo(Vector2d position) {
+        if (isOccupied(position)) {
+            return !(this.objectAt(position) instanceof Animal);      //nie w jednym warunku dla ułatwienia czytelności
+        }
+        return true;
     }
 
     @Override
