@@ -18,10 +18,10 @@ public class GrassField extends AbstractWorldMap {
 
     @Override
     protected Vector2d getUpperCorn() {
-        if (animals.size() == 0) return new Vector2d(0 ,0);
+        if (Animals.isEmpty()) return new Vector2d(0, 0);
 
-        Vector2d upperCorn = animals.get(0).getPosition();
-        for (Animal animal : animals) {
+        Vector2d upperCorn = Animals.keySet().iterator().next();
+        for (Animal animal : Animals.values()) {
             upperCorn = animal.getPosition().upperRight(upperCorn);
         }
         for (Grass bunch : GrassList) {
@@ -32,10 +32,10 @@ public class GrassField extends AbstractWorldMap {
 
     @Override
     protected Vector2d getLowerCorn(){
-        if (animals.size() == 0) return new Vector2d(0 ,0);
+        if (Animals.isEmpty()) return new Vector2d(0, 0);
 
-        Vector2d lowerCorn = animals.get(0).getPosition();
-        for (Animal animal : animals) {
+        Vector2d lowerCorn = Animals.keySet().iterator().next();
+        for (Animal animal : Animals.values()) {
             lowerCorn = animal.getPosition().lowerLeft(lowerCorn);
         }
         for (Grass bunch : GrassList) {
