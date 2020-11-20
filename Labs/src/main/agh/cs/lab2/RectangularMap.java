@@ -2,18 +2,23 @@ package agh.cs.lab2;
 
 public class RectangularMap extends AbstractWorldMap {
     final private Vector2d upperCorn;
-    public RectangularMap (int width, int height){
-        this.upperCorn = new Vector2d(width - 1, height);   // width - 1
+
+    public RectangularMap(int width, int height) {
+        this.upperCorn = new Vector2d(width - 1, height);
     }
 
     @Override
-    protected Vector2d getUpperCorn(){
+    protected Vector2d getUpperCorn() {
         return this.upperCorn;
     }
-    protected Vector2d getLowerCorn(){ return new Vector2d(0, 0); }
+
+    protected Vector2d getLowerCorn() {
+        return new Vector2d(0, 0);
+    }
+
     @Override
     public boolean canMoveTo(Vector2d position) {
-        if (position.follows(getLowerCorn()) && position.precedes(upperCorn)){
+        if (position.follows(getLowerCorn()) && position.precedes(upperCorn)) {
             return !(isOccupied(position));
         }
         return false;
