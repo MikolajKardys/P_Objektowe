@@ -8,6 +8,7 @@ package agh.cs.lab2;
  *
  */
 public interface IWorldMap {
+    void printHashTab();
     /**
      * Indicate if any object can move to the given position.
      *

@@ -9,5 +9,6 @@ public class World {
         IEngine engine = new SimulationEngine(directions, field, positions);
         engine.run();
         System.out.print(field.toString());
+        field.printHashTab();
     }
 }

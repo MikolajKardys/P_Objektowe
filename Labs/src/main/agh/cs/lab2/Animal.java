@@ -1,6 +1,11 @@
 package agh.cs.lab2;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class Animal extends AbstractWorldMapElement {
     private MapDirection direction;
+    private List<IPositionChangeObserver> observers = new ArrayList<>();
     private final IWorldMap map;
     public Animal(IWorldMap map){
         this(map, new Vector2d(2, 2));
@@ -15,7 +20,7 @@ public class Animal extends AbstractWorldMapElement {
     }
 
     private void move_forward(boolean backward) { //Przesuwamy się w odpowiednim kierunku
-        Vector2d finalPosition; // raczej camelCase
+        Vector2d finalPosition;
         if (backward) {
             finalPosition = this.position.add(this.direction.toUnitVector().opposite());
         }
@@ -28,6 +33,7 @@ public class Animal extends AbstractWorldMapElement {
     }
 
     public void move(MoveDirection direction) {
+        Vector2d oldPosition = this.getPosition();
         switch (direction) {
             case RIGHT:
                 this.direction = this.direction.next();
@@ -42,6 +48,20 @@ public class Animal extends AbstractWorldMapElement {
                 move_forward(true);
                 break;
         }
+        this.positionChanged(oldPosition, this.getPosition());
+    }
 
+    public void addObserver(IPositionChangeObserver observer){
+        observers.add(observer);
+    }
+
+    public void removeObserver(IPositionChangeObserver observer){
+        observers.remove(observer);
+    }
+
+    private void positionChanged(Vector2d oldPosition, Vector2d newPosition){
+        for (IPositionChangeObserver observer : observers){
+            observer.positionChanged(oldPosition, newPosition);
+        }
     }
 }
