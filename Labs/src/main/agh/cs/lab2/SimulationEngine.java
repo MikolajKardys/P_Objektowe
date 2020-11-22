@@ -21,6 +21,7 @@ public class SimulationEngine implements IEngine {
 
     @Override
     public void run() {
+        if (this.positions.length == 0) return;
         int index = 0;
         int length = positions.length;
         for (MoveDirection movement : movements){
