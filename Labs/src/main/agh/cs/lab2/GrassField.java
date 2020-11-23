@@ -4,25 +4,25 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GrassField extends AbstractWorldMap {
-    private final Map<Vector2d, Grass> GrassList = new HashMap<>();
+    private final Map<Vector2d, Grass> GrassList = new HashMap<>(); // myląca nazwa
+
     public GrassField(int GrassNumber) {
         double grassRangeConst = Math.sqrt(GrassNumber * 10);
         for (int i = 0; i < GrassNumber; i++) {
-            Vector2d position = new Vector2d((int) (Math.random() * grassRangeConst), (int) (Math.random() * grassRangeConst));
+            Vector2d position = new Vector2d((int) (Math.random() * grassRangeConst), (int) (Math.random() * grassRangeConst)); // warto wynik tego obliczenia zapisać w zmiennej
             if (!isOccupied(position)) {
                 GrassList.put(position, new Grass(position));
-            } else i -= 1;
+            } else i -= 1;  // czytelniej jest użyć while'a, niż modyfikować licznik for'a
         }
     }
 
     @Override
     protected Vector2d getUpperCorn() {
         Vector2d upperCorn;
-        if (Animals.isEmpty()){
+        if (Animals.isEmpty()) {
             if (GrassList.isEmpty()) return new Vector2d(0, 0);    //Żeby pojawiło się cokolwiek dla pustej mapy
             upperCorn = GrassList.keySet().iterator().next();               //adres 1. elementu Grasslist
-        }
-        else {
+        } else {
             upperCorn = Animals.keySet().iterator().next();            //adres 1. elementu Animals
         }
 
@@ -36,13 +36,12 @@ public class GrassField extends AbstractWorldMap {
     }
 
     @Override
-    protected Vector2d getLowerCorn(){
+    protected Vector2d getLowerCorn() {
         Vector2d lowerCorn;
-        if (Animals.isEmpty()){
+        if (Animals.isEmpty()) {
             if (GrassList.isEmpty()) return new Vector2d(0, 0);      //Żeby pojawiło się cokolwiek dla pustej mapy
             lowerCorn = GrassList.keySet().iterator().next();               //adres 1. elementu Grasslist
-        }
-        else {
+        } else {
             lowerCorn = Animals.keySet().iterator().next();            //adres 1. elementu Animals
         }
 

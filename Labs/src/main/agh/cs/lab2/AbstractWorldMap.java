@@ -4,16 +4,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
-    protected Map<Vector2d, Animal> Animals = new HashMap<>();
-    protected MapVisualizer viz = new MapVisualizer(this);
+    protected Map<Vector2d, Animal> Animals = new HashMap<>();  // oba pola mogą być finalne
+    protected MapVisualizer viz = new MapVisualizer(this);  // to może być prywatne
 
     public String toString() {
         return viz.draw(getLowerCorn(), getUpperCorn());
     }
 
-    abstract Vector2d getLowerCorn();
+    abstract Vector2d getLowerCorn();   // prawdopodobnie powinno być protected
 
-    abstract Vector2d getUpperCorn();
+    abstract Vector2d getUpperCorn();   // górna kukurydza?
 
     @Override
     public boolean place(Animal animal) {
