@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Animal extends AbstractWorldMapElement {
     private MapDirection direction;
-    private List<IPositionChangeObserver> observers = new ArrayList<>();    // to też może być finalnec
+    private final List<IPositionChangeObserver> observers = new ArrayList<>();
     private final IWorldMap map;
 
     public Animal(IWorldMap map) {
@@ -22,7 +22,7 @@ public class Animal extends AbstractWorldMapElement {
         return this.direction.toString();
     }
 
-    private void move_forward(boolean backward) { //Przesuwamy się w odpowiednim kierunku   // raczej camelCase
+    private void moveForward(boolean backward) { //Przesuwamy się w odpowiednim kierunku   
         Vector2d finalPosition;
         if (backward) {
             finalPosition = this.position.add(this.direction.toUnitVector().opposite());
@@ -44,10 +44,10 @@ public class Animal extends AbstractWorldMapElement {
                 this.direction = this.direction.previous();
                 break;
             case FORWARD:
-                move_forward(false);
+                moveForward(false);
                 break;
             case BACKWARD:
-                move_forward(true);
+                moveForward(true);
                 break;
         }
         this.positionChanged(oldPosition, this.getPosition());

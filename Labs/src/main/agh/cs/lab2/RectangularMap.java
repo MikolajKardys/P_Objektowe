@@ -4,7 +4,7 @@ public class RectangularMap extends AbstractWorldMap {
     final private Vector2d upperCorn;
 
     public RectangularMap(int width, int height) {
-        this.upperCorn = new Vector2d(width - 1, height);   // height - 1
+        this.upperCorn = new Vector2d(width - 1, height - 1);   
     }
 
     @Override
