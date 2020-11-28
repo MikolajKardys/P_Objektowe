@@ -50,7 +50,7 @@ public class Animal extends AbstractWorldMapElement {
                 moveForward(true);
                 break;
         }
-        this.positionChanged(oldPosition, this.getPosition());
+        this.alertObservers(oldPosition, this.getPosition());
     }
 
     public void addObserver(IPositionChangeObserver observer) {
@@ -61,7 +61,7 @@ public class Animal extends AbstractWorldMapElement {
         observers.remove(observer);
     }
 
-    private void positionChanged(Vector2d oldPosition, Vector2d newPosition) {
+    private void alertObservers(Vector2d oldPosition, Vector2d newPosition) {
         for (IPositionChangeObserver observer : observers) {
             observer.positionChanged(oldPosition, newPosition);
         }
