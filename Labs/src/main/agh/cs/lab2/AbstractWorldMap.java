@@ -17,7 +17,6 @@ abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
     }  // górna kukurydza? // :)
 
     public String toString() {
-        mapCorners.printSorted(); ////////////////////////////////////
         return viz.draw(getLowerCorn(), getUpperCorn());
     }
 
@@ -25,8 +24,9 @@ abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
 
     @Override
     public boolean place(Animal animal) {
-        if (!canMoveTo(animal.getPosition()))
-            return false;
+        if (!canMoveTo(animal.getPosition())) {
+            throw new IllegalArgumentException("Can't add Animal to position " + animal.getPosition().toString() + "; field already taken");
+        }
         this.Animals.put(animal.getPosition(), animal);
 
         this.mapCorners.addElement(animal);
