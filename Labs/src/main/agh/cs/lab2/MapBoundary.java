@@ -5,6 +5,7 @@ import java.util.List;
 
 public class MapBoundary implements IPositionChangeObserver {
 
+    //Tej klasy są obiekty w listach
     private static class borderElement extends AbstractWorldMapElement {
         public boolean isAnimal;
 
@@ -59,15 +60,53 @@ public class MapBoundary implements IPositionChangeObserver {
         System.out.print("\n");
     }
 
-    private int[] getIndexXY(borderElement element) {
-        int indX = 0;
-        while (indX < sortedByX.size() && element.greaterXThan(sortedByX.get(indX))) {
-            indX++;
+    private int[] getIndexXY(borderElement element) {   //Zwraca index w liście X i liście Y; używa binarySearch
+        if (this.sortedByX.size() == 0){
+            return new int[]{0, 0};
         }
-        int indY = 0;
-        while (indY < sortedByY.size() && element.greaterYThan(sortedByY.get(indY))) {
-            indY++;
+
+        int indX = -1;
+        int leftInd = 0;
+        int rightInd = this.sortedByX.size() - 1;
+        while (leftInd < rightInd) {
+            int midInd = (rightInd + leftInd) / 2;
+            borderElement midElement = this.sortedByX.get(midInd);
+            if (element.greaterXThan(midElement)){
+                leftInd = midInd + 1;
+            }
+            else if (midElement.greaterXThan(element)){
+                rightInd = midInd - 1;
+            }
+            else{
+                indX = midInd;
+                break;
+            }
         }
+        if (leftInd >= rightInd){
+            indX =  (element.greaterXThan(sortedByX.get(leftInd))) ? (leftInd + 1) : leftInd;
+        }
+
+        int indY = -1;
+        leftInd = 0;
+        rightInd = this.sortedByY.size() - 1;
+        while (leftInd < rightInd) {
+            int midInd = (rightInd + leftInd) / 2;
+            borderElement midElement = this.sortedByY.get(midInd);
+            if (element.greaterYThan(midElement)){
+                leftInd = midInd + 1;
+            }
+            else if (midElement.greaterYThan(element)){
+                rightInd = midInd - 1;
+            }
+            else{
+                indY = midInd;
+                break;
+            }
+        }
+        if (leftInd >= rightInd){
+            indY =  (element.greaterYThan(sortedByY.get(leftInd))) ? (leftInd + 1) : leftInd;
+        }
+
         return new int[]{indX, indY};
     }
 
