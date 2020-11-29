@@ -26,9 +26,10 @@ public class OptionsParser {
                     results[elements] = MoveDirection.RIGHT;
                     elements += 1;
                     break;
-
+                default: throw new IllegalArgumentException(arg + " is not legal move specification; check " + (elements + 1) + ". given argument");
             }
         }
+
         results = Arrays.copyOfRange(results, 0, elements);
         return results;
     }

@@ -14,48 +14,11 @@ public class GrassField extends AbstractWorldMap {
             int newGrassY = (int) (Math.random() * grassRangeConst);
             Vector2d position = new Vector2d(newGrassX, newGrassY);
             if (!isOccupied(position)) {
-                GrassMap.put(position, new Grass(position));
+                this.GrassMap.put(position, new Grass(position));
+                this.mapCorners.addElement(new Grass(position));
                 i++;
             }
         }
-    }
-
-    @Override
-    protected Vector2d getUpperCorn() {
-        Vector2d upperCorn;
-        if (Animals.isEmpty()) {
-            if (GrassMap.isEmpty()) return new Vector2d(0, 0);    //Żeby pojawiło się cokolwiek dla pustej mapy
-            upperCorn = GrassMap.keySet().iterator().next();               //adres 1. elementu Grasslist
-        } else {
-            upperCorn = Animals.keySet().iterator().next();            //adres 1. elementu Animals
-        }
-
-        for (Animal animal : Animals.values()) {
-            upperCorn = animal.getPosition().upperRight(upperCorn);
-        }
-        for (Grass bunch : GrassMap.values()) {
-            upperCorn = bunch.getPosition().upperRight(upperCorn);
-        }
-        return upperCorn;
-    }
-
-    @Override
-    protected Vector2d getLowerCorn() {
-        Vector2d lowerCorn;
-        if (Animals.isEmpty()) {
-            if (GrassMap.isEmpty()) return new Vector2d(0, 0);      //Żeby pojawiło się cokolwiek dla pustej mapy
-            lowerCorn = GrassMap.keySet().iterator().next();               //adres 1. elementu Grasslist
-        } else {
-            lowerCorn = Animals.keySet().iterator().next();            //adres 1. elementu Animals
-        }
-
-        for (Animal animal : Animals.values()) {
-            lowerCorn = animal.getPosition().lowerLeft(lowerCorn);
-        }
-        for (Grass bunch : GrassMap.values()) {
-            lowerCorn = bunch.getPosition().lowerLeft(lowerCorn);
-        }
-        return lowerCorn;
     }
 
     @Override
