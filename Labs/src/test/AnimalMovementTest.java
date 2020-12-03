@@ -9,7 +9,7 @@ public class AnimalMovementTest {
         RectangularMap map = new RectangularMap(5, 5);
         Animal lion = new Animal(map);
         String [] movement = {"f", "backward", "left", "forward", "left", "backward"};
-        String expected_position = "(1,3), v";
+        String expected_position = "(1,3), \uD83E\uDC53";
         MoveDirection[] arguments = OptionsParser.parse(movement);
         for (MoveDirection arg : arguments) {
             lion.move(arg);
@@ -22,7 +22,7 @@ public class AnimalMovementTest {
         RectangularMap map = new RectangularMap(5, 5);
         Animal lion = new Animal(map);
         String [] movement = {"right", "forward", "forward", "left", "backward", "backward", "left"};
-        String expected_position = "(4,0), <";
+        String expected_position = "(4,0), \uD83E\uDC50";
         MoveDirection[] arguments = OptionsParser.parse(movement);
         for (MoveDirection arg : arguments) {
             lion.move(arg);
@@ -35,7 +35,7 @@ public class AnimalMovementTest {
         RectangularMap map = new RectangularMap(5, 5);
         Animal lion = new Animal(map);
         String [] movement = {"l", "forward", "f", "right", "backward", "b"};
-        String expected_position = "(0,0), ^";
+        String expected_position = "(0,0), \uD83E\uDC51";
         MoveDirection[] arguments = OptionsParser.parse(movement);
         for (MoveDirection arg : arguments) {
             lion.move(arg);
@@ -48,7 +48,7 @@ public class AnimalMovementTest {
         RectangularMap map = new RectangularMap(5, 5);
         Animal lion = new Animal(map);
         String [] movement = {"r", "forward", "left", "forward", "forward", "right", "b"};
-        String expected_position = "(2,4), >";
+        String expected_position = "(2,4), \uD83E\uDC52";
         MoveDirection[] arguments = OptionsParser.parse(movement);
         for (MoveDirection arg : arguments) {
             lion.move(arg);
@@ -61,7 +61,7 @@ public class AnimalMovementTest {
         RectangularMap map = new RectangularMap(5, 5);
         Animal lion = new Animal(map);
         String [] movement = {"l", "forward", "f", "forward", "right", "b", "left", "left", "forward", "forward"};
-        String expected_position = "(0,0), v";
+        String expected_position = "(0,0), \uD83E\uDC53";
         MoveDirection[] arguments = OptionsParser.parse(movement);
         for (MoveDirection arg : arguments) {
             lion.move(arg);
@@ -74,7 +74,7 @@ public class AnimalMovementTest {
         RectangularMap map = new RectangularMap(5, 5);
         Animal lion = new Animal(map);
         String [] movement = {"r", "forward", "f", "forward", "left", "f", "right", "right", "b", "backward"};
-        String expected_position = "(4,4), v";
+        String expected_position = "(4,4), \uD83E\uDC53";
         MoveDirection[] arguments = OptionsParser.parse(movement);
         for (MoveDirection arg : arguments) {
             lion.move(arg);

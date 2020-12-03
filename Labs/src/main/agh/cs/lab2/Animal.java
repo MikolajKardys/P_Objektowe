@@ -2,25 +2,25 @@ package agh.cs.lab2;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Animal extends AbstractWorldMapElement {
     private MapDirection direction;
     private final List<IPositionChangeObserver> observers = new ArrayList<>();
     private final IWorldMap map;
     public final int [] genome;
-
     public Animal(IWorldMap map) {
-        this(map, new Vector2d(2, 2), new int [] {0, 0, 0, 0});
+        this(map, new Vector2d(2, 2), new int [] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0});
     }
 
     public Animal(IWorldMap map, Vector2d initialPosition) {
-        this(map, initialPosition, new int [] {0, 0, 0, 0});
+        this(map, initialPosition, new int [] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0});
     }
     public Animal(IWorldMap map, Vector2d initialPosition, int [] genome) {
         super(initialPosition);
         this.map = map;
-        this.direction = MapDirection.NORTH;
         this.genome = genome;
+        this.direction = MapDirection.Dir_0;
     }
 
     public String toString() {
@@ -39,23 +39,34 @@ public class Animal extends AbstractWorldMapElement {
         }
     }
 
-    public void move(MoveDirection direction) {
+    public void move(MoveDirection turn) {      //Stare poruszanie się
         Vector2d oldPosition = this.getPosition();
-        switch (direction) {
-            case RIGHT:
-                this.direction = this.direction.next();
-                break;
-            case LEFT:
-                this.direction = this.direction.previous();
-                break;
-            case FORWARD:
+        switch (turn) {
+            case TURN_0:
                 moveForward(false);
                 break;
-            case BACKWARD:
+            case TURN_4:
                 moveForward(true);
+                break;
+            default:
+                this.direction = this.direction.turn(turn);
                 break;
         }
         this.alertObservers(oldPosition, this.getPosition());
+    }
+
+    public void newMove(){
+        int randomTurn = this.genome[new Random().nextInt(32)];
+        MoveDirection turn = MoveDirection.valueOf("TURN_" + randomTurn);
+
+        Vector2d oldPosition = this.getPosition();
+        this.direction = this.direction.turn(turn);
+        Vector2d finalPosition = this.position.add(this.direction.toUnitVector());
+
+        if (this.map.canMoveTo(finalPosition)) {
+            this.position = finalPosition;
+            this.alertObservers(oldPosition, this.getPosition());
+        }
     }
 
     public void addObserver(IPositionChangeObserver observer) {
@@ -71,4 +82,6 @@ public class Animal extends AbstractWorldMapElement {
             observer.positionChanged(oldPosition, newPosition);
         }
     }
+
+
 }
