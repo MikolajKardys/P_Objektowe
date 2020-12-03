@@ -81,7 +81,7 @@ public class GrassFieldTest {
         Animal lion = new Animal(field, new Vector2d(4, 2));
         field.place(lion);
 
-        assertFalse(field.canMoveTo(new Vector2d(-1, 4)));
+        assertTrue(field.canMoveTo(new Vector2d(-1, 4)));
         assertTrue(field.canMoveTo(new Vector2d(3, 1)));
         assertFalse(field.canMoveTo(new Vector2d(4, 2)));
     }

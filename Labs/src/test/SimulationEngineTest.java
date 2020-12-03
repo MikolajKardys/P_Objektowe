@@ -6,7 +6,7 @@ public class SimulationEngineTest{
     //testy przerzucone do osobnej klasy
     @Test
     public void Complete_Test_1() {
-        IWorldMap map = new RectangularMap(10, 5);                                    //Mapa
+        IWorldMap map = new RectangularMap(11, 6);                                    //Mapa
         MoveDirection[] directions = new OptionsParser().parse(new String [] {"f", "b", "r", "l", "f", "f", "r", "r", "f", "f", "f", "f", "f", "f", "f", "f"});//Argumenty
         Vector2d [] positions = {new Vector2d(2,2), new Vector2d(3,4) };                //Zwierzęta
         IEngine engine = new SimulationEngine(directions, map, positions);
@@ -24,7 +24,7 @@ public class SimulationEngineTest{
     }
     @Test
     public void Complete_Test_2() {
-        IWorldMap map = new RectangularMap(5, 5);                                    //Mapa
+        IWorldMap map = new RectangularMap(6, 6);                                    //Mapa
         MoveDirection[] directions = new OptionsParser().parse(new String [] {"r", "l", "f", "f", "f", "f", "f", "f", "l", "l", "f", "f", "f", "f"});//Argumenty
         Vector2d [] positions = {new Vector2d(0,0), new Vector2d(5,5) };                //Zwierzęta
         IEngine engine = new SimulationEngine(directions, map, positions);
@@ -42,7 +42,7 @@ public class SimulationEngineTest{
     }
     @Test
     public void Complete_Test_3() {
-        IWorldMap map = new RectangularMap(3, 3);                                    //Mapa
+        IWorldMap map = new RectangularMap(4, 4);                                    //Mapa
         MoveDirection[] directions = new OptionsParser().parse(new String [] {"f", "b", "r", "r", "f", "f", "f", "f", "f", "f", "r", "l", "f", "f"});//Argumenty
         Vector2d [] positions = {new Vector2d(0,0), new Vector2d(0,3) };                //Zwierzęta
         IEngine engine = new SimulationEngine(directions, map, positions);

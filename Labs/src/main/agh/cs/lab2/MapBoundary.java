@@ -6,15 +6,15 @@ import java.util.List;
 public class MapBoundary implements IPositionChangeObserver {
 
     //Tej klasy są obiekty w listach
-    private static class borderElement extends AbstractWorldMapElement {
+    private static class SortedListsElement extends AbstractWorldMapElement { //uważam, że możemy dziedziczyć, bo wykorzystujemy odziedziczone elementy
         public boolean isAnimal;
 
-        public borderElement(Vector2d position, boolean isAnimal) {
+        public SortedListsElement(Vector2d position, boolean isAnimal) {
             super(position);
             this.isAnimal = isAnimal;
         }
 
-        public boolean greaterXThan(borderElement other) {
+        public boolean greaterXThan(SortedListsElement other) {
             if (this.getPosition().x > other.getPosition().x) {
                 return true;
             }
@@ -27,7 +27,7 @@ public class MapBoundary implements IPositionChangeObserver {
             return false;
         }
 
-        public boolean greaterYThan(borderElement other) {
+        public boolean greaterYThan(SortedListsElement other) {
             if (this.getPosition().y > other.getPosition().y) {
                 return true;
             }
@@ -41,26 +41,15 @@ public class MapBoundary implements IPositionChangeObserver {
         }
     }
 
-    private final List<borderElement> sortedByX;
-    private final List<borderElement> sortedByY;
+    private final List<SortedListsElement> sortedByX;
+    private final List<SortedListsElement> sortedByY;
 
     public MapBoundary() {
         this.sortedByX = new ArrayList<>();
         this.sortedByY = new ArrayList<>();
     }
 
-    public void printSorted() {
-        for (borderElement elem : this.sortedByX) {
-            System.out.print(elem.getPosition().toString() + " ");
-        }
-        System.out.print("\n");
-        for (borderElement elem : this.sortedByY) {
-            System.out.print(elem.getPosition().toString() + " ");
-        }
-        System.out.print("\n");
-    }
-
-    private int[] getIndexXY(borderElement element) {   //Zwraca index w liście X i liście Y; używa binarySearch
+    private int[] getIndexXY(SortedListsElement element) {   //Zwraca index w liście X i liście Y; używa binarySearch
         if (this.sortedByX.size() == 0){
             return new int[]{0, 0};
         }
@@ -70,7 +59,7 @@ public class MapBoundary implements IPositionChangeObserver {
         int rightInd = this.sortedByX.size() - 1;
         while (leftInd < rightInd) {
             int midInd = (rightInd + leftInd) / 2;
-            borderElement midElement = this.sortedByX.get(midInd);
+            SortedListsElement midElement = this.sortedByX.get(midInd);
             if (element.greaterXThan(midElement)){
                 leftInd = midInd + 1;
             }
@@ -91,7 +80,7 @@ public class MapBoundary implements IPositionChangeObserver {
         rightInd = this.sortedByY.size() - 1;
         while (leftInd < rightInd) {
             int midInd = (rightInd + leftInd) / 2;
-            borderElement midElement = this.sortedByY.get(midInd);
+            SortedListsElement midElement = this.sortedByY.get(midInd);
             if (element.greaterYThan(midElement)){
                 leftInd = midInd + 1;
             }
@@ -111,7 +100,10 @@ public class MapBoundary implements IPositionChangeObserver {
     }
 
     public void addElement(AbstractWorldMapElement element) {
-        borderElement newElement = new borderElement(element.getPosition(), element instanceof Animal);
+        if (element instanceof Animal){
+            ((Animal) element).addObserver(this);
+        }
+        SortedListsElement newElement = new SortedListsElement(element.getPosition(), element instanceof Animal);
         int[] indexes = getIndexXY(newElement);
         this.sortedByX.add(indexes[0], newElement);
         this.sortedByY.add(indexes[1], newElement);
@@ -119,7 +111,7 @@ public class MapBoundary implements IPositionChangeObserver {
 
     private void deleteElement(AbstractWorldMapElement element) {
         if (this.sortedByX.size() == 0) return;
-        borderElement newElement = new borderElement(element.getPosition(), element instanceof Animal);
+        SortedListsElement newElement = new SortedListsElement(element.getPosition(), element instanceof Animal);
         int[] indexes = getIndexXY(newElement);
         this.sortedByX.remove(indexes[0]);
         this.sortedByY.remove(indexes[1]);
@@ -139,7 +131,7 @@ public class MapBoundary implements IPositionChangeObserver {
 
     @Override
     public void positionChanged(Vector2d oldPosition, Vector2d newPosition) {
-        borderElement movedElement = new borderElement(oldPosition, true);
+        SortedListsElement movedElement = new SortedListsElement(oldPosition, true);
         this.deleteElement(movedElement);
         movedElement.position = newPosition;
         this.addElement(movedElement);

@@ -4,36 +4,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
-    protected final MapBoundary mapCorners = new MapBoundary();
     protected final Map<Vector2d, Animal> Animals = new HashMap<>();
     private final MapVisualizer viz = new MapVisualizer(this);
 
-    private Vector2d getLowerCorn(){
-        return mapCorners.lowerCorn();
-    }
-
-    private Vector2d getUpperCorn(){
-        return mapCorners.upperCorn();
-    }  // górna kukurydza? // :)
+    abstract protected Vector2d getLowerCorner();   // :( // Może w tej trawie rozła kukurydza?
+    abstract protected Vector2d getUpperCorner();
 
     public String toString() {
-        return viz.draw(getLowerCorn(), getUpperCorn());
-    }
-
-
-
-    @Override
-    public boolean place(Animal animal) {
-        if (!canMoveTo(animal.getPosition())) {
-            throw new IllegalArgumentException("Can't add Animal to position " + animal.getPosition().toString() + "; field already taken");
-        }
-        this.Animals.put(animal.getPosition(), animal);
-
-        this.mapCorners.addElement(animal);
-
-        animal.addObserver(this);
-        animal.addObserver(this.mapCorners);
-        return true;
+        return viz.draw(getLowerCorner(), getUpperCorner());
     }
 
     @Override

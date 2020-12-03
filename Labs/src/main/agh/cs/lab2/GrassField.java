@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GrassField extends AbstractWorldMap {
+    protected final MapBoundary mapCorners = new MapBoundary();
     private final Map<Vector2d, Grass> GrassMap = new HashMap<>();
 
     public GrassField(int GrassNumber) {
@@ -19,6 +20,25 @@ public class GrassField extends AbstractWorldMap {
                 i++;
             }
         }
+    }
+
+    protected Vector2d getLowerCorner(){
+        return mapCorners.lowerCorn();
+    }
+
+    protected Vector2d getUpperCorner(){
+        return mapCorners.upperCorn();
+    }
+
+    @Override
+    public boolean place(Animal animal) {
+        if (!canMoveTo(animal.getPosition())) {
+            throw new IllegalArgumentException("Can't add Animal to position " + animal.getPosition().toString() + "; field already taken");
+        }
+        this.Animals.put(animal.getPosition(), animal);
+        this.mapCorners.addElement(animal);
+        animal.addObserver(this);
+        return true;
     }
 
     @Override
