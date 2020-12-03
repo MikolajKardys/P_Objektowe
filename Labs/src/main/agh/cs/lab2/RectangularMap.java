@@ -7,7 +7,7 @@ public class RectangularMap extends AbstractWorldMap {
         this.upperCorn = new Vector2d(width - 1, height - 1);   
     }
 
-    @Override
+    @Override   // na pewno?
     protected Vector2d getUpperCorn() {
         return this.upperCorn;
     }

@@ -1,3 +1,4 @@
+// pakiet
 import agh.cs.lab2.*;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
@@ -82,7 +83,7 @@ public class AnimalMovementTest {
         assertEquals(expected_position, real_position);
     }
     @Test
-    public void Gibberish_command_test_no1() {               //niepoprawne polecenia
+    public void Gibberish_command_test_no1() {               //niepoprawne polecenia    // ten test przechodzi?
         RectangularMap map = new RectangularMap(4, 4);
         Animal lion = new Animal(map);
         String [] movement = {"r", "forwards", "l", "forasd", "rihj", "backward", "l", "lft", "b", "backward"};

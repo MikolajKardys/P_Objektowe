@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
-    protected final MapBoundary mapCorners = new MapBoundary();
+    protected final MapBoundary mapCorners = new MapBoundary(); // czy to jest część wspólna obu map?
     protected final Map<Vector2d, Animal> Animals = new HashMap<>();
     private final MapVisualizer viz = new MapVisualizer(this);
 
@@ -14,7 +14,7 @@ abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
 
     private Vector2d getUpperCorn(){
         return mapCorners.upperCorn();
-    }  // górna kukurydza? // :)
+    }  // górna kukurydza? // :) // nadal mnie ta kukurydza nurtuje; bo chyba nie chodzi o oszczędność 2 literek?
 
     public String toString() {
         return viz.draw(getLowerCorn(), getUpperCorn());
@@ -32,7 +32,7 @@ abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
         this.mapCorners.addElement(animal);
 
         animal.addObserver(this);
-        animal.addObserver(this.mapCorners);
+        animal.addObserver(this.mapCorners);    // czemu MapBoundary nie wychodzi samo z inicjatywą?
         return true;
     }
 

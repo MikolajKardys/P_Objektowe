@@ -6,7 +6,7 @@ import java.util.List;
 public class MapBoundary implements IPositionChangeObserver {
 
     //Tej klasy są obiekty w listach
-    private static class borderElement extends AbstractWorldMapElement {
+    private static class borderElement extends AbstractWorldMapElement {    // klasy raczej PascalCase + trochę myląca nazwa + czy to dziedziczenie jest uzasadnione?
         public boolean isAnimal;
 
         public borderElement(Vector2d position, boolean isAnimal) {
@@ -14,7 +14,7 @@ public class MapBoundary implements IPositionChangeObserver {
             this.isAnimal = isAnimal;
         }
 
-        public boolean greaterXThan(borderElement other) {
+        public boolean greaterXThan(borderElement other) {  // polecam Comparator<>
             if (this.getPosition().x > other.getPosition().x) {
                 return true;
             }
@@ -49,7 +49,7 @@ public class MapBoundary implements IPositionChangeObserver {
         this.sortedByY = new ArrayList<>();
     }
 
-    public void printSorted() {
+    public void printSorted() { // ta metoda jest częścią interfejsu?
         for (borderElement elem : this.sortedByX) {
             System.out.print(elem.getPosition().toString() + " ");
         }

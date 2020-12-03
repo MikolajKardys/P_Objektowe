@@ -30,7 +30,7 @@ public class OptionsParser {
             }
         }
 
-        results = Arrays.copyOfRange(results, 0, elements);
+        results = Arrays.copyOfRange(results, 0, elements); // czy to ma sens, jeśli rzucamy wyjątek przy błędnych danych?
         return results;
     }
 }
