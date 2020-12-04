@@ -14,14 +14,7 @@ public enum MapDirection{
     public String toString(){
         return arrowTable[this.ordinal()];
     }
-    public MapDirection next(){
-        int next = (this.ordinal() + 2) % this.numNumber;
-        return MapDirection.valueOf("Dir_" + next);
-    }
-    public MapDirection previous(){
-        int prev = (this.ordinal() + 6) % this.numNumber;
-        return MapDirection.valueOf("Dir_" + prev);
-    }
+
     public Vector2d toUnitVector(){
         int [] tabX = {0, 1, 1, 1, 0, -1, -1, -1};
         int [] tabY = {1, 1, 0, -1, -1, -1, 0, 1};
