@@ -3,7 +3,7 @@ package agh.cs.project;
 abstract class AbstractWorldMapElement {
     protected Vector2d position;
 
-    protected AbstractWorldMapElement(Vector2d position) {
+    public AbstractWorldMapElement(Vector2d position) {
         this.position = position;
     }
 

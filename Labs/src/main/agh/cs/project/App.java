@@ -1,22 +1,24 @@
 package agh.cs.project;
 
-import agh.cs.project.Visualisation.*;
-
 import javax.swing.*;
+
 class App {
 
-    public static void main(String [] args){
-        JFrame f = new JFrame("CheckerBoard!");
-        int fieldSize = 30;
-        GrassField field = new GrassField(fieldSize);
-        DrawBoard board = new DrawBoard(f, field, fieldSize);
+    public static void main(String [] args) throws InterruptedException {
+        JFrame f = new JFrame("Map");
 
-        Animal animal = new Animal(field);
-        board.addAnimal(animal);
+        int fieldSize = 25;
+        int width = 20;
+        int height = 30;
 
-        f.setSize(750,750); //setting frame size
+        f.setSize(fieldSize * width,fieldSize * height); //setting frame size
+
+        ProjectEngine engine = new ProjectEngine(f, fieldSize, height, width, 22, 100, 10);
+        engine.run();
+
         f.setVisible(true);
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
 
     }
 }

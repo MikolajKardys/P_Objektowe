@@ -10,7 +10,7 @@ public enum MapDirection{
     Dir_6,
     Dir_7;
     public final int numNumber = 8;
-    private final String [] arrowTable = new String [] {"\uD83E\uDC51", "\uD83E\uDC55", "→", "\uD83E\uDC56", "\uD83E\uDC53", "\uD83E\uDC57", "←", "\uD83E\uDC54"};
+    private final String [] arrowTable = new String [] {"→", "\uD83E\uDC56", "\uD83E\uDC53", "\uD83E\uDC57", "←", "\uD83E\uDC54", "\uD83E\uDC51", "\uD83E\uDC55", };
     public String toString(){
         return arrowTable[this.ordinal()];
     }
