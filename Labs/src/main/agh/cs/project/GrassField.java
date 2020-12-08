@@ -26,17 +26,15 @@ public class GrassField implements IWorldMap, IPositionChangeObserver{
         this.mapUpdater = new MapVizRepresentation(f, this, fieldSize);
         int i = 0;
         while (i < GrassNumber){
-            if (growGrassOn(this.lowerCorner, this.upperCorner)){
+            if (growGrass()){
                 i++;
             }
         }
     }
 
-    public boolean growGrassOn(Vector2d lowerCorner, Vector2d upperCorner){
-        int width = upperCorner.x - lowerCorner.x;
-        int height = upperCorner.y - lowerCorner.y;
-        int newX = (int) (Math.random() * (double) width);
-        int newY = (int) (Math.random() * (double) height);
+    public boolean growGrass(){
+        int newX = (int) (Math.random() * (double) this.width);
+        int newY = (int) (Math.random() * (double) this.height);
         Vector2d position = new Vector2d(newX, newY);
 
         if (this.canGrowAt(position)) {

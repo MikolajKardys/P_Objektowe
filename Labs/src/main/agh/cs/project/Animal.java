@@ -14,25 +14,20 @@ public class Animal extends AbstractWorldMapElement {
     private final Genome genome;
     private final float healthScale = 100;
 
-    public int health;
+    public int energy;
     private final int moveEnergy;
 
-    public Animal(GrassField map, Vector2d newPosition, MapDirection direction, int health, int moveEnergy) {
-        this(map, newPosition, direction, health, moveEnergy, new int []{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7});
+    public Animal(GrassField map, Vector2d newPosition, MapDirection direction, int energy, int moveEnergy) {
+        this(map, newPosition, direction, energy, moveEnergy, new int []{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7});
     }
 
-    public Animal(GrassField map, Vector2d initialPosition, MapDirection direction, int health, int moveEnergy, int [] genome) {
+    public Animal(GrassField map, Vector2d initialPosition, MapDirection direction, int energy, int moveEnergy, int [] genome) {
         super(initialPosition);
         this.map = map;
         this.direction = direction;
-        this.health = health;
+        this.energy = energy;
         this.moveEnergy = moveEnergy;
         this.genome = new Genome(genome);
-    }
-
-
-    public String toString() {
-        return this.direction.toString();
     }
 
     public void newMove(){
@@ -50,9 +45,12 @@ public class Animal extends AbstractWorldMapElement {
         this.alertObserversMoved(oldPosition);
 
     }
+
     public void kill(){
         this.alertObserversDied();
     }
+
+//////////////////////////////////////////////////////////////////////////////////////
 
     public void addObserver(IPositionChangeObserver observer) {
         observers.add(observer);
@@ -74,12 +72,18 @@ public class Animal extends AbstractWorldMapElement {
         }
     }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
     public Color getHealthColor(){
-        if (this.health >= 50){
-            float healthPart = (float)(this.health - 50) / (healthScale / 2);
+        if (this.energy >= 50){
+            float healthPart = (float)(this.energy - 50) / (healthScale / 2);
             return new Color((int)(255 * (1 - healthPart)), 255, 0);
         }
-        float healthPart = (float)(this.health) / (healthScale / 2);
+        float healthPart = (float)(this.energy) / (healthScale / 2);
         return new Color(255, (int)(255 * healthPart), 0);
+    }
+
+    public String toString() {
+        return this.direction.toString();
     }
 }

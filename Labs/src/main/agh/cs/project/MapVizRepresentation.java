@@ -9,6 +9,8 @@ public class MapVizRepresentation implements IPositionChangeObserver {
     private final JFrame f;
     private int fieldSize;
 
+    private Color grassColor = new Color(0, 102, 0);
+
     public MapVizRepresentation(JFrame f, GrassField field, int fieldSize){
         this.f = f;
         this.field = field;
@@ -29,7 +31,7 @@ public class MapVizRepresentation implements IPositionChangeObserver {
 
                 Vector2d curPosition = new Vector2d(x, y);
                 if (field.objectAt(curPosition) instanceof Grass){
-                    newPanel.setBackground(Color.green);
+                    newPanel.setBackground(grassColor);
                 }
 
             }
@@ -80,7 +82,7 @@ public class MapVizRepresentation implements IPositionChangeObserver {
             this.updateField(indX, indY);
         }
         else {
-            this.fields[indX][indY].setBackground(Color.green);
+            this.fields[indX][indY].setBackground(this.grassColor);
         }
     }
 
