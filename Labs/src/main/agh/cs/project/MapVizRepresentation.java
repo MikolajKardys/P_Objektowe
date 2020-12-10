@@ -6,15 +6,11 @@ import java.awt.*;
 public class MapVizRepresentation implements IPositionChangeObserver {
     private final JPanel [][] fields;
     private final GrassField field;
-    private final JFrame f;
-    private int fieldSize;
 
     private Color grassColor = new Color(0, 102, 0);
 
-    public MapVizRepresentation(JFrame f, GrassField field, int fieldSize){
-        this.f = f;
+    public MapVizRepresentation(JFrame f, GrassField field){
         this.field = field;
-        this.fieldSize = fieldSize;
 
         f.setLayout(new GridLayout(field.width, field.height));
         this.fields = new JPanel [field.width][field.height];
@@ -25,6 +21,7 @@ public class MapVizRepresentation implements IPositionChangeObserver {
                 f.add(newPanel);
                 newPanel.setBackground(Color.white);
                 newPanel.setVisible(true);
+                newPanel.setLayout(new GridBagLayout());
 
                 this.fields[x][y] = newPanel;
                 newPanel.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 1, Color.gray));
@@ -47,15 +44,12 @@ public class MapVizRepresentation implements IPositionChangeObserver {
         if (topSprite != null) {
             curField.setBackground(this.field.getColorAt(position));
 
-            JTextPane text = new JTextPane();
+            JTextArea text = new JTextArea();
             text.setText(topSprite);
             text.setOpaque(false);
             text.setEditable(false);
 
-            curField.setLayout(new GridBagLayout());
             curField.add(text);
-
-            f.setVisible(true);
 
         }
         else {

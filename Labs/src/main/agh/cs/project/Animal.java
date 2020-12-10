@@ -38,11 +38,12 @@ public class Animal extends AbstractWorldMapElement {
         this.direction = this.direction.turn(turn);
         Vector2d finalPosition = this.position.add(this.direction.toUnitVector());
 
-
         finalPosition = map.convertToMovable(finalPosition);
         this.position = finalPosition;
 
         this.alertObserversMoved(oldPosition);
+
+        this.energy -= this.moveEnergy;
 
     }
 
@@ -54,10 +55,6 @@ public class Animal extends AbstractWorldMapElement {
 
     public void addObserver(IPositionChangeObserver observer) {
         observers.add(observer);
-    }
-
-    public void removeObserver(IPositionChangeObserver observer) {
-        observers.remove(observer);
     }
 
     private void alertObserversMoved(Vector2d oldPosition) {

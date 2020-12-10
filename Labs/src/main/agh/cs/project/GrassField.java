@@ -17,13 +17,12 @@ public class GrassField implements IWorldMap, IPositionChangeObserver{
     public final int width;
     public final int height;
 
-    public GrassField(int GrassNumber, JFrame f, int width, int height, int fieldSize) {
+    public GrassField(int GrassNumber, JFrame f, int width, int height) {
         this.width = width;
         this.height = height;
         this.upperCorner = new Vector2d(width, height);
 
-
-        this.mapUpdater = new MapVizRepresentation(f, this, fieldSize);
+        this.mapUpdater = new MapVizRepresentation(f, this);
         int i = 0;
         while (i < GrassNumber){
             if (growGrass()){
