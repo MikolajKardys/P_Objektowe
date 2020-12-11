@@ -12,45 +12,58 @@ public class ProjectEngine implements IEngine {
             return super.remove(index);
         }
     };
-    private final int moveEnergy;
+    private final int energyToSurvive;
+    private final int plantEnergy;
     private final JFrame f;
+    private final GrassField field;
 
-    public ProjectEngine(JFrame f, int fieldSize, int width, int height, int animalNumber, int startEnergy, int moveEnergy) {
+    public ProjectEngine(JFrame f, int width, int height, int animalNumber, int startEnergy, int moveEnergy, int plantEnergy) throws InterruptedException {
 
-        GrassField field = new GrassField(0, f, width, height);
-        this.moveEnergy = moveEnergy;
+        GrassField field = new GrassField(f, width, height);
+        this.energyToSurvive = moveEnergy;
+        this.plantEnergy = plantEnergy;
+        this.field = field;
         this.f = f;
 
         for (int i = 0; i < animalNumber; i++) {
             int newX = (int) (Math.random() * (double) width);
             int newY = (int) (Math.random() * (double) height);
             Vector2d newPosition = new Vector2d(newX, newY);
-            Animal newAnimal = new Animal(field, newPosition, MapDirection.Dir_0, (int) (startEnergy * Math.random()), moveEnergy);
-
-            Animals.add(newAnimal);
-            field.place(newAnimal);
+            Animals.add( new Animal(field, newPosition, MapDirection.Dir_0, startEnergy, moveEnergy) );
         }
-
         f.setVisible(true);
     }
 
     @Override
-    public void run(){
-        while (Animals.size() > 1) {
-
+    public void run() throws InterruptedException {
+        FieldEventMap eatEventMap = new FieldEventMap(this.plantEnergy);
+        int died = 0;
+        while (Animals.size() > 0) {
+            Thread.sleep(200);
+            field.growGrass();
+            field.growGrass();
+            Thread.sleep(200);
             int ind = 0;
             while (ind < Animals.size()) {
                 Animal curAnimal = Animals.get(ind);
-                if (curAnimal.energy < moveEnergy) {
+                if (curAnimal.energy < this.energyToSurvive) {
                     Animals.remove(ind);
+                    died++;
+                    System.out.println("Number that died: " + died);
                 } else ind++;
             }
             f.setVisible(true);
 
             for (Animal animal : Animals) {
-                animal.newMove();
+                if (animal.newMove() == EventType.Eating) {
+                    eatEventMap.addAnimal(animal);
+                }
             }
+
+            eatEventMap.resolveEating();
+
             f.setVisible(true);
+
         }
     }
 }

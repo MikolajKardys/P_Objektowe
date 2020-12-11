@@ -22,34 +22,22 @@ public class AnimalSortedList extends ArrayList<Animal>{
         else return (index * (-1)) - 1;
     }
 
-    public Animal getTop(){
+    public ArrayList<Animal> getAllTop(){
         if (this.size() == 0){
             return null;
         }
-        return this.get(0);
-    }
-
-    public Animal [] getTopTwo(){
-        if (this.size() < 2){
-            return null;
+        ArrayList<Animal> firsts = new ArrayList<>();
+        firsts.add(this.get(0));
+        int ind = 1;
+        while (ind < this.size() && this.get(ind).energy == this.get(0).energy){
+            firsts.add(this.get(ind));
+            ind++;
         }
-        return new Animal [] {this.get(0), this.get(1)};
+        return firsts;
     }
-
     @Override
     public boolean add(Animal newAnimal){
         this.add(this.getIndex(newAnimal), newAnimal);
         return true;
     }
-
-    @Override
-    public boolean remove(Object animal){
-        int index = this.getIndex((Animal) animal);
-        if (index >= 0){
-            this.remove(index);
-            return true;
-        }
-        return false;
-    }
-
 }

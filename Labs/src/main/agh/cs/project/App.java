@@ -13,7 +13,7 @@ class App {
 
         f.setSize(fieldSize * width,fieldSize * height); //setting frame size
 
-        ProjectEngine engine = new ProjectEngine(f, fieldSize, height, width, 50, 100, 10);
+        ProjectEngine engine = new ProjectEngine(f, height, width, 30, 100, 5, 50);
         engine.run();
 
         f.setVisible(true);

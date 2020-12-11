@@ -2,41 +2,38 @@ package agh.cs.project;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GrassField implements IWorldMap, IPositionChangeObserver{
+public class GrassField implements IWorldMap, IChangeObserver {
     private final Map<Vector2d, Grass> GrassMap = new HashMap<>();
-    private final Map<Vector2d, AnimalSortedList> Animals = new HashMap<>();
+    private final FieldMap Animals = new FieldMap();
     private final Vector2d upperCorner;
     private final Vector2d lowerCorner = new Vector2d(0, 0);
 
     private final MapVisualizer viz = new MapVisualizer(this);
-    public final IPositionChangeObserver mapUpdater;
+    public final IChangeObserver mapUpdater;
 
     public final int width;
     public final int height;
 
-    public GrassField(int GrassNumber, JFrame f, int width, int height) {
+    public GrassField(JFrame f, int width, int height) {
         this.width = width;
         this.height = height;
         this.upperCorner = new Vector2d(width, height);
-
         this.mapUpdater = new MapVizRepresentation(f, this);
-        int i = 0;
-        while (i < GrassNumber){
-            if (growGrass()){
-                i++;
-            }
-        }
     }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
     public boolean growGrass(){
+
         int newX = (int) (Math.random() * (double) this.width);
         int newY = (int) (Math.random() * (double) this.height);
         Vector2d position = new Vector2d(newX, newY);
 
-        if (this.canGrowAt(position)) {
+        if (!isOccupied(position)) {
             Grass newGrass = new Grass(position);
             this.GrassMap.put(position, newGrass);
             this.mapUpdater.addedElement(newGrass);
@@ -45,8 +42,9 @@ public class GrassField implements IWorldMap, IPositionChangeObserver{
         return false;
     }
 
-    private boolean canGrowAt(Vector2d position) {
-        return !isOccupied(position);
+    public boolean isGrassAt(Vector2d position){
+        Grass grass = this.GrassMap.get(position);
+        return grass != null;
     }
 
 ////////////////////////////////////////////////////////////////////////////////////
@@ -55,20 +53,8 @@ public class GrassField implements IWorldMap, IPositionChangeObserver{
         return new Vector2d((position.x + this.width) % this.width, (position.y + this.height) % this.height);
     }
 
-    private void addAnimalAt(Animal animal, Vector2d position){
-        if ( this.objectAt(position) instanceof Animal ){
-            this.Animals.get(position).add(animal);
-        }
-        else {
-            AnimalSortedList list = new AnimalSortedList(animal);
-            this.Animals.put(position, list);
-        }
-    }
-
-    public boolean place(Animal animal) {
-        this.addAnimalAt(animal, animal.getPosition());
-        animal.addObserver(this);
-        this.mapUpdater.addedElement(animal);
+    public boolean place(Animal newAnimal) {
+        this.Animals.addAnimal(newAnimal);
         return true;
     }
 
@@ -77,7 +63,7 @@ public class GrassField implements IWorldMap, IPositionChangeObserver{
     public Object objectAt(Vector2d position) {
         AnimalSortedList possibleAnimalList = Animals.get(position);
         if (possibleAnimalList != null) {
-            return possibleAnimalList.getTop();
+            return possibleAnimalList.getAllTop();
         }
         return GrassMap.get(position);
     }
@@ -89,33 +75,38 @@ public class GrassField implements IWorldMap, IPositionChangeObserver{
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
     @Override
-    public void positionChanged(Animal animal, Vector2d oldPosition) {
-        Animals.get(oldPosition).remove(animal);
-        if (Animals.get(oldPosition).size() == 0) {
-            Animals.remove(oldPosition);
-        }
-        this.addAnimalAt(animal, animal.getPosition());
+    public void changedPosition(Animal animal, Vector2d oldPosition) {
+        this.Animals.removeAnimal(oldPosition, animal);
 
-        this.mapUpdater.positionChanged(animal, oldPosition);
+        this.Animals.addAnimal(animal);
+
+        this.mapUpdater.changedPosition(animal, oldPosition);
     }
 
     @Override
     public void addedElement(AbstractWorldMapElement element){
-        //Jeszcze nie potrzebna
+        if (element instanceof Animal) {
+            this.place((Animal) element);
+        }
+        else this.GrassMap.put(element.getPosition(), (Grass) element);
+
+        this.mapUpdater.addedElement(element);
     }
 
     @Override
-    public void removedElement(AbstractWorldMapElement element, Vector2d oldPosition){
+    public void removedElement(AbstractWorldMapElement element){
         if (element instanceof Animal) {
-            Animals.get(oldPosition).remove(element);
-            if (Animals.get(oldPosition).size() == 0){
-                Animals.remove(element.getPosition());
-            }
+            this.Animals.removeAnimal(element.getPosition(), (Animal) element);
         }
 
         else this.GrassMap.remove(element.getPosition());
 
-        this.mapUpdater.removedElement(element, element.getPosition());
+        this.mapUpdater.removedElement(element);
+    }
+
+    @Override
+    public void changedEnergy(Animal animal){
+        this.mapUpdater.changedEnergy(animal);
     }
 
 ///////////////////////////////////////////////////////////////////////////////////
@@ -132,12 +123,14 @@ public class GrassField implements IWorldMap, IPositionChangeObserver{
         return viz.draw(this.lowerCorner, this.upperCorner);
     }
 
+////////////////////////////////////////////////////////////////////////////////////////////
+
     public String getTopStringAt(Vector2d position){
         AnimalSortedList list = this.Animals.get(position);
         if (list != null) {
-            Animal topAt = this.Animals.get(position).getTop();
+            ArrayList <Animal> topAt = this.Animals.get(position).getAllTop();
             if (topAt != null) {
-                return topAt.toString();
+                return topAt.get(0).toString();
             }
         }
         return null;
@@ -146,9 +139,9 @@ public class GrassField implements IWorldMap, IPositionChangeObserver{
     public Color getColorAt(Vector2d position){
         AnimalSortedList list = this.Animals.get(position);
         if (list != null) {
-            Animal topAt = this.Animals.get(position).getTop();
+            ArrayList <Animal> topAt = this.Animals.get(position).getAllTop();
             if (topAt != null) {
-                return topAt.getHealthColor();
+                return topAt.get(0).getHealthColor();
             }
         }
         return null;

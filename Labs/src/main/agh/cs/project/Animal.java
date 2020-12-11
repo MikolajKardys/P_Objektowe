@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Animal extends AbstractWorldMapElement {
-    private final List<IPositionChangeObserver> observers = new ArrayList<>();
+    private final List<IChangeObserver> observers = new ArrayList<>();
 
 
     private MapDirection direction;
 
     private final GrassField map;
-    private final Genome genome;
+    public final Genome genome;
     private final float healthScale = 100;
 
     public int energy;
@@ -28,9 +28,12 @@ public class Animal extends AbstractWorldMapElement {
         this.energy = energy;
         this.moveEnergy = moveEnergy;
         this.genome = new Genome(genome);
+
+        this.addObserver(map);
+        this.alertObserversAdded();
     }
 
-    public void newMove(){
+    public EventType newMove(){
         int randomTurn = this.genome.getRandomGene();
         MoveDirection turn = MoveDirection.valueOf("TURN_" + randomTurn);
 
@@ -45,33 +48,53 @@ public class Animal extends AbstractWorldMapElement {
 
         this.energy -= this.moveEnergy;
 
+        if (this.map.isGrassAt(this.position)){
+            return EventType.Eating;
+        }
+        return EventType.None;
     }
 
     public void kill(){
+        System.out.println("Died with health: " + this.energy);
         this.alertObserversDied();
     }
 
 //////////////////////////////////////////////////////////////////////////////////////
 
-    public void addObserver(IPositionChangeObserver observer) {
+    public void addObserver(IChangeObserver observer) {
         observers.add(observer);
     }
 
     private void alertObserversMoved(Vector2d oldPosition) {
-        for (IPositionChangeObserver observer : observers) {
-            observer.positionChanged(this, oldPosition);
+        for (IChangeObserver observer : observers) {
+            observer.changedPosition(this, oldPosition);
+        }
+    }
+
+    private void alertObserversAdded() {
+        for (IChangeObserver observer : observers) {
+            observer.addedElement(this);
         }
     }
 
     private void alertObserversDied() {
-        for (IPositionChangeObserver observer : observers) {
-            observer.removedElement(this, this.position);
+        for (IChangeObserver observer : observers) {
+            observer.removedElement(this);
+        }
+    }
+
+    public void alertObserversChangedEnergy() {
+        for (IChangeObserver observer : observers) {
+            observer.changedEnergy(this);
         }
     }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public Color getHealthColor(){
+        if (this.energy >= 100){
+            return new Color(0, 255, 0);
+        }
         if (this.energy >= 50){
             float healthPart = (float)(this.energy - 50) / (healthScale / 2);
             return new Color((int)(255 * (1 - healthPart)), 255, 0);
@@ -83,4 +106,7 @@ public class Animal extends AbstractWorldMapElement {
     public String toString() {
         return this.direction.toString();
     }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 }

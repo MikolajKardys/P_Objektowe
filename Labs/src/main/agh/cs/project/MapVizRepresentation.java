@@ -3,11 +3,11 @@ package agh.cs.project;
 import javax.swing.*;
 import java.awt.*;
 
-public class MapVizRepresentation implements IPositionChangeObserver {
+public class MapVizRepresentation implements IChangeObserver {
     private final JPanel [][] fields;
     private final GrassField field;
 
-    private Color grassColor = new Color(0, 102, 0);
+    private final Color grassColor = new Color(31, 119, 49);
 
     public MapVizRepresentation(JFrame f, GrassField field){
         this.field = field;
@@ -58,7 +58,7 @@ public class MapVizRepresentation implements IPositionChangeObserver {
     }
 
     @Override
-    public void positionChanged(Animal animal, Vector2d oldPosition){
+    public void changedPosition(Animal animal, Vector2d oldPosition){
         int indX = oldPosition.x;
         int indY = oldPosition.y;
         this.updateField(indX, indY);
@@ -81,9 +81,9 @@ public class MapVizRepresentation implements IPositionChangeObserver {
     }
 
     @Override
-    public void removedElement(AbstractWorldMapElement element, Vector2d oldPosition){
-        int indX = oldPosition.x;
-        int indY = oldPosition.y;
+    public void removedElement(AbstractWorldMapElement element){
+        int indX = element.getPosition().x;
+        int indY = element.getPosition().y;
         if (element instanceof Animal){
             this.updateField(indX, indY);
         }
@@ -92,4 +92,8 @@ public class MapVizRepresentation implements IPositionChangeObserver {
         }
     }
 
+    @Override
+    public void changedEnergy(Animal animal){
+        this.updateField(animal.getPosition().x, animal.getPosition().y);
+    }
 }
