@@ -6,13 +6,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GrassField implements IWorldMap, IChangeObserver {
+public class GrassField implements IChangeObserver {
     private final Map<Vector2d, Grass> GrassMap = new HashMap<>();
     private final FieldMap Animals = new FieldMap();
-    private final Vector2d upperCorner;
-    private final Vector2d lowerCorner = new Vector2d(0, 0);
 
-    private final MapVisualizer viz = new MapVisualizer(this);
     public final IChangeObserver mapUpdater;
 
     public final int width;
@@ -21,7 +18,6 @@ public class GrassField implements IWorldMap, IChangeObserver {
     public GrassField(JFrame f, int width, int height) {
         this.width = width;
         this.height = height;
-        this.upperCorner = new Vector2d(width, height);
         this.mapUpdater = new MapVizRepresentation(f, this);
     }
 
@@ -42,20 +38,26 @@ public class GrassField implements IWorldMap, IChangeObserver {
         return false;
     }
 
-    public boolean isGrassAt(Vector2d position){
+    public boolean isGrassAt(Vector2d position){ //usuwa jeśli jesśli jest
         Grass grass = this.GrassMap.get(position);
-        return grass != null;
+        if (grass != null){
+            this.GrassMap.remove(position);
+            return true;
+        }
+        return false;
     }
 
+    public boolean isAnimalAt(Vector2d position) {
+        return this.objectAt(position) instanceof ArrayList;
+    }
 ////////////////////////////////////////////////////////////////////////////////////
 
     public Vector2d convertToMovable(Vector2d position) {
         return new Vector2d((position.x + this.width) % this.width, (position.y + this.height) % this.height);
     }
 
-    public boolean place(Animal newAnimal) {
+    private void place(Animal newAnimal) {
         this.Animals.addAnimal(newAnimal);
-        return true;
     }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -110,20 +112,6 @@ public class GrassField implements IWorldMap, IChangeObserver {
     }
 
 ///////////////////////////////////////////////////////////////////////////////////
-
-    private boolean isEmpty(){
-        if (!Animals.isEmpty()) return false;
-        return GrassMap.isEmpty();
-    }
-
-    public String toString() {
-        if (isEmpty()){
-            return viz.draw(new Vector2d(0, 0), new Vector2d(0, 0));
-        }
-        return viz.draw(this.lowerCorner, this.upperCorner);
-    }
-
-////////////////////////////////////////////////////////////////////////////////////////////
 
     public String getTopStringAt(Vector2d position){
         AnimalSortedList list = this.Animals.get(position);

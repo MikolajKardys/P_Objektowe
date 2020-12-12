@@ -11,29 +11,31 @@ public class Animal extends AbstractWorldMapElement {
     private MapDirection direction;
 
     private final GrassField map;
-    public final Genome genome;
+    private final Genome genome;
     private final float healthScale = 100;
 
     public int energy;
     private final int moveEnergy;
 
-    public Animal(GrassField map, Vector2d newPosition, MapDirection direction, int energy, int moveEnergy) {
-        this(map, newPosition, direction, energy, moveEnergy, new int []{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7});
+    public Animal(GrassField map, Vector2d initialPosition, MapDirection direction, int energy, int moveEnergy) {
+        this(map, initialPosition, direction, energy, moveEnergy, new Genome());
     }
 
-    public Animal(GrassField map, Vector2d initialPosition, MapDirection direction, int energy, int moveEnergy, int [] genome) {
+    public Animal(GrassField map, Vector2d initialPosition, MapDirection direction, int energy, int moveEnergy, Genome genes) {
         super(initialPosition);
         this.map = map;
         this.direction = direction;
         this.energy = energy;
         this.moveEnergy = moveEnergy;
-        this.genome = new Genome(genome);
+        this.genome = genes;
 
         this.addObserver(map);
         this.alertObserversAdded();
     }
 
-    public EventType newMove(){
+    public ArrayList<EventType> newMove(){
+        ArrayList<EventType> possibleEvents = new ArrayList<>();
+
         int randomTurn = this.genome.getRandomGene();
         MoveDirection turn = MoveDirection.valueOf("TURN_" + randomTurn);
 
@@ -42,20 +44,23 @@ public class Animal extends AbstractWorldMapElement {
         Vector2d finalPosition = this.position.add(this.direction.toUnitVector());
 
         finalPosition = map.convertToMovable(finalPosition);
+        if (this.map.isAnimalAt(finalPosition)){
+            possibleEvents.add(EventType.Breading);
+            System.out.println("Found Mate at " + finalPosition);
+        }
         this.position = finalPosition;
 
         this.alertObserversMoved(oldPosition);
 
         this.energy -= this.moveEnergy;
 
-        if (this.map.isGrassAt(this.position)){
-            return EventType.Eating;
+        if (this.map.isGrassAt(this.position)){      //try to eat
+            possibleEvents.add(EventType.Eating);
         }
-        return EventType.None;
+        return possibleEvents;
     }
 
     public void kill(){
-        System.out.println("Died with health: " + this.energy);
         this.alertObserversDied();
     }
 
