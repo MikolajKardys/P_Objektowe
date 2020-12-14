@@ -1,6 +1,6 @@
 package agh.cs.project;
 
-abstract class AbstractWorldMapElement {
+abstract public class AbstractWorldMapElement {
     protected Vector2d position;
 
     public AbstractWorldMapElement(Vector2d position) {

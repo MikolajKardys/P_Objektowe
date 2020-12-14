@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="agh.cs.project.Pages.MenuPage">
+  <grid id="27dc6" binding="menuPanel" layout-manager="GridLayoutManager" row-count="7" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+    <margin top="0" left="0" bottom="0" right="0"/>
+    <constraints>
+      <xy x="50" y="20" width="348" height="400"/>
+    </constraints>
+    <properties/>
+    <border type="none"/>
+    <children>
+      <component id="bcf0f" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Width:"/>
+        </properties>
+      </component>
+      <component id="29e01" class="javax.swing.JButton" binding="runButton">
+        <constraints>
+          <grid row="6" column="1" row-span="1" col-span="3" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Run Simulation"/>
+        </properties>
+      </component>
+      <component id="ed46c" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Number of Animals:"/>
+        </properties>
+      </component>
+      <component id="6a737" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Height:"/>
+        </properties>
+      </component>
+      <component id="8640d" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Energy animals start with:"/>
+        </properties>
+      </component>
+      <component id="57a37" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Energy consumed by moving:"/>
+        </properties>
+      </component>
+      <component id="727bf" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Energy restored by eating plants:"/>
+        </properties>
+      </component>
+      <hspacer id="fd837">
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+      </hspacer>
+      <hspacer id="9498b">
+        <constraints>
+          <grid row="1" column="4" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+      </hspacer>
+      <hspacer id="72ed1">
+        <constraints>
+          <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+      </hspacer>
+      <component id="1a6d" class="javax.swing.JTextField" binding="widthField">
+        <constraints>
+          <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="4" fill="0" indent="0" use-parent-layout="false">
+            <minimum-size width="75" height="-1"/>
+            <preferred-size width="75" height="-1"/>
+            <maximum-size width="75" height="-1"/>
+          </grid>
+        </constraints>
+        <properties>
+          <dragEnabled value="false"/>
+          <horizontalAlignment value="11"/>
+          <margin top="2" left="6" bottom="2" right="6"/>
+          <text value="10"/>
+        </properties>
+      </component>
+      <component id="bda48" class="javax.swing.JTextField" binding="heightField">
+        <constraints>
+          <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="4" fill="0" indent="0" use-parent-layout="false">
+            <minimum-size width="75" height="-1"/>
+            <preferred-size width="75" height="-1"/>
+            <maximum-size width="75" height="-1"/>
+          </grid>
+        </constraints>
+        <properties>
+          <horizontalAlignment value="11"/>
+          <margin top="2" left="6" bottom="2" right="6"/>
+          <text value="10"/>
+        </properties>
+      </component>
+      <component id="353e4" class="javax.swing.JTextField" binding="animalNumberField">
+        <constraints>
+          <grid row="2" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="4" fill="0" indent="0" use-parent-layout="false">
+            <minimum-size width="75" height="-1"/>
+            <preferred-size width="75" height="-1"/>
+            <maximum-size width="75" height="-1"/>
+          </grid>
+        </constraints>
+        <properties>
+          <horizontalAlignment value="4"/>
+          <margin top="2" left="6" bottom="2" right="6"/>
+          <text value="10"/>
+        </properties>
+      </component>
+      <component id="67bd8" class="javax.swing.JTextField" binding="startEnergyField">
+        <constraints>
+          <grid row="3" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="4" fill="0" indent="0" use-parent-layout="false">
+            <minimum-size width="75" height="-1"/>
+            <preferred-size width="75" height="-1"/>
+            <maximum-size width="75" height="-1"/>
+          </grid>
+        </constraints>
+        <properties>
+          <horizontalAlignment value="11"/>
+          <margin top="2" left="6" bottom="2" right="6"/>
+          <text value="100"/>
+        </properties>
+      </component>
+      <component id="7d1cd" class="javax.swing.JTextField" binding="moveEnergyField">
+        <constraints>
+          <grid row="4" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="4" fill="0" indent="0" use-parent-layout="false">
+            <minimum-size width="75" height="-1"/>
+            <preferred-size width="75" height="-1"/>
+            <maximum-size width="75" height="-1"/>
+          </grid>
+        </constraints>
+        <properties>
+          <horizontalAlignment value="11"/>
+          <margin top="2" left="6" bottom="2" right="6"/>
+          <text value="5"/>
+        </properties>
+      </component>
+      <component id="8d3b" class="javax.swing.JTextField" binding="plantEnergyField">
+        <constraints>
+          <grid row="5" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="4" fill="0" indent="0" use-parent-layout="false">
+            <minimum-size width="75" height="-1"/>
+            <preferred-size width="75" height="-1"/>
+            <maximum-size width="75" height="-1"/>
+          </grid>
+        </constraints>
+        <properties>
+          <horizontalAlignment value="11"/>
+          <margin top="2" left="6" bottom="2" right="6"/>
+          <text value="50"/>
+        </properties>
+      </component>
+    </children>
+  </grid>
+</form>

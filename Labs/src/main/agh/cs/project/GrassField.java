@@ -1,6 +1,7 @@
 package agh.cs.project;
 
-import javax.swing.*;
+import agh.cs.project.Pages.SimulationPage;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,10 +16,10 @@ public class GrassField implements IChangeObserver {
     public final int width;
     public final int height;
 
-    public GrassField(JFrame f, int width, int height) {
+    public GrassField(int width, int height, ProjectEngine engine) {
         this.width = width;
         this.height = height;
-        this.mapUpdater = new MapVizRepresentation(f, this);
+        this.mapUpdater = new SimulationPage(this, engine);
     }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
