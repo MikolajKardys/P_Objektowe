@@ -17,8 +17,8 @@ public class ProjectEngine extends Thread {
 
     private boolean paused = false;
 
-    public ProjectEngine(int width, int height, int animalNumber, int startEnergy, int moveEnergy, int plantEnergy){
-        GrassField field = new GrassField(width, height, this);
+    public ProjectEngine(int width, int height, int animalNumber, int startEnergy, int moveEnergy, int plantEnergy, float jungleRatio){
+        GrassField field = new GrassField(width, height, jungleRatio, this);
         this.energyToSurvive = moveEnergy;
         this.plantEnergy = plantEnergy;
         this.field = field;
@@ -47,7 +47,8 @@ public class ProjectEngine extends Thread {
     public void run() {
         try {
             while (Animals.size() > 0) {
-                sleep(400);
+                sleep(200);
+                System.out.println(field.jungle.takenFields + "   " + field.takenFields + "   " + field.GrassMap.size());
                 if (paused){
                     synchronized (this){
                         System.out.println("Paused");
@@ -56,7 +57,7 @@ public class ProjectEngine extends Thread {
                     System.out.println("Unpaused");
                 }
                 field.growGrass();
-                field.growGrass();
+
                 int ind = 0;
                 while (ind < Animals.size()) {
                     Animal curAnimal = Animals.get(ind);
@@ -72,10 +73,12 @@ public class ProjectEngine extends Thread {
                         eatEventMap.addAnimal(animal);
                     }
                 }
+
                 eatEventMap.resolveEating();
             }
         }
         catch (InterruptedException ignored) {
+            System.out.println("Terminated");
         }
     }
 }

@@ -6,7 +6,11 @@ public class AnimalSortedList extends ArrayList<Animal>{
 
     private static class compareHealth implements Comparator<Animal>{
         public int compare (Animal a, Animal b){
+            if (b.energy == a.energy){
+                return b.hashCode() - a.hashCode();
+            }
             return b.energy - a.energy;
+
         }
     }
 

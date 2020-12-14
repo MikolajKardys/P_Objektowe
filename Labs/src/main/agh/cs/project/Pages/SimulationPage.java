@@ -12,12 +12,13 @@ public class SimulationPage implements IChangeObserver {
 
     private final Color grassColor = new Color(31, 119, 49);
     private final Color steppeColor = new Color(182,227,83);
+    private final Color jungeColor = new Color(51, 153, 102);
 
     public SimulationPage(GrassField field, ProjectEngine engine){
         this.field = field;
         this.fields = new JTextField [field.width][field.height];
 
-        int fieldSize = 50;   //bo czemu nie
+        int fieldSize = 25;   //bo czemu nie
 
         JFrame f = new JFrame("Simulation Map");
         f.setSize(fieldSize * field.height,fieldSize * field.width + fieldSize);
@@ -41,19 +42,19 @@ public class SimulationPage implements IChangeObserver {
         for(int x = 0; x < field.width; x++) {
             for(int y = 0; y < field.height; y++){
 
-                JTextField newPanel = new JTextField();
-                newPanel.setHorizontalAlignment(SwingConstants.CENTER);
-                newPanel.setEditable(false);
-                newPanel.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, borderColor));
-                newPanel.setBackground(steppeColor);
+                JTextField newText = new JTextField();
+                this.fields[x][y] = newText;
+                newText.setHorizontalAlignment(SwingConstants.CENTER);
+                newText.setEditable(false);
+                newText.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, borderColor));
+                setGroundColor(x, y);
 
                 Vector2d curPosition = new Vector2d(x, y);
                 if (field.objectAt(curPosition) instanceof Grass){
-                    newPanel.setBackground(grassColor);
+                    newText.setBackground(grassColor);
                 }
 
-                mainPanel.add(newPanel);
-                this.fields[x][y] = newPanel;
+                mainPanel.add(newText);
             }
         }
         JPanel buttonPanel = new JPanel();
@@ -61,6 +62,7 @@ public class SimulationPage implements IChangeObserver {
         buttonPanel.setBackground(borderColor);
 
         JButton stopButton = new JButton("Stop Simulation");
+        stopButton.setPreferredSize(new Dimension(fieldSize * field.height,fieldSize));
 
         buttonPanel.add(stopButton);
 
@@ -78,7 +80,7 @@ public class SimulationPage implements IChangeObserver {
         stopButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (stopButton.getText() == "Stop Simulation"){
+                if (stopButton.getText().equals("Stop Simulation")){
                     stopButton.setText("Resume Simulation");
                     engine.pause();
                 }
@@ -92,6 +94,14 @@ public class SimulationPage implements IChangeObserver {
 
     }
 
+    private void setGroundColor(int indX, int indY){
+        if (field.positionInJungle(new Vector2d(indX, indY))){
+            this.fields[indX][indY].setBackground(jungeColor);
+        }
+        else
+            this.fields[indX][indY].setBackground(steppeColor);
+    }
+
     private void updateField(int indX, int indY) {
         JTextField text = this.fields[indX][indY];
         text.setText("");
@@ -103,7 +113,7 @@ public class SimulationPage implements IChangeObserver {
             text.setBackground(this.field.getColorAt(position));
         }
         else {
-            text.setBackground(steppeColor);
+            setGroundColor(indX, indY);
         }
     }
 
@@ -138,7 +148,7 @@ public class SimulationPage implements IChangeObserver {
             this.updateField(indX, indY);
         }
         else {
-            this.fields[indX][indY].setBackground(steppeColor);
+            setGroundColor(indX, indY);
         }
     }
 

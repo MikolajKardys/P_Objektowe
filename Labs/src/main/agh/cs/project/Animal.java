@@ -46,7 +46,6 @@ public class Animal extends AbstractWorldMapElement {
         finalPosition = map.convertToMovable(finalPosition);
         if (this.map.isAnimalAt(finalPosition)){
             possibleEvents.add(EventType.Breading);
-            System.out.println("Found Mate at " + finalPosition);
         }
         this.position = finalPosition;
 

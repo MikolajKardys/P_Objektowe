@@ -18,6 +18,7 @@ public class MenuPage implements ActionListener {
     private JTextField startEnergyField;
     private JTextField moveEnergyField;
     private JTextField plantEnergyField;
+    private JTextField jungeRatio;
 
     public MenuPage(){
         this.frame = new JFrame();
@@ -39,16 +40,19 @@ public class MenuPage implements ActionListener {
 
     private boolean areArgumentsCorrect(){
         for (Component comp : menuPanel.getComponents()){
-            if (comp instanceof JTextField){
-                String text = ((JTextField) comp).getText();
-                if (text.isBlank()) {
-                    return false;
-                }
-                for (char c : text.toCharArray()) {
-                    if (!Character.isDigit(c)) {
-                        return false;
+            try {
+                if (comp instanceof JTextField) {
+                    String text = ((JTextField) comp).getText();
+
+                    if (comp.equals(this.jungeRatio)) {
+                        Float.parseFloat(text);
+                    } else {
+                        Integer.parseInt(text);
                     }
                 }
+            }
+            catch (NumberFormatException ignored) {
+                return false;
             }
         }
         return true;
@@ -59,13 +63,19 @@ public class MenuPage implements ActionListener {
         if (e.getSource() == runButton){
 
             if (areArgumentsCorrect()){
-                int width = Integer.parseInt(widthField.getText());
-                int height = Integer.parseInt(heightField.getText());
-                int animalNumber = Integer.parseInt(animalNumberField.getText());
-                int startEnergy = Integer.parseInt(startEnergyField.getText());
-                int moveEnergy = Integer.parseInt(moveEnergyField.getText());
-                int plantEnergy = Integer.parseInt(plantEnergyField.getText());
-                new ProjectEngine(height, width, animalNumber, startEnergy, moveEnergy, plantEnergy).start();
+                float jungeRatio = Float.parseFloat(this.jungeRatio.getText());
+                if (jungeRatio < 0 || jungeRatio > 1){
+                    JOptionPane.showMessageDialog(frame, "Jungle ratio must be between 0 and 1!!!");
+                }
+                else {
+                    int width = Integer.parseInt(widthField.getText());
+                    int height = Integer.parseInt(heightField.getText());
+                    int animalNumber = Integer.parseInt(animalNumberField.getText());
+                    int startEnergy = Integer.parseInt(startEnergyField.getText());
+                    int moveEnergy = Integer.parseInt(moveEnergyField.getText());
+                    int plantEnergy = Integer.parseInt(plantEnergyField.getText());
+                    new ProjectEngine(height, width, animalNumber, startEnergy, moveEnergy, plantEnergy, jungeRatio).start();
+                }
             }
             else{
                 JOptionPane.showMessageDialog(frame, "Incorrect simulation parameters!!!");

@@ -33,6 +33,16 @@ public class Vector2d {
         return new Vector2d(this.x * (-1), this.y * (-1));
     }
 
+    public boolean precedes(Vector2d other) {
+        if (this.x <= other.x && this.y <= other.y) return true;
+        return false;
+    }
+
+    public boolean follows(Vector2d other) {
+        if (this.x >= other.x && this.y >= other.y) return true;
+        return false;
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(this.x, this.y);
