@@ -15,7 +15,8 @@ public class ProjectEngine extends Thread {
     private final int plantEnergy;
     private final GrassField field;
 
-    private boolean paused = false;
+    private boolean paused = true;
+    private int delay;
 
     public ProjectEngine(int width, int height, int animalNumber, int startEnergy, int moveEnergy, int plantEnergy, float jungleRatio){
         GrassField field = new GrassField(width, height, jungleRatio, this);
@@ -27,7 +28,7 @@ public class ProjectEngine extends Thread {
             int newX = (int) (Math.random() * (double) width);
             int newY = (int) (Math.random() * (double) height);
             Vector2d newPosition = new Vector2d(newX, newY);
-            Animals.add( new Animal(field, newPosition, MapDirection.Dir_0, startEnergy, moveEnergy) );
+            Animals.add( new Animal(field, newPosition, startEnergy, moveEnergy) );
         }
     }
 
@@ -36,9 +37,10 @@ public class ProjectEngine extends Thread {
         this.paused = true;
     }
 
-    public void unpause(){
+    public void unpause(int delay){
         synchronized (this){
             this.paused = false;
+            this.delay = delay;
             this.notifyAll();
         }
     }
@@ -47,7 +49,7 @@ public class ProjectEngine extends Thread {
     public void run() {
         try {
             while (Animals.size() > 0) {
-                sleep(200);
+                sleep(delay);
                 System.out.println(field.jungle.takenFields + "   " + field.takenFields + "   " + field.GrassMap.size());
                 if (paused){
                     synchronized (this){

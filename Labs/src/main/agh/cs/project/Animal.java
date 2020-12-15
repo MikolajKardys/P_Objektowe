@@ -17,14 +17,14 @@ public class Animal extends AbstractWorldMapElement {
     public int energy;
     private final int moveEnergy;
 
-    public Animal(GrassField map, Vector2d initialPosition, MapDirection direction, int energy, int moveEnergy) {
-        this(map, initialPosition, direction, energy, moveEnergy, new Genome());
+    public Animal(GrassField map, Vector2d initialPosition, int energy, int moveEnergy) {
+        this(map, initialPosition, energy, moveEnergy, new Genome());
     }
 
-    public Animal(GrassField map, Vector2d initialPosition, MapDirection direction, int energy, int moveEnergy, Genome genes) {
+    public Animal(GrassField map, Vector2d initialPosition, int energy, int moveEnergy, Genome genes) {
         super(initialPosition);
         this.map = map;
-        this.direction = direction;
+        this.direction = MapDirection.newMapDirection((int)(Math.random() * 8));
         this.energy = energy;
         this.moveEnergy = moveEnergy;
         this.genome = genes;

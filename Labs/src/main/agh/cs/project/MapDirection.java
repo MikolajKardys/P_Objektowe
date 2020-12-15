@@ -9,6 +9,10 @@ public enum MapDirection{
     Dir_5,
     Dir_6,
     Dir_7;
+    public static MapDirection newMapDirection(int ordinal){
+        return MapDirection.valueOf("Dir_" + ordinal);
+    }
+
     public final int numNumber = 8;
     private final String [] arrowTable = new String [] {"⭢", "⭨", "⭣", "⭩", "⭠", "⭦", "⭡", "⭧"};
     public String toString(){

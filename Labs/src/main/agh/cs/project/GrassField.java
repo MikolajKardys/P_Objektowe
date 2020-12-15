@@ -31,15 +31,15 @@ public class GrassField implements IChangeObserver {
     }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-    private boolean canGrowAt(Vector2d position, boolean inJungle){
+
+    private boolean cantGrowAt(Vector2d position, boolean inJungle){
         if (inJungle){
-            if (!this.positionInJungle(position)) return false;
-            return isFree(position);
+            if (!this.positionInJungle(position)) return true;
         }
         else {
-            if (this.positionInJungle(position)) return false;
-            return isFree(position);
+            if (this.positionInJungle(position)) return true;
         }
+        return !isFree(position);
     }
 
     public void growGrass(){
@@ -53,7 +53,7 @@ public class GrassField implements IChangeObserver {
                 newY = (int) (Math.random() * (double) this.height);
                 position = new Vector2d(newX, newY);
             }
-            while (!canGrowAt(position, true));
+            while (cantGrowAt(position, true));
             this.addedElement(new Grass(position));
         }
 
@@ -63,10 +63,9 @@ public class GrassField implements IChangeObserver {
                 newY = (int) (Math.random() * (double) this.height);
                 position = new Vector2d(newX, newY);
             }
-            while (!canGrowAt(position, false));
+            while (cantGrowAt(position, false));
             this.addedElement(new Grass(position));
         }
-
     }
 
     public boolean isGrassAt(Vector2d position){ //usuwa jeśli jesśli jest
