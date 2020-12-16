@@ -39,6 +39,16 @@ public class AnimalSortedList extends ArrayList<Animal>{
         }
         return firsts;
     }
+
+    public ArrayList<Animal> getTopTwo(){
+        if (this.size() < 2){
+            return null;
+        }
+        ArrayList<Animal> breeding = new ArrayList<>();
+        breeding.add(this.get(this.size() - 1));
+        breeding.add(this.get(this.size() - 2));
+        return breeding;
+    }
     @Override
     public boolean add(Animal newAnimal){
         this.add(this.getIndex(newAnimal), newAnimal);

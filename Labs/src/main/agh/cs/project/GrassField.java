@@ -1,6 +1,7 @@
 package agh.cs.project;
 
 import agh.cs.project.Pages.SimulationPage;
+import agh.cs.project.Pages.SimulationPagePanels.StatsPanel;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -12,22 +13,28 @@ public class GrassField implements IChangeObserver {
     private final FieldMap Animals = new FieldMap();
 
     public final IChangeObserver mapUpdater;
+    public final StatsPanel statsUpdater;
 
     public final int width;
     public final int height;
 
     public final Jungle jungle;
+    public int jungleGrassNumber;
 
     private final int maxFields;
-    public int takenFields;
+    private int takenFields;
 
     public GrassField(int width, int height, float jungleRatio, ProjectEngine engine) {
         this.width = width;
         this.height = height;
         this.jungle = new Jungle(this, jungleRatio);
         this.takenFields = 0;
+        this.jungleGrassNumber = 0;
         this.maxFields = width * height - this.jungle.maxFields;
-        this.mapUpdater = new SimulationPage(this, engine);
+
+        SimulationPage thisPage = new SimulationPage(this, engine);
+        this.mapUpdater = thisPage.getMap();
+        this.statsUpdater = thisPage.getStats();
     }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -66,12 +73,16 @@ public class GrassField implements IChangeObserver {
             while (cantGrowAt(position, false));
             this.addedElement(new Grass(position));
         }
+        this.statsUpdater.mostUpdate(this);
     }
 
     public boolean isGrassAt(Vector2d position){ //usuwa jeśli jesśli jest
         Grass grass = this.GrassMap.get(position);
         if (grass != null){
             this.GrassMap.remove(position);
+            if ( positionInJungle(position) ){
+                jungleGrassNumber--;
+            }
             return true;
         }
         return false;
@@ -135,18 +146,23 @@ public class GrassField implements IChangeObserver {
 
     @Override
     public void addedElement(AbstractWorldMapElement element){
-        if ( positionInJungle(element.getPosition()) ){
-            if (isFree(element.getPosition())) jungle.takenFields++;
+        Vector2d position = element.getPosition();
+        if ( positionInJungle(position) ){
+            if ( isFree(position) ) jungle.takenFields++;
         }
         else {
-            if (isFree(element.getPosition())) this.takenFields++;
+            if ( isFree(position) ) this.takenFields++;
         }
 
         if (element instanceof Animal) {
             this.place((Animal) element);
+            this.statsUpdater.addedAnimal();
         }
         else {
-            this.GrassMap.put(element.getPosition(), (Grass) element);
+            if ( positionInJungle(position) ){
+                jungleGrassNumber++;
+            }
+            this.GrassMap.put(position, (Grass) element);
         }
 
         this.mapUpdater.addedElement(element);
@@ -154,16 +170,20 @@ public class GrassField implements IChangeObserver {
 
     @Override
     public void removedElement(AbstractWorldMapElement element){
+        Vector2d position = element.getPosition();
         if (element instanceof Animal) {
-            this.Animals.removeAnimal(element.getPosition(), (Animal) element);
-            if ( positionInJungle(element.getPosition()) ){
-                if (isFree(element.getPosition())) jungle.takenFields--;
+            this.Animals.removeAnimal(position, (Animal) element);
+            if ( positionInJungle(position) ){
+                if ( isFree(position) ) jungle.takenFields--;
             }
             else {
-                if (isFree(element.getPosition())) this.takenFields--;
+                if ( isFree(position) ) this.takenFields--;
             }
+            this.statsUpdater.killedAnimal();
         }
-        else this.GrassMap.remove(element.getPosition());
+        else {
+            this.GrassMap.remove( position );
+        }
 
         this.mapUpdater.removedElement(element);
     }

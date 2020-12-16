@@ -31,9 +31,7 @@ public class Jungle{
         int width = getDimension(field.width, ratio);
         int height = getDimension(field.height, ratio);
 
-        takenFields = 0;
-
-
+        this.takenFields = 0;
 
         this.lowerCorner = new Vector2d(field.width / 2 - width / 2, field.height / 2 - height / 2);
         this.upperCorner = new Vector2d(field.width / 2 + width / 2 - (field.width + 1) % 2, field.height / 2 + height / 2 - (field.height + 1) % 2);

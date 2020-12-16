@@ -7,28 +7,25 @@ import java.util.List;
 public class Animal extends AbstractWorldMapElement {
     private final List<IChangeObserver> observers = new ArrayList<>();
 
-
     private MapDirection direction;
-
     private final GrassField map;
     private final Genome genome;
-    private final float healthScale = 100;
+    public int startEnergy;
 
     public int energy;
     private final int moveEnergy;
 
     public Animal(GrassField map, Vector2d initialPosition, int energy, int moveEnergy) {
         this(map, initialPosition, energy, moveEnergy, new Genome());
+        this.startEnergy = energy;
     }
-
-    public Animal(GrassField map, Vector2d initialPosition, int energy, int moveEnergy, Genome genes) {
+    public Animal(GrassField map, Vector2d initialPosition, int energy, int moveEnergy, Genome genome) {
         super(initialPosition);
         this.map = map;
         this.direction = MapDirection.newMapDirection((int)(Math.random() * 8));
         this.energy = energy;
         this.moveEnergy = moveEnergy;
-        this.genome = genes;
-
+        this.genome = genome;
         this.addObserver(map);
         this.alertObserversAdded();
     }
@@ -56,6 +53,7 @@ public class Animal extends AbstractWorldMapElement {
         if (this.map.isGrassAt(this.position)){      //try to eat
             possibleEvents.add(EventType.Eating);
         }
+
         return possibleEvents;
     }
 
@@ -96,11 +94,12 @@ public class Animal extends AbstractWorldMapElement {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public Color getHealthColor(){
-        if (this.energy >= 100){
+        float healthScale = startEnergy * 2;
+        if (this.energy >= healthScale){
             return new Color(0, 255, 0);
         }
-        if (this.energy >= 50){
-            float healthPart = (float)(this.energy - 50) / (healthScale / 2);
+        if (this.energy >= (healthScale / 2)){
+            float healthPart = (this.energy - (healthScale / 2)) / (healthScale / 2);
             return new Color((int)(255 * (1 - healthPart)), 255, 0);
         }
         float healthPart = (float)(this.energy) / (healthScale / 2);
@@ -113,4 +112,15 @@ public class Animal extends AbstractWorldMapElement {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    public Animal breedWith(Animal other){
+        Genome newGenome = new Genome(this.genome, other.genome);
+
+        int energy = this.energy / 4 + other.energy / 4;
+        this.energy -= this.energy / 4;
+        other.energy -= other.energy / 4;
+
+        Animal newAnimal = new Animal(this.map, this.position, energy, this.moveEnergy, newGenome);
+        newAnimal.startEnergy = this.startEnergy;
+        return newAnimal;
+    }
 }

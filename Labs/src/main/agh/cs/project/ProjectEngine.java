@@ -50,7 +50,6 @@ public class ProjectEngine extends Thread {
         try {
             while (Animals.size() > 0) {
                 sleep(delay);
-                System.out.println(field.jungle.takenFields + "   " + field.takenFields + "   " + field.GrassMap.size());
                 if (paused){
                     synchronized (this){
                         System.out.println("Paused");
@@ -58,8 +57,6 @@ public class ProjectEngine extends Thread {
                     }
                     System.out.println("Unpaused");
                 }
-                field.growGrass();
-
                 int ind = 0;
                 while (ind < Animals.size()) {
                     Animal curAnimal = Animals.get(ind);
@@ -69,14 +66,24 @@ public class ProjectEngine extends Thread {
                 }
 
                 FieldEventMap eatEventMap = new FieldEventMap(this.plantEnergy);
+                FieldEventMap breedEventMap = new FieldEventMap();
                 for (Animal animal : Animals) {
                     ArrayList<EventType> events = animal.newMove();
                     if (events.contains(EventType.Eating)) {
                         eatEventMap.addAnimal(animal);
                     }
+                    if (events.contains(EventType.Breading)) {
+                        breedEventMap.addAnimal(animal);
+                        System.out.println("Maybe breed at: " + animal.getPosition().toString());
+                    }
                 }
 
                 eatEventMap.resolveEating();
+
+                ArrayList<Animal> newAnimals = breedEventMap.resolveBreeding();
+                this.Animals.addAll(newAnimals);
+
+                field.growGrass();
             }
         }
         catch (InterruptedException ignored) {

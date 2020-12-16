@@ -23,4 +23,20 @@ public class FieldEventMap extends FieldMap{
         }
         this.clear();
     }
+
+    public ArrayList<Animal> resolveBreeding(){
+        ArrayList<Animal> newTab = new ArrayList<>();
+        for (AnimalSortedList field : this.values()){
+            ArrayList<Animal> breedingAnimals = field.getTopTwo();
+            if (breedingAnimals != null) {
+                if (breedingAnimals.get(1).energy >= breedingAnimals.get(1).startEnergy) {
+                    newTab.add(breedingAnimals.get(0).breedWith(breedingAnimals.get(1)));
+                    System.out.println("Breed at: " + breedingAnimals.get(0).getPosition().toString());
+                }
+            }
+
+        }
+        return newTab;
+
+    }
 }
