@@ -1,6 +1,7 @@
 package agh.cs.project.Pages.SimulationPagePanels;
 
 import agh.cs.project.*;
+import agh.cs.project.Pages.SimulationPage;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,7 +15,7 @@ public class MapPanel extends JPanel implements IChangeObserver{
     private final Color jungeColor = new Color(51, 153, 102);
     private final Color borderColor = new Color(131, 125, 74);
 
-    public MapPanel(GrassField field, int mapWidth, int mapHeight, int fieldSize){
+    public MapPanel(SimulationPage stats, GrassField field, int mapWidth, int mapHeight, int fieldSize){
         this.field = field;
         this.fields = new JButton[field.width][field.height];
 
@@ -29,9 +30,11 @@ public class MapPanel extends JPanel implements IChangeObserver{
 
                 JButton newButton = new JButton();
                 this.fields[x][y] = newButton;
+                newButton.setName(x + " " + y);
                 newButton.setHorizontalAlignment(SwingConstants.CENTER);
                 newButton.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 1, borderColor));
                 newButton.setFont( new Font(newButton.getFont().getName(), Font.BOLD, (fieldSize / 3)) );
+                newButton.addActionListener(stats);
                 setGroundColor(x, y);
 
                 Vector2d curPosition = new Vector2d(x, y);

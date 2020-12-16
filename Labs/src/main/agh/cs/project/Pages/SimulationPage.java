@@ -7,17 +7,21 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class SimulationPage {
+public class SimulationPage implements ActionListener {
     private final MapPanel map;
     private final StatsPanel stats;
 
-    private final Color borderColor = new Color(131, 125, 74);
+    private final GrassField field;
 
-    public SimulationPage(GrassField field, ProjectEngine engine) {
+    private final Color borderColor = new Color(131, 125, 74);
+    private SimulationPage x;
+
+    public SimulationPage(GrassField field, ProjectEngine engine){
         int minMapHeight = 400;
         int minMapWidth = 400;
         int statsWidth = 400;    //trzeba ustawić w formularzu
 
+        this.field = field;
         int fieldSize = Math.min(600 / field.width, 1200 / field.height);
         fieldSize = Math.min(120, fieldSize);
         fieldSize = Math.max(fieldSize, 15);
@@ -41,6 +45,11 @@ public class SimulationPage {
 
 //Początek lewej strony
 
+        this.stats = new StatsPanel(statsWidth, totalHeight);
+        contentPane.add(stats);
+
+//Początek prawej strony
+
         JPanel left = new JPanel();
         left.setBackground(borderColor);
         left.setLayout(new BoxLayout(left, BoxLayout.Y_AXIS));
@@ -48,7 +57,7 @@ public class SimulationPage {
         left.setMaximumSize(new Dimension(Math.max(mapWidth, minMapWidth), totalHeight));
         contentPane.add(left);
 
-        this.map = new MapPanel(field, mapWidth, mapHeight, fieldSize);    //mapa
+        this.map = new MapPanel(this, field, mapWidth, mapHeight, fieldSize);    //mapa
         left.add(this.map);
 
         DelayPanel delayPanel = new DelayPanel(mapWidth, mapHeight, totalHeight);     //panel opóźnienia
@@ -81,11 +90,6 @@ public class SimulationPage {
 
         });
 
-//Koniec lewej strony, początek prawej
-
-        this.stats = new StatsPanel(statsWidth, totalHeight);
-        contentPane.add(stats);
-
         f.setVisible(true);
 
         f.addWindowListener(new WindowAdapter() {
@@ -97,12 +101,20 @@ public class SimulationPage {
 
     }
 
+//Metody
+
     public MapPanel getMap (){
         return this.map;
     }
 
     public StatsPanel getStats (){
         return this.stats;
+    }
+
+    public void actionPerformed(ActionEvent e){
+        JButton source = (JButton) e.getSource();
+        Vector2d position = Vector2d.fromString(source.getName());
+        System.out.println(field.objectAt(position));
     }
 }
 

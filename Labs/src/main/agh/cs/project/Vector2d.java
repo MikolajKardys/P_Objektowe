@@ -2,6 +2,7 @@ package agh.cs.project;
 
 
 import java.util.Objects;
+import java.util.Scanner;
 
 public class Vector2d {
     public final int x;
@@ -14,6 +15,11 @@ public class Vector2d {
 
     public String toString() {
         return "(" + this.x + "," + this.y + ")";
+    }
+
+    public static Vector2d fromString(String name){
+        Scanner scanner = new Scanner(name);
+        return new Vector2d(scanner.nextInt(), scanner.nextInt());
     }
 
     public Vector2d add(Vector2d other) {

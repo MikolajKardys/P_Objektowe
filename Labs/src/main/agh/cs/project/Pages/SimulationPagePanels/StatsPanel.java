@@ -47,4 +47,5 @@ public class StatsPanel extends JPanel{
         this.jungleGrass.setText(String.valueOf(field.jungleGrassNumber));
         this.savannaGrass.setText(String.valueOf(field.GrassMap.size() - field.jungleGrassNumber));
     }
+
 }

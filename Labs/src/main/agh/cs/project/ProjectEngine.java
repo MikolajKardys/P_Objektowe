@@ -2,6 +2,7 @@ package agh.cs.project;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
 
 public class ProjectEngine extends Thread {
     private final List<Animal> Animals = new ArrayList<>() {
@@ -49,7 +50,7 @@ public class ProjectEngine extends Thread {
     public void run() {
         try {
             while (Animals.size() > 0) {
-                sleep(delay);
+                sleep(200);
                 if (paused){
                     synchronized (this){
                         System.out.println("Paused");
@@ -57,6 +58,7 @@ public class ProjectEngine extends Thread {
                     }
                     System.out.println("Unpaused");
                 }
+
                 int ind = 0;
                 while (ind < Animals.size()) {
                     Animal curAnimal = Animals.get(ind);
