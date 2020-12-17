@@ -14,6 +14,7 @@ public enum MapDirection{
     }
 
     public final int numNumber = 8;
+    
     private final String [] arrowTable = new String [] {"⭢", "⭨", "⭣", "⭩", "⭠", "⭦", "⭡", "⭧"};
     public String toString(){
         return arrowTable[this.ordinal()];

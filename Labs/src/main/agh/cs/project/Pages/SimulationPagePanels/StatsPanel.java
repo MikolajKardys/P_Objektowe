@@ -31,7 +31,12 @@ public class StatsPanel extends JPanel{
     public void allUpdate(GrassField field){
         days++;
         this.day.setText(String.valueOf(days));
+
         this.animalNumber.setText(String.valueOf(field.animalNumber));
+
+        this.jungleGrass.setText(String.valueOf(field.jungleGrassNumber));
+
+        this.savannaGrass.setText(String.valueOf(field.grassCount() - field.jungleGrassNumber));
     }
 
 }

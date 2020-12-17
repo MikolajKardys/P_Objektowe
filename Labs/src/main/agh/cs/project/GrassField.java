@@ -1,6 +1,7 @@
 package agh.cs.project;
 
 import agh.cs.project.Pages.SimulationPage;
+import agh.cs.project.Pages.SimulationPagePanels.MapPanel;
 import agh.cs.project.Pages.SimulationPagePanels.StatsPanel;
 
 import java.awt.*;
@@ -9,17 +10,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GrassField implements IChangeObserver {
-    public final Map<Vector2d, Grass> GrassMap = new HashMap<>();
+    private final Map<Vector2d, Grass> GrassMap = new HashMap<>();
     private final FieldMap Animals = new FieldMap();
 
-    private final IChangeObserver mapUpdater;
+    private final MapPanel mapUpdater;
     private final StatsPanel statsUpdater;
+    private final Jungle jungle;
 
     public final int width;
     public final int height;
 
-    private final Jungle jungle;
-    private int jungleGrassNumber;
+    public int jungleGrassNumber;
     public int animalNumber = 0;
 
     private final int maxFields;
@@ -41,6 +42,9 @@ public class GrassField implements IChangeObserver {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    public int grassCount(){
+        return this.GrassMap.size();
+    }
     private boolean cantGrowAt(Vector2d position, boolean inJungle){
         if (inJungle){
             if (!this.positionInJungle(position)) return true;
@@ -224,5 +228,9 @@ public class GrassField implements IChangeObserver {
 
     public void updateStats(Object task){
         this.statsUpdater.allUpdate(this);
+    }
+
+    public void setVisible(boolean doSet){
+        this.mapUpdater.setVisible(doSet);
     }
 }
