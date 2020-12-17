@@ -19,6 +19,14 @@ public class Animal extends AbstractWorldMapElement {
         this(map, initialPosition, energy, moveEnergy, new Genome());
         this.startEnergy = energy;
     }
+    public Animal(Animal aParent, Animal bParent){
+        this(aParent.map, aParent.position, aParent.energy / 4 + bParent.energy / 4, aParent.moveEnergy, new Genome(aParent.genome, bParent.genome));
+
+        aParent.energy -= aParent.energy / 4;
+        bParent.energy -= bParent.energy / 4;
+        this.startEnergy = aParent.startEnergy;
+    }
+
     public Animal(GrassField map, Vector2d initialPosition, int energy, int moveEnergy, Genome genome) {
         super(initialPosition);
         this.map = map;
@@ -94,7 +102,7 @@ public class Animal extends AbstractWorldMapElement {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public Color getHealthColor(){
-        float healthScale = startEnergy * 2;
+        float healthScale = startEnergy;
         if (this.energy >= healthScale){
             return new Color(0, 255, 0);
         }
@@ -112,15 +120,4 @@ public class Animal extends AbstractWorldMapElement {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public Animal breedWith(Animal other){
-        Genome newGenome = new Genome(this.genome, other.genome);
-
-        int energy = this.energy / 4 + other.energy / 4;
-        this.energy -= this.energy / 4;
-        other.energy -= other.energy / 4;
-
-        Animal newAnimal = new Animal(this.map, this.position, energy, this.moveEnergy, newGenome);
-        newAnimal.startEnergy = this.startEnergy;
-        return newAnimal;
-    }
 }

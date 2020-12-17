@@ -29,14 +29,17 @@ public class FieldEventMap extends FieldMap{
         for (AnimalSortedList field : this.values()){
             ArrayList<Animal> breedingAnimals = field.getTopTwo();
             if (breedingAnimals != null) {
-                if (breedingAnimals.get(1).energy >= breedingAnimals.get(1).startEnergy) {
-                    newTab.add(breedingAnimals.get(0).breedWith(breedingAnimals.get(1)));
+                Animal aParent = breedingAnimals.get(0);
+                Animal bParent = breedingAnimals.get(1);
+                if (bParent.energy >= bParent.startEnergy / 2) {
+                    Animal newAnimal = new Animal(aParent, bParent);
+                    newTab.add(newAnimal);
                     System.out.println("Breed at: " + breedingAnimals.get(0).getPosition().toString());
+                    System.out.println(newAnimal.startEnergy);
                 }
             }
 
         }
         return newTab;
-
     }
 }

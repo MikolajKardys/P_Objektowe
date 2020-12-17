@@ -3,8 +3,10 @@ package agh.cs.project;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
+import java.util.TimerTask;
 
-public class ProjectEngine extends Thread {
+public class ProjectEngine extends Timer {
+
     private final List<Animal> Animals = new ArrayList<>() {
         @Override
         public Animal remove(int index) {
@@ -19,7 +21,11 @@ public class ProjectEngine extends Thread {
     private boolean paused = true;
     private int delay;
 
+    public final boolean tooBig;
+
     public ProjectEngine(int width, int height, int animalNumber, int startEnergy, int moveEnergy, int plantEnergy, float jungleRatio){
+        this.tooBig = ((width > 40) || (height > 60) || (animalNumber > 1000));
+
         GrassField field = new GrassField(width, height, jungleRatio, this);
         this.energyToSurvive = moveEnergy;
         this.plantEnergy = plantEnergy;
@@ -31,11 +37,12 @@ public class ProjectEngine extends Thread {
             Vector2d newPosition = new Vector2d(newX, newY);
             Animals.add( new Animal(field, newPosition, startEnergy, moveEnergy) );
         }
+        field.updateStats(this);
     }
-
 
     public void pause(){
         this.paused = true;
+        System.out.println("Paused");
     }
 
     public void unpause(int delay){
@@ -43,53 +50,68 @@ public class ProjectEngine extends Thread {
             this.paused = false;
             this.delay = delay;
             this.notifyAll();
+            this.start();
+            System.out.println("Unpaused");
         }
     }
 
+    public void start(){
+        this.schedule(new ProjectEngineDay(this),0, delay);
+    }
+
     @Override
-    public void run() {
-        try {
-            while (Animals.size() > 0) {
-                sleep(200);
-                if (paused){
-                    synchronized (this){
-                        System.out.println("Paused");
-                        this.wait();
-                    }
-                    System.out.println("Unpaused");
-                }
+    public void cancel(){
+        System.out.println("Terminated");
+        super.cancel();
+    }
 
-                int ind = 0;
-                while (ind < Animals.size()) {
-                    Animal curAnimal = Animals.get(ind);
-                    if (curAnimal.energy < this.energyToSurvive) {
-                        Animals.remove(ind);
-                    } else ind++;
-                }
-
-                FieldEventMap eatEventMap = new FieldEventMap(this.plantEnergy);
-                FieldEventMap breedEventMap = new FieldEventMap();
-                for (Animal animal : Animals) {
-                    ArrayList<EventType> events = animal.newMove();
-                    if (events.contains(EventType.Eating)) {
-                        eatEventMap.addAnimal(animal);
-                    }
-                    if (events.contains(EventType.Breading)) {
-                        breedEventMap.addAnimal(animal);
-                        System.out.println("Maybe breed at: " + animal.getPosition().toString());
-                    }
-                }
-
-                eatEventMap.resolveEating();
-
-                ArrayList<Animal> newAnimals = breedEventMap.resolveBreeding();
-                this.Animals.addAll(newAnimals);
-
-                field.growGrass();
-            }
+    private class ProjectEngineDay extends TimerTask {
+        private final ProjectEngine engine;
+        public ProjectEngineDay(ProjectEngine engine){
+            this.engine = engine;
         }
-        catch (InterruptedException ignored) {
-            System.out.println("Terminated");
+        @Override
+        public void run() {
+            synchronized (this) {
+
+                if (engine.Animals.size() == 0){
+                    engine.pause();
+                    this.cancel();
+                }
+                else if (engine.paused){
+                    this.cancel();
+                }
+                else {
+                    int ind = 0;
+                    while (ind < Animals.size()) {
+                        Animal curAnimal = Animals.get(ind);
+                        if (curAnimal.energy < engine.energyToSurvive) {
+                            Animals.remove(ind);
+                        } else ind++;
+                    }
+
+                    FieldEventMap eatEventMap = new FieldEventMap(engine.plantEnergy);
+                    FieldEventMap breedEventMap = new FieldEventMap();
+                    for (Animal animal : Animals) {
+                        ArrayList<EventType> events = animal.newMove();
+                        if (events.contains(EventType.Eating)) {
+                            eatEventMap.addAnimal(animal);
+                        }
+                        if (events.contains(EventType.Breading)) {
+                            breedEventMap.addAnimal(animal);
+                        }
+                    }
+
+                    eatEventMap.resolveEating();
+
+                    ArrayList<Animal> newAnimals = breedEventMap.resolveBreeding();
+                    engine.Animals.addAll(newAnimals);
+
+                    field.growGrass();
+
+                    field.updateStats(this);
+                }
+            }
         }
     }
 }

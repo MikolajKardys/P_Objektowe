@@ -14,8 +14,9 @@ public class StatsPanel extends JPanel{
     private JLabel avgEnergy;
     private JLabel avgLife;
     private JLabel avgChildren;
+    private JEditorPane editorPane1;
 
-    private int days = 1;
+    private int days = 0;
 
     private int allAnimals;
     private int livingNumber;
@@ -27,25 +28,10 @@ public class StatsPanel extends JPanel{
         this.add(statsPanel);
     }
 
-    public void addedAnimal(){
-        allAnimals++;
-        livingNumber++;
-
-        this.animalNumber.setText(String.valueOf(livingNumber));
-    }
-
-    public void killedAnimal(){
-        livingNumber--;
-
-        this.animalNumber.setText(String.valueOf(livingNumber));
-    }
-
-    public void mostUpdate(GrassField field){
+    public void allUpdate(GrassField field){
         days++;
         this.day.setText(String.valueOf(days));
-
-        this.jungleGrass.setText(String.valueOf(field.jungleGrassNumber));
-        this.savannaGrass.setText(String.valueOf(field.GrassMap.size() - field.jungleGrassNumber));
+        this.animalNumber.setText(String.valueOf(field.animalNumber));
     }
 
 }

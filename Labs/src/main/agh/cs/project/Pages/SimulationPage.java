@@ -13,22 +13,32 @@ public class SimulationPage implements ActionListener {
 
     private final GrassField field;
 
-    private final Color borderColor = new Color(131, 125, 74);
-    private SimulationPage x;
-
     public SimulationPage(GrassField field, ProjectEngine engine){
+        Color borderColor = new Color(131, 125, 74);
+
+
+        boolean tooBig = engine.tooBig;
+        this.field = field;
+
         int minMapHeight = 400;
         int minMapWidth = 400;
         int statsWidth = 400;    //trzeba ustawić w formularzu
 
-        this.field = field;
-        int fieldSize = Math.min(600 / field.width, 1200 / field.height);
-        fieldSize = Math.min(120, fieldSize);
-        fieldSize = Math.max(fieldSize, 15);
-        System.out.println(field.height + " " + field.width + " " + 50);
-
-        int mapHeight = fieldSize * field.width;
-        int mapWidth = (int) (mapHeight * ((float) field.height / (float) field.width));
+        int fieldSize;
+        int mapWidth;
+        int mapHeight;
+        if (!tooBig){
+            fieldSize = Math.min(650 / field.width, 1100 / field.height);
+            fieldSize = Math.min(120, fieldSize);
+            fieldSize = Math.max(fieldSize, 15);
+            mapHeight = fieldSize * field.width;
+            mapWidth = (int) (mapHeight * ((float) field.height / (float) field.width));
+        }
+        else {
+            fieldSize = 50;
+            mapWidth = minMapWidth;
+            mapHeight = minMapHeight;
+        }
 
         int totalHeight = Math.max(mapHeight, minMapHeight) + 100;
         int totalWidth = Math.max(mapWidth, minMapWidth) + statsWidth;
@@ -57,8 +67,14 @@ public class SimulationPage implements ActionListener {
         left.setMaximumSize(new Dimension(Math.max(mapWidth, minMapWidth), totalHeight));
         contentPane.add(left);
 
-        this.map = new MapPanel(this, field, mapWidth, mapHeight, fieldSize);    //mapa
-        left.add(this.map);
+        if (!tooBig) {
+            this.map = new MapPanel(this, field, mapWidth, mapHeight, fieldSize);    //mapa
+            left.add(this.map);
+        }
+        else {
+            this.map = null;
+        }
+        left.add(Box.createVerticalGlue());
 
         DelayPanel delayPanel = new DelayPanel(mapWidth, mapHeight, totalHeight);     //panel opóźnienia
         delayPanel.setBackground(borderColor);
@@ -66,28 +82,30 @@ public class SimulationPage implements ActionListener {
 
         ButtonPanel buttonPanel = new ButtonPanel(mapWidth);
         buttonPanel.setBackground(borderColor);
+        delayPanel.setAlignmentY(Component.BOTTOM_ALIGNMENT);
         left.add(buttonPanel);
 
         buttonPanel.stopButton.addActionListener(e -> {
-            if (buttonPanel.stopButton.getText().equals("Stop Simulation")) {
-                buttonPanel.stopButton.setText("Resume Simulation");
-                delayPanel.delayText.setEnabled(true);
-                engine.pause();
-            } else {
-                try {
-                    int delay = Integer.parseInt(delayPanel.delayText.getText());
-                    if (delay >= 0) {
-                        buttonPanel.stopButton.setText("Stop Simulation");
-                        engine.unpause(delay);
-                        delayPanel.delayText.setEnabled(false);
-                    } else {
-                        JOptionPane.showMessageDialog(f, "Delay value must be equal or above 0");
+            synchronized (engine) {
+                if (buttonPanel.stopButton.getText().equals("Stop Simulation")) {
+                    buttonPanel.stopButton.setText("Resume Simulation");
+                    delayPanel.delayText.setEnabled(true);
+                    engine.pause();
+                } else {
+                    try {
+                        int delay = Integer.parseInt(delayPanel.delayText.getText());
+                        if (delay > 0) {
+                            buttonPanel.stopButton.setText("Stop Simulation");
+                            engine.unpause(delay);
+                            delayPanel.delayText.setEnabled(false);
+                        } else {
+                            JOptionPane.showMessageDialog(f, "Delay value must be a positive integer!!!");
+                        }
+                    } catch (NumberFormatException ignored) {
+                        JOptionPane.showMessageDialog(f, "Invalid delay value!!!");
                     }
-                } catch (NumberFormatException ignored) {
-                    JOptionPane.showMessageDialog(f, "Invalid delay value!!!");
                 }
             }
-
         });
 
         f.setVisible(true);
@@ -95,7 +113,7 @@ public class SimulationPage implements ActionListener {
         f.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                engine.interrupt();
+                engine.cancel();
             }
         });
 

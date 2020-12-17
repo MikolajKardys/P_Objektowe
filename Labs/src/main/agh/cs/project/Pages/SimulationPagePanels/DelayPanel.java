@@ -7,7 +7,7 @@ public class DelayPanel extends JPanel {
     public final JTextField delayText;
 
     public DelayPanel(int mapWidth, int mapHeight, int totalHeight){
-        this.setPreferredSize(new Dimension(mapWidth, totalHeight - mapHeight - 50));
+        this.setMaximumSize(new Dimension(mapWidth, totalHeight - mapHeight - 50));
 
         JLabel delayLabel = new JLabel("Current delay (in milliseconds): ");
         delayLabel.setAlignmentX(Component.CENTER_ALIGNMENT);

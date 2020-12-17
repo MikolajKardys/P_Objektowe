@@ -74,7 +74,7 @@ public class MenuPage implements ActionListener {
                     int startEnergy = Integer.parseInt(startEnergyField.getText());
                     int moveEnergy = Integer.parseInt(moveEnergyField.getText());
                     int plantEnergy = Integer.parseInt(plantEnergyField.getText());
-                    new ProjectEngine(height, width, animalNumber, startEnergy, moveEnergy, plantEnergy, jungeRatio).start();
+                    new ProjectEngine(height, width, animalNumber, startEnergy, moveEnergy, plantEnergy, jungeRatio);
                 }
             }
             else{
