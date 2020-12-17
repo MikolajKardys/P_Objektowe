@@ -1,12 +1,18 @@
 package agh.cs.project.Pages.SimulationPagePanels;
 
-import agh.cs.project.*;
-import agh.cs.project.Pages.SimulationPage;
-
 import javax.swing.*;
-import java.awt.*;
 
-public class MapPanel extends JPanel implements IChangeObserver{
+public class MapPanel extends JPanel{
+
+    
+
+
+    /*
+
+
+
+
+
     private final JButton[][] fields;
     private final GrassField field;
 
@@ -17,7 +23,6 @@ public class MapPanel extends JPanel implements IChangeObserver{
 
     public MapPanel(SimulationPage stats, GrassField field, int mapWidth, int mapHeight, int fieldSize){
         this.field = field;
-        this.fields = new JButton[field.width][field.height];
 
         this.setLayout(new GridLayout(field.width, field.height));
         this.setBackground(borderColor);
@@ -33,7 +38,6 @@ public class MapPanel extends JPanel implements IChangeObserver{
                 newButton.setName(x + " " + y);
                 newButton.setHorizontalAlignment(SwingConstants.CENTER);
                 newButton.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 1, borderColor));
-                newButton.setFont( new Font(newButton.getFont().getName(), Font.BOLD, (fieldSize / 3)) );
                 newButton.addActionListener(stats);
                 setGroundColor(x, y);
 
@@ -59,13 +63,10 @@ public class MapPanel extends JPanel implements IChangeObserver{
 
     private void updateField(int indX, int indY) {
         JButton text = this.fields[indX][indY];
-        text.setText("");
-
         Vector2d position = new Vector2d(indX, indY);
-        String topSprite = this.field.getTopStringAt(position);
-        if (topSprite != null) {
-            text.setText(topSprite);
-            text.setBackground(this.field.getColorAt(position));
+        Color newColor = this.field.getColorAt(position);
+        if (newColor != null) {
+            text.setBackground(newColor);
         }
         else {
             setGroundColor(indX, indY);
@@ -111,5 +112,7 @@ public class MapPanel extends JPanel implements IChangeObserver{
     public void changedEnergy(Animal animal){
         this.updateField(animal.getPosition().x, animal.getPosition().y);
     }
+
+     */
 }
 

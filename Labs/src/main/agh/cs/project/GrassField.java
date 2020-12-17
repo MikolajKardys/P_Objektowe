@@ -200,17 +200,6 @@ public class GrassField implements IChangeObserver {
 
 ///////////////////////////////////////////////////////////////////////////////////
 
-    public String getTopStringAt(Vector2d position){
-        AnimalSortedList list = this.Animals.get(position);
-        if (list != null) {
-            ArrayList <Animal> topAt = this.Animals.get(position).getAllTop();
-            if (topAt != null) {
-                return topAt.get(0).toString();
-            }
-        }
-        return null;
-    }
-
     public Color getColorAt(Vector2d position){
         AnimalSortedList list = this.Animals.get(position);
         if (list != null) {

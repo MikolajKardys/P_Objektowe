@@ -14,11 +14,6 @@ public enum MapDirection{
     }
 
     public final int numNumber = 8;
-    
-    private final String [] arrowTable = new String [] {"⭢", "⭨", "⭣", "⭩", "⭠", "⭦", "⭡", "⭧"};
-    public String toString(){
-        return arrowTable[this.ordinal()];
-    }
 
     public Vector2d toUnitVector(){
         int [] tabX = {0, 1, 1, 1, 0, -1, -1, -1};

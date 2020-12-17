@@ -82,7 +82,6 @@ public class ProjectEngine extends Timer {
                     this.cancel();
                 }
                 else {
-
                     field.setVisible(false);
 
                     int ind = 0;
@@ -112,9 +111,9 @@ public class ProjectEngine extends Timer {
 
                     field.growGrass();
 
-                    field.setVisible(true);
-
                     field.updateStats(this);
+
+                    field.setVisible(true);
                 }
             }
         }
