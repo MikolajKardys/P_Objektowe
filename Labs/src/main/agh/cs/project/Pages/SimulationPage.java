@@ -7,7 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class SimulationPage implements ActionListener {
+public class SimulationPage {
     private final MapPanel map;
     private final StatsPanel stats;
 
@@ -60,30 +60,30 @@ public class SimulationPage implements ActionListener {
 
 //Początek prawej strony
 
-        JPanel left = new JPanel();
-        left.setBackground(borderColor);
-        left.setLayout(new BoxLayout(left, BoxLayout.Y_AXIS));
-        left.setPreferredSize(new Dimension(Math.max(mapWidth, minMapWidth), totalHeight));
-        left.setMaximumSize(new Dimension(Math.max(mapWidth, minMapWidth), totalHeight));
-        contentPane.add(left);
+        JPanel right = new JPanel();
+        right.setBackground(borderColor);
+        right.setLayout(new BoxLayout(right, BoxLayout.Y_AXIS));
+        right.setPreferredSize(new Dimension(Math.max(mapWidth, minMapWidth), totalHeight));
+        right.setMaximumSize(new Dimension(Math.max(mapWidth, minMapWidth), totalHeight));
+        contentPane.add(right);
 
         if (!tooBig) {
-            this.map = new MapPanel(field, mapWidth, mapHeight, fieldSize);    //mapa
-            left.add(this.map);
+            this.map = new MapPanel(this, field, mapWidth, mapHeight, fieldSize);    //mapa
+            right.add(this.map);
         }
         else {
             this.map = null;
         }
-        left.add(Box.createVerticalGlue());
+        right.add(Box.createVerticalGlue());
 
         DelayPanel delayPanel = new DelayPanel(mapWidth, mapHeight, totalHeight);     //panel opóźnienia
         delayPanel.setBackground(borderColor);
-        left.add(delayPanel);
+        right.add(delayPanel);
 
         ButtonPanel buttonPanel = new ButtonPanel(mapWidth);
         buttonPanel.setBackground(borderColor);
         delayPanel.setAlignmentY(Component.BOTTOM_ALIGNMENT);
-        left.add(buttonPanel);
+        right.add(buttonPanel);
 
         buttonPanel.stopButton.addActionListener(e -> {
             synchronized (engine) {

@@ -27,7 +27,7 @@ public class ProjectEngine implements ActionListener {
     public final boolean tooBig;
 
     public ProjectEngine(int width, int height, int animalNumber, int startEnergy, int moveEnergy, int plantEnergy, float jungleRatio){
-        this.tooBig = ((width > 40) || (height > 70) || (animalNumber > 2000));
+        this.tooBig = ((width > 40) || (height > 70));
 
         GrassField field = new GrassField(width, height, jungleRatio, this);
         this.energyToSurvive = moveEnergy;
