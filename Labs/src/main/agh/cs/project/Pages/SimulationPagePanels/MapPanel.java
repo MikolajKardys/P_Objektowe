@@ -1,118 +1,84 @@
 package agh.cs.project.Pages.SimulationPagePanels;
 
+import agh.cs.project.*;
+
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.ArrayList;
 
-public class MapPanel extends JPanel{
-
-    
-
-
-    /*
-
-
-
-
-
-    private final JButton[][] fields;
+public class MapPanel extends JPanel {
     private final GrassField field;
+    private final int fieldSize;
+    private final int mapWidth;
+    private final int mapHeight;
 
     private final Color grassColor = new Color(31, 119, 49);
     private final Color steppeColor = new Color(182, 227, 83);
     private final Color jungeColor = new Color(51, 153, 102);
     private final Color borderColor = new Color(131, 125, 74);
 
-    public MapPanel(SimulationPage stats, GrassField field, int mapWidth, int mapHeight, int fieldSize){
+    private ProjectEngine curTask = null;
+
+    public MapPanel(GrassField field, int mapWidth, int mapHeight, int fieldSize) {
         this.field = field;
+        this.fieldSize = fieldSize;
+        this.mapWidth = mapWidth;
+        this.mapHeight = mapHeight;
 
-        this.setLayout(new GridLayout(field.width, field.height));
-        this.setBackground(borderColor);
+        this.setBackground(steppeColor);
         this.setPreferredSize(new Dimension(mapWidth, mapHeight));
+        this.setMinimumSize(new Dimension(mapWidth, mapHeight));
         this.setMaximumSize(new Dimension(mapWidth, mapHeight));
+        this.setAlignmentX(CENTER_ALIGNMENT);
+    }
 
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
 
-        for(int x = 0; x < field.width; x++) {
-            for(int y = 0; y < field.height; y++){
+        //Paint Jungle
+        Vector2d jungleLower = field.getJungleLowerCorner();
+        Vector2d jungleUpper = field.getJungleUpperCorner();
+        int jungleX = jungleUpper.y - jungleLower.y + 1;
+        int jungleY = jungleUpper.x - jungleLower.x + 1;
+        g.setColor(jungeColor);
+        g.fillRect(jungleLower.y * fieldSize, jungleLower.x * fieldSize,
+                jungleX * fieldSize, jungleY * fieldSize);
 
-                JButton newButton = new JButton();
-                this.fields[x][y] = newButton;
-                newButton.setName(x + " " + y);
-                newButton.setHorizontalAlignment(SwingConstants.CENTER);
-                newButton.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 1, borderColor));
-                newButton.addActionListener(stats);
-                setGroundColor(x, y);
-
-                Vector2d curPosition = new Vector2d(x, y);
-                if (field.objectAt(curPosition) instanceof Grass){
-                    newButton.setBackground(grassColor);
-                }
-
-                this.add(newButton);
+        //Paint Grass
+        g.setColor(grassColor);
+        ArrayList<Grass> grassList = field.getGrasses();
+        for (Grass grass : grassList) {
+            if (grass != null) {
+                int y = grass.getPosition().x * fieldSize;
+                int x = grass.getPosition().y * fieldSize;
+                g.fillRect(x, y, fieldSize, fieldSize);
             }
         }
-    }
 
-
-
-    private void setGroundColor(int indX, int indY){
-        if (field.positionInJungle(new Vector2d(indX, indY))){
-            this.fields[indX][indY].setBackground(jungeColor);
+        //Paint Animals
+        ArrayList<AnimalSortedList> animalLists = field.getAnimals();
+        for (AnimalSortedList animals : animalLists) {
+            Animal animal = animals.getAllTop().get(0);
+            int y = animal.getPosition().x * fieldSize;
+            int x = animal.getPosition().y * fieldSize;
+            g.setColor(animal.getHealthColor());
+            g.fillRect(x, y, fieldSize, fieldSize);
         }
-        else
-            this.fields[indX][indY].setBackground(steppeColor);
-    }
 
-    private void updateField(int indX, int indY) {
-        JButton text = this.fields[indX][indY];
-        Vector2d position = new Vector2d(indX, indY);
-        Color newColor = this.field.getColorAt(position);
-        if (newColor != null) {
-            text.setBackground(newColor);
+        //Paint Grid
+        g.setColor(borderColor);
+        for (int i = 1; i < field.height; i++) {
+            g.drawLine(0, i * fieldSize, mapWidth * fieldSize, i * fieldSize);
+            g.drawLine(i * fieldSize, 0, i * fieldSize, mapHeight * fieldSize);
         }
-        else {
-            setGroundColor(indX, indY);
-        }
+
     }
-
-    @Override
-    public void changedPosition(Animal animal, Vector2d oldPosition){
-        int indX = oldPosition.x;
-        int indY = oldPosition.y;
-        this.updateField(indX, indY);
-
-        int newX = animal.getPosition().x;
-        int newY = animal.getPosition().y;
-        this.updateField(newX, newY);
-    }
-
-    @Override
-    public void addedElement(AbstractWorldMapElement element){
-        int indX = element.getPosition().x;
-        int indY = element.getPosition().y;
-        if (element instanceof Animal){
-            this.updateField(indX, indY);
-        }
-        else {
-            this.fields[indX][indY].setBackground(grassColor);
-        }
-    }
-
-    @Override
-    public void removedElement(AbstractWorldMapElement element){
-        int indX = element.getPosition().x;
-        int indY = element.getPosition().y;
-        if (element instanceof Animal){
-            this.updateField(indX, indY);
-        }
-        else {
-            setGroundColor(indX, indY);
-        }
-    }
-
-    @Override
-    public void changedEnergy(Animal animal){
-        this.updateField(animal.getPosition().x, animal.getPosition().y);
-    }
-
-     */
 }
+
+
+
+
 

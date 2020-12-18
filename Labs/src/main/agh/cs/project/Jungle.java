@@ -2,8 +2,8 @@ package agh.cs.project;
 
 public class Jungle{
 
-    private final Vector2d lowerCorner;
-    private final Vector2d upperCorner;
+    public final Vector2d lowerCorner;
+    public final Vector2d upperCorner;
 
     public final int maxFields;
     public int takenFields;
@@ -41,4 +41,5 @@ public class Jungle{
 
         this.maxFields = jungleX * jungleY;
     }
+
 }

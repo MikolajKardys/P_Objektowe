@@ -34,8 +34,6 @@ public class FieldEventMap extends FieldMap{
                 if (bParent.energy >= bParent.startEnergy / 2) {
                     Animal newAnimal = new Animal(aParent, bParent);
                     newTab.add(newAnimal);
-                    System.out.println("Breed at: " + breedingAnimals.get(0).getPosition().toString());
-                    System.out.println(newAnimal.startEnergy);
                 }
             }
 

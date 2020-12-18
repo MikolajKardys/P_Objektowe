@@ -29,7 +29,7 @@ public class SimulationPage implements ActionListener {
         int mapHeight;
         if (!tooBig){
             fieldSize = Math.min(650 / field.width, 1100 / field.height);
-            fieldSize = Math.min(120, fieldSize);
+            fieldSize = Math.min(100, fieldSize);
             fieldSize = Math.max(fieldSize, 15);
             mapHeight = fieldSize * field.width;
             mapWidth = (int) (mapHeight * ((float) field.height / (float) field.width));
@@ -68,7 +68,7 @@ public class SimulationPage implements ActionListener {
         contentPane.add(left);
 
         if (!tooBig) {
-            this.map = new MapPanel(this, field, mapWidth, mapHeight, fieldSize);    //mapa
+            this.map = new MapPanel(field, mapWidth, mapHeight, fieldSize);    //mapa
             left.add(this.map);
         }
         else {

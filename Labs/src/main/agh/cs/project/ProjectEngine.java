@@ -1,11 +1,12 @@
 package agh.cs.project;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import javax.swing.Timer;
 
-public class ProjectEngine extends Timer {
+public class ProjectEngine implements ActionListener {
 
     private final List<Animal> Animals = new ArrayList<>() {
         @Override
@@ -20,6 +21,8 @@ public class ProjectEngine extends Timer {
 
     private boolean paused = true;
     private int delay;
+
+    private final Timer timer;
 
     public final boolean tooBig;
 
@@ -37,43 +40,90 @@ public class ProjectEngine extends Timer {
             Vector2d newPosition = new Vector2d(newX, newY);
             Animals.add( new Animal(field, newPosition, startEnergy, moveEnergy) );
         }
-        field.updateStats(this);
+        field.updateStats();
+
+        field.repaint();
+
+        timer = new Timer(200, this);
     }
 
     public void pause(){
         this.paused = true;
-        System.out.println("Paused");
     }
 
     public void unpause(int delay){
-        synchronized (this){
-            this.paused = false;
-            this.delay = delay;
-            this.notifyAll();
-            this.start();
-            System.out.println("Unpaused");
-        }
+        this.paused = false;
+        this.delay = delay;
+        this.notifyAll();
+        this.start(delay);
     }
 
-    public void start(){
-        this.schedule(new ProjectEngineDay(this),0, delay);
+    public void start(int delay){
+        timer.setDelay(delay);
+        timer.start();
+    }
+
+    public void cancel(){
+        timer.stop();
+        System.out.println("Terminated");
     }
 
     @Override
-    public void cancel(){
-        System.out.println("Terminated");
-        super.cancel();
-    }
+    public void actionPerformed(ActionEvent e) {
+        if (this.Animals.size() == 0){
+            this.pause();
+            this.cancel();
+        }
+        else if (this.paused){
+            this.cancel();
+        }
+        else {
+            int ind = 0;
+            while (ind < Animals.size()) {
+                Animal curAnimal = Animals.get(ind);
+                if (curAnimal.energy < this.energyToSurvive) {
+                    Animals.remove(ind);
+                } else ind++;
+            }
 
-    private class ProjectEngineDay extends TimerTask {
+            FieldEventMap eatEventMap = new FieldEventMap(this.plantEnergy);
+            FieldEventMap breedEventMap = new FieldEventMap();
+            for (Animal animal : Animals) {
+                ArrayList<EventType> events = animal.newMove();
+                if (events.contains(EventType.Eating)) {
+                    eatEventMap.addAnimal(animal);
+                }
+                if (events.contains(EventType.Breading)) {
+                    breedEventMap.addAnimal(animal);
+                }
+            }
+
+            eatEventMap.resolveEating();
+
+            ArrayList<Animal> newAnimals = breedEventMap.resolveBreeding();
+            this.Animals.addAll(newAnimals);
+
+            field.growGrass();
+
+            field.updateStats();
+
+            field.repaint();
+        }
+    }
+}
+
+
+    /*
+    public class ProjectEngineDay extends TimerTask {
         private final ProjectEngine engine;
+
         public ProjectEngineDay(ProjectEngine engine){
             this.engine = engine;
         }
+
         @Override
         public void run() {
             synchronized (this) {
-
                 if (engine.Animals.size() == 0){
                     engine.pause();
                     this.cancel();
@@ -82,8 +132,6 @@ public class ProjectEngine extends Timer {
                     this.cancel();
                 }
                 else {
-                    field.setVisible(false);
-
                     int ind = 0;
                     while (ind < Animals.size()) {
                         Animal curAnimal = Animals.get(ind);
@@ -111,12 +159,11 @@ public class ProjectEngine extends Timer {
 
                     field.growGrass();
 
-                    field.updateStats(this);
+                    field.updateStats();
 
-                    field.setVisible(true);
+                    field.repaint(this);
                 }
             }
         }
-    }
-}
+    }*/
 

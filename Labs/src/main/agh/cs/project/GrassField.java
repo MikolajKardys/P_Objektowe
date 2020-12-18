@@ -4,27 +4,21 @@ import agh.cs.project.Pages.SimulationPage;
 import agh.cs.project.Pages.SimulationPagePanels.MapPanel;
 import agh.cs.project.Pages.SimulationPagePanels.StatsPanel;
 
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class GrassField implements IChangeObserver {
     private final Map<Vector2d, Grass> GrassMap = new HashMap<>();
     private final FieldMap Animals = new FieldMap();
-
     private final MapPanel mapUpdater;
     private final StatsPanel statsUpdater;
     private final Jungle jungle;
+    private final int maxFields;
+    private int takenFields;
 
     public final int width;
     public final int height;
-
     public int jungleGrassNumber;
     public int animalNumber = 0;
-
-    private final int maxFields;
-    private int takenFields;
 
     public GrassField(int width, int height, float jungleRatio, ProjectEngine engine) {
         this.width = width;
@@ -146,7 +140,6 @@ public class GrassField implements IChangeObserver {
 
         this.Animals.addAnimal(animal);
 
-        if (this.mapUpdater != null) this.mapUpdater.changedPosition(animal, oldPosition);
     }
 
     @Override
@@ -170,7 +163,6 @@ public class GrassField implements IChangeObserver {
             this.GrassMap.put(position, (Grass) element);
         }
 
-        if (this.mapUpdater != null) this.mapUpdater.addedElement(element);
     }
 
     @Override
@@ -190,36 +182,39 @@ public class GrassField implements IChangeObserver {
             this.GrassMap.remove( position );
         }
 
-        if (this.mapUpdater != null) this.mapUpdater.removedElement(element);
     }
 
     @Override
     public void changedEnergy(Animal animal){
-        if (this.mapUpdater != null) this.mapUpdater.changedEnergy(animal);
     }
 
 ///////////////////////////////////////////////////////////////////////////////////
-
-    public Color getColorAt(Vector2d position){
-        AnimalSortedList list = this.Animals.get(position);
-        if (list != null) {
-            ArrayList <Animal> topAt = this.Animals.get(position).getAllTop();
-            if (topAt != null) {
-                return topAt.get(0).getHealthColor();
-            }
-        }
-        return null;
-    }
 
     public boolean positionInJungle(Vector2d position){
         return this.jungle.positionInJungle(position);
     }
 
-    public void updateStats(Object task){
+    public void updateStats(){
         this.statsUpdater.allUpdate(this);
     }
 
-    public void setVisible(boolean doSet){
-        this.mapUpdater.setVisible(doSet);
+    public Vector2d getJungleUpperCorner(){
+        return this.jungle.upperCorner;
+    }
+
+    public Vector2d getJungleLowerCorner(){
+        return this.jungle.lowerCorner;
+    }
+
+    public ArrayList<Grass> getGrasses(){
+        return new ArrayList<>(this.GrassMap.values());
+    }
+
+    public ArrayList<AnimalSortedList> getAnimals(){
+        return new ArrayList<>(this.Animals.values());
+    }
+
+    public void repaint(){
+        if (this.mapUpdater != null) this.mapUpdater.repaint();
     }
 }

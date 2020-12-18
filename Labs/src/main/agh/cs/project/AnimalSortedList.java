@@ -1,5 +1,6 @@
 package agh.cs.project;
 
+import java.awt.*;
 import java.util.*;
 
 public class AnimalSortedList extends ArrayList<Animal>{
@@ -54,4 +55,5 @@ public class AnimalSortedList extends ArrayList<Animal>{
         this.add(this.getIndex(newAnimal), newAnimal);
         return true;
     }
+
 }

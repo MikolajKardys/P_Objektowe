@@ -32,8 +32,6 @@ public class Genome {
         int switchIndexTwo = (int)(Math.random() * 30) + 1;
         while (switchIndexTwo == switchIndexOne) switchIndexTwo = (int)(Math.random() * 30) + 1;
 
-        System.out.println(switchIndexOne + " " + switchIndexTwo);
-
         int [] curParent = firstParent;
         int [] genomeTab = new int [] {0, 0, 0, 0, 0, 0, 0, 0};
         for (int i = 0; i < 32; i++){
