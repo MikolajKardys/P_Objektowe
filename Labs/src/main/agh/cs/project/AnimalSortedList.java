@@ -1,58 +1,58 @@
 package agh.cs.project;
 
-import java.awt.*;
 import java.util.*;
 
 public class AnimalSortedList extends ArrayList<Animal>{
-
     private static class compareHealth implements Comparator<Animal>{
         public int compare (Animal a, Animal b){
-            if (b.energy == a.energy){
+            if (b.getEnergy() == a.getEnergy()){
                 return b.hashCode() - a.hashCode();
             }
-            return b.energy - a.energy;
+            return b.getEnergy() - a.getEnergy();
 
         }
     }
 
     public AnimalSortedList(Animal firstAnimal){
+        super();
         this.add(firstAnimal);
-    }
-
-    private int getIndex(Animal animal){
-        int index = Collections.binarySearch(this, animal, new compareHealth());
-        if (index >= 0){
-            return index;
-        }
-        else return (index * (-1)) - 1;
     }
 
     public ArrayList<Animal> getAllTop(){
         if (this.size() == 0){
             return null;
         }
-        ArrayList<Animal> firsts = new ArrayList<>();
-        firsts.add(this.get(0));
-        int ind = 1;
-        while (ind < this.size() && this.get(ind).energy == this.get(0).energy){
-            firsts.add(this.get(ind));
-            ind++;
+        AnimalSortedList allTop = new AnimalSortedList(this.get(0));
+        int i = 1;
+        while (i < this.size() && this.get(i).getEnergy() == allTop.get(0).getEnergy()){
+            allTop.add(this.get(i));
+            i++;
         }
-        return firsts;
+        return allTop;
     }
 
     public ArrayList<Animal> getTopTwo(){
         if (this.size() < 2){
             return null;
         }
-        ArrayList<Animal> breeding = new ArrayList<>();
-        breeding.add(this.get(this.size() - 1));
-        breeding.add(this.get(this.size() - 2));
-        return breeding;
+        ArrayList<Animal> topTwo = this.getAllTop();
+        if (topTwo.size() == 1){
+            topTwo.add(this.get(1));
+        }
+        return topTwo;
     }
+
+    public void sort(){
+        this.sort(new compareHealth());
+    }
+
     @Override
     public boolean add(Animal newAnimal){
-        this.add(this.getIndex(newAnimal), newAnimal);
+        int ind = 0;
+        while (ind < this.size() && newAnimal.getEnergy() < this.get(ind).getEnergy()){
+            ind++;
+        }
+        super.add(ind, newAnimal);
         return true;
     }
 

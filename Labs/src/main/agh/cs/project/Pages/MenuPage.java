@@ -64,13 +64,16 @@ public class MenuPage implements ActionListener {
 
             if (areArgumentsCorrect()){
                 float jungeRatio = Float.parseFloat(this.jungeRatio.getText());
+                int width = Integer.parseInt(widthField.getText());
+                int height = Integer.parseInt(heightField.getText());
+                int animalNumber = Integer.parseInt(animalNumberField.getText());
                 if (jungeRatio < 0 || jungeRatio > 1){
                     JOptionPane.showMessageDialog(frame, "Jungle ratio must be between 0 and 1!!!");
                 }
+                else if(animalNumber > width * height){
+                    JOptionPane.showMessageDialog(frame, "Too many animals to fit on the map!!!");
+                }
                 else {
-                    int width = Integer.parseInt(widthField.getText());
-                    int height = Integer.parseInt(heightField.getText());
-                    int animalNumber = Integer.parseInt(animalNumberField.getText());
                     int startEnergy = Integer.parseInt(startEnergyField.getText());
                     int moveEnergy = Integer.parseInt(moveEnergyField.getText());
                     int plantEnergy = Integer.parseInt(plantEnergyField.getText());

@@ -10,36 +10,57 @@ public class Animal extends AbstractWorldMapElement {
     private MapDirection direction;
     private final GrassField map;
     private final Genome genome;
-    public int startEnergy;
-
-    public int energy;
     private final int moveEnergy;
+
+    public int startEnergy;
+    private int energy;
+    public int lifeLength = 0;
+
+    public final ArrayList<Animal> parents;
+    public final ArrayList<Animal> children;
 
     public Animal(GrassField map, Vector2d initialPosition, int energy, int moveEnergy) {
         this(map, initialPosition, energy, moveEnergy, new Genome());
         this.startEnergy = energy;
+
+        this.addObserver(map);
+        this.alertObserversAdded();
     }
+
     public Animal(Animal aParent, Animal bParent){
-        this(aParent.map, aParent.position, aParent.energy / 4 + bParent.energy / 4, aParent.moveEnergy, new Genome(aParent.genome, bParent.genome));
+        this(aParent.map, aParent.map.getSpawnPoint(aParent.position),
+                aParent.energy / 4 + bParent.energy / 4,
+                aParent.moveEnergy,
+                new Genome(aParent.genome, bParent.genome));
 
-        aParent.energy -= aParent.energy / 4;
-        bParent.energy -= bParent.energy / 4;
+        aParent.changeEnergy(-(aParent.energy / 4));
+        bParent.changeEnergy(-(bParent.energy / 4));
         this.startEnergy = aParent.startEnergy;
+
+        this.parents.add(aParent);
+        this.parents.add(bParent);
+        aParent.children.add(this);
+        bParent.children.add(this);
+
+        this.addObserver(map);
+        this.alertObserversAdded();
     }
 
-    public Animal(GrassField map, Vector2d initialPosition, int energy, int moveEnergy, Genome genome) {
+    private Animal(GrassField map, Vector2d initialPosition, int energy, int moveEnergy, Genome genome) {
         super(initialPosition);
         this.map = map;
         this.direction = MapDirection.newMapDirection((int)(Math.random() * 8));
         this.energy = energy;
         this.moveEnergy = moveEnergy;
         this.genome = genome;
-        this.addObserver(map);
-        this.alertObserversAdded();
+
+        this.children = new ArrayList<>();
+        this.parents = new ArrayList<>();
     }
 
     public ArrayList<EventType> newMove(){
         ArrayList<EventType> possibleEvents = new ArrayList<>();
+        this.changeEnergy(-moveEnergy);
 
         int randomTurn = this.genome.getRandomGene();
         MoveDirection turn = MoveDirection.valueOf("TURN_" + randomTurn);
@@ -56,16 +77,22 @@ public class Animal extends AbstractWorldMapElement {
 
         this.alertObserversMoved(oldPosition);
 
-        this.energy -= this.moveEnergy;
-
         if (this.map.isGrassAt(this.position)){      //try to eat
             possibleEvents.add(EventType.Eating);
         }
+
+        lifeLength++;
 
         return possibleEvents;
     }
 
     public void kill(){
+        for (Animal parent : parents){
+            parent.children.remove(this);
+        }
+        for (Animal child : children){
+            child.parents.remove(this);
+        }
         this.alertObserversDied();
     }
 
@@ -93,9 +120,9 @@ public class Animal extends AbstractWorldMapElement {
         }
     }
 
-    public void alertObserversChangedEnergy() {
+    private void alertObserversEnergy(int change) {
         for (IChangeObserver observer : observers) {
-            observer.changedEnergy(this);
+            observer.energyChanged(this, change);
         }
     }
 
@@ -114,10 +141,23 @@ public class Animal extends AbstractWorldMapElement {
         return new Color(255, (int)(255 * healthPart), 0);
     }
 
-    public String toString() {
-        return this.direction.toString();
+    @Override
+    public String toString(){
+        return this.energy + "   " + this.genome.toString() + " " + this.parents.size() + " " + this.children.size();
     }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    public void sortThisField(){
+        ((AnimalSortedList) this.map.objectAt(this.position)).sort();
+    }
+
+    public int getEnergy() {
+        return energy;
+    }
+
+    public void changeEnergy(int change){
+        this.energy += change;
+        this.alertObserversEnergy(change);
+    }
 }

@@ -27,7 +27,6 @@ public class Jungle{
     }
 
     public Jungle(GrassField field, float ratio) {
-        System.out.println(getDimension(field.width, ratio) + "   " + getDimension(field.height, ratio));
         int width = getDimension(field.width, ratio);
         int height = getDimension(field.height, ratio);
 

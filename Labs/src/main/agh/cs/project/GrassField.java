@@ -18,7 +18,6 @@ public class GrassField implements IChangeObserver {
     public final int width;
     public final int height;
     public int jungleGrassNumber;
-    public int animalNumber = 0;
 
     public GrassField(int width, int height, float jungleRatio, ProjectEngine engine) {
         this.width = width;
@@ -90,14 +89,30 @@ public class GrassField implements IChangeObserver {
     public boolean isAnimalAt(Vector2d position) {
         return this.objectAt(position) instanceof ArrayList;
     }
+
 ////////////////////////////////////////////////////////////////////////////////////
+
+    private void place(Animal newAnimal) {
+        this.Animals.addAnimal(newAnimal);
+    }
 
     public Vector2d convertToMovable(Vector2d position) {
         return new Vector2d((position.x + this.width) % this.width, (position.y + this.height) % this.height);
     }
 
-    private void place(Animal newAnimal) {
-        this.Animals.addAnimal(newAnimal);
+    public Vector2d getSpawnPoint(Vector2d position){
+        ArrayList<Vector2d> positionList = new ArrayList<>();
+        for (MapDirection dir : MapDirection.values()){
+            Vector2d freePoint = position.add(dir.toUnitVector());
+            freePoint = this.convertToMovable(freePoint);
+            if (this.isFree(freePoint)) positionList.add(freePoint);
+        }
+        if (positionList.size() > 0) {
+            int randInd = (int) (Math.random() * positionList.size());
+            return positionList.get(randInd);
+        }
+        int randomIndex = (int) (Math.random() * 8);
+        return position.add(MapDirection.newMapDirection(randomIndex).toUnitVector());
     }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -105,7 +120,7 @@ public class GrassField implements IChangeObserver {
     public Object objectAt(Vector2d position) {
         AnimalSortedList possibleAnimalList = Animals.get(position);
         if (possibleAnimalList != null) {
-            return possibleAnimalList.getAllTop();
+            return possibleAnimalList;
         }
         return GrassMap.get(position);
     }
@@ -154,7 +169,7 @@ public class GrassField implements IChangeObserver {
 
         if (element instanceof Animal) {
             this.place((Animal) element);
-            animalNumber++;
+            this.statsUpdater.addedElement(element);
         }
         else {
             if ( positionInJungle(position) ){
@@ -176,7 +191,7 @@ public class GrassField implements IChangeObserver {
             else {
                 if ( isFree(position) ) this.takenFields--;
             }
-            animalNumber--;
+            this.statsUpdater.removedElement(element);
         }
         else {
             this.GrassMap.remove( position );
@@ -185,17 +200,14 @@ public class GrassField implements IChangeObserver {
     }
 
     @Override
-    public void changedEnergy(Animal animal){
+    public void energyChanged(Animal animal, int change){
+        this.statsUpdater.energyChanged(animal, change);
     }
 
 ///////////////////////////////////////////////////////////////////////////////////
 
     public boolean positionInJungle(Vector2d position){
         return this.jungle.positionInJungle(position);
-    }
-
-    public void updateStats(){
-        this.statsUpdater.allUpdate(this);
     }
 
     public Vector2d getJungleUpperCorner(){
@@ -212,6 +224,10 @@ public class GrassField implements IChangeObserver {
 
     public ArrayList<AnimalSortedList> getAnimals(){
         return new ArrayList<>(this.Animals.values());
+    }
+
+    public void updateStats(){
+        this.statsUpdater.allUpdate(this);
     }
 
     public void repaint(){

@@ -27,7 +27,7 @@ public class ProjectEngine implements ActionListener {
     public final boolean tooBig;
 
     public ProjectEngine(int width, int height, int animalNumber, int startEnergy, int moveEnergy, int plantEnergy, float jungleRatio){
-        this.tooBig = ((width > 40) || (height > 70));
+        this.tooBig = ((width > 60) || (height > 100));
 
         GrassField field = new GrassField(width, height, jungleRatio, this);
         this.energyToSurvive = moveEnergy;
@@ -35,9 +35,13 @@ public class ProjectEngine implements ActionListener {
         this.field = field;
 
         for (int i = 0; i < animalNumber; i++) {
-            int newX = (int) (Math.random() * (double) width);
-            int newY = (int) (Math.random() * (double) height);
-            Vector2d newPosition = new Vector2d(newX, newY);
+            Vector2d newPosition;
+            do {
+                int newX = (int) (Math.random() * (double) width);
+                int newY = (int) (Math.random() * (double) height);
+                newPosition = new Vector2d(newX, newY);
+            }
+            while (!field.isFree(newPosition));
             Animals.add( new Animal(field, newPosition, startEnergy, moveEnergy) );
         }
         field.updateStats();
@@ -81,7 +85,7 @@ public class ProjectEngine implements ActionListener {
             int ind = 0;
             while (ind < Animals.size()) {
                 Animal curAnimal = Animals.get(ind);
-                if (curAnimal.energy < this.energyToSurvive) {
+                if (curAnimal.getEnergy() < this.energyToSurvive) {
                     Animals.remove(ind);
                 } else ind++;
             }
@@ -107,63 +111,7 @@ public class ProjectEngine implements ActionListener {
 
             field.updateStats();
 
-            field.repaint();
+            if (!tooBig) field.repaint();
         }
     }
 }
-
-
-    /*
-    public class ProjectEngineDay extends TimerTask {
-        private final ProjectEngine engine;
-
-        public ProjectEngineDay(ProjectEngine engine){
-            this.engine = engine;
-        }
-
-        @Override
-        public void run() {
-            synchronized (this) {
-                if (engine.Animals.size() == 0){
-                    engine.pause();
-                    this.cancel();
-                }
-                else if (engine.paused){
-                    this.cancel();
-                }
-                else {
-                    int ind = 0;
-                    while (ind < Animals.size()) {
-                        Animal curAnimal = Animals.get(ind);
-                        if (curAnimal.energy < engine.energyToSurvive) {
-                            Animals.remove(ind);
-                        } else ind++;
-                    }
-
-                    FieldEventMap eatEventMap = new FieldEventMap(engine.plantEnergy);
-                    FieldEventMap breedEventMap = new FieldEventMap();
-                    for (Animal animal : Animals) {
-                        ArrayList<EventType> events = animal.newMove();
-                        if (events.contains(EventType.Eating)) {
-                            eatEventMap.addAnimal(animal);
-                        }
-                        if (events.contains(EventType.Breading)) {
-                            breedEventMap.addAnimal(animal);
-                        }
-                    }
-
-                    eatEventMap.resolveEating();
-
-                    ArrayList<Animal> newAnimals = breedEventMap.resolveBreeding();
-                    engine.Animals.addAll(newAnimals);
-
-                    field.growGrass();
-
-                    field.updateStats();
-
-                    field.repaint(this);
-                }
-            }
-        }
-    }*/
-

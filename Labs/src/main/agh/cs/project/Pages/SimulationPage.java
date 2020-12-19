@@ -20,7 +20,7 @@ public class SimulationPage {
         boolean tooBig = engine.tooBig;
         this.field = field;
 
-        int minMapHeight = 400;
+        int minMapHeight = 650;
         int minMapWidth = 400;
         int statsWidth = 400;    //trzeba ustawić w formularzu
 
@@ -28,9 +28,9 @@ public class SimulationPage {
         int mapWidth;
         int mapHeight;
         if (!tooBig){
-            fieldSize = Math.min(650 / field.width, 1100 / field.height);
+            fieldSize = Math.min(600 / field.width, 1100 / field.height);
             fieldSize = Math.min(100, fieldSize);
-            fieldSize = Math.max(fieldSize, 15);
+            fieldSize = Math.max(fieldSize, 10);
             mapHeight = fieldSize * field.width;
             mapWidth = (int) (mapHeight * ((float) field.height / (float) field.width));
         }
@@ -76,11 +76,11 @@ public class SimulationPage {
         }
         right.add(Box.createVerticalGlue());
 
-        DelayPanel delayPanel = new DelayPanel(mapWidth, mapHeight, totalHeight);     //panel opóźnienia
+        DelayPanel delayPanel = new DelayPanel(minMapWidth, mapHeight, totalHeight);     //panel opóźnienia
         delayPanel.setBackground(borderColor);
         right.add(delayPanel);
 
-        ButtonPanel buttonPanel = new ButtonPanel(mapWidth);
+        ButtonPanel buttonPanel = new ButtonPanel();
         buttonPanel.setBackground(borderColor);
         delayPanel.setAlignmentY(Component.BOTTOM_ALIGNMENT);
         right.add(buttonPanel);
@@ -132,7 +132,11 @@ public class SimulationPage {
     public void actionPerformed(ActionEvent e){
         JButton source = (JButton) e.getSource();
         Vector2d position = Vector2d.fromString(source.getName());
-        System.out.println(field.objectAt(position));
+        System.out.print(field.objectAt(position) + "    ");
+        if (field.objectAt(position) instanceof AnimalSortedList){
+            System.out.print(((AnimalSortedList) field.objectAt(position)).getTopTwo());
+        }
+        System.out.print("\n");
     }
 }
 

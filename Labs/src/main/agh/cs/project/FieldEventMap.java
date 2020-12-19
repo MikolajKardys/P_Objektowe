@@ -17,8 +17,7 @@ public class FieldEventMap extends FieldMap{
             ArrayList<Animal> hungryAnimals = field.getAllTop();
             int energyForEach = plantEnergy / hungryAnimals.size();
             for (Animal hippo : hungryAnimals){
-                hippo.energy += energyForEach;
-                hippo.alertObserversChangedEnergy();
+                hippo.changeEnergy(energyForEach);
             }
         }
         this.clear();
@@ -31,9 +30,10 @@ public class FieldEventMap extends FieldMap{
             if (breedingAnimals != null) {
                 Animal aParent = breedingAnimals.get(0);
                 Animal bParent = breedingAnimals.get(1);
-                if (bParent.energy >= bParent.startEnergy / 2) {
+                if (bParent.getEnergy() >= bParent.startEnergy / 2) {
                     Animal newAnimal = new Animal(aParent, bParent);
                     newTab.add(newAnimal);
+                    aParent.sortThisField();
                 }
             }
 

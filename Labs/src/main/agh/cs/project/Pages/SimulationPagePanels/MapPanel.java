@@ -75,15 +75,6 @@ public class MapPanel extends JPanel {
             g.setColor(animal.getHealthColor());
             g.fillRect(x, y, fieldSize, fieldSize);
         }
-
-        /*
-        //Paint Grid
-        g.setColor(borderColor);
-        for (int i = 1; i < field.height; i++) {
-            g.drawLine(0, i * fieldSize, mapWidth * fieldSize, i * fieldSize);
-            g.drawLine(i * fieldSize, 0, i * fieldSize, mapHeight * fieldSize);
-        }*/
-
     }
 }
 
