@@ -46,6 +46,14 @@ public class Genome {
         return Arrays.toString(this.quantities);
     }
 
+    public String toLongString() {
+        StringBuilder s = new StringBuilder();
+        for (int i = 0; i < 32; i++){
+            s.append(this.genes[i]);
+        }
+        return s.toString();
+    }
+
     private void genomeFromQuantities(){
         for (int i = 0; i < 8; i++){
             while (quantities[i] == 0){
@@ -68,4 +76,12 @@ public class Genome {
         return this.genes[random.nextInt(genes.length)];
     }
 
+    public int compare(Genome other){
+        for (int i = 0; i < 8; i++){
+            if (this.quantities[i] != other.quantities[i]){
+                return this.quantities[i] - other.quantities[i];
+            }
+        }
+        return 0;
+    }
 }

@@ -16,20 +16,25 @@ public class StatsPanel extends JPanel implements IChangeObserver {
     private JLabel avgEnergy;
     private JLabel avgLife;
     private JLabel avgChildren;
+    private JLabel dominant;
 
     private int days = 0;
 
-    private ArrayList<Animal> Animals;
+    private final ArrayList<Animal> Animals;
     private int deadNumber = 0;
     private int lifeLengthSum = 0;
     private int energySum;
     private int childrenNumber;
+
+    private final GenomeQuantitySet quantitySet;
 
     public StatsPanel(int statsWidth, int totalHeight) {
         this.setPreferredSize(new Dimension(statsWidth, totalHeight));
         this.setBackground(new Color(187, 187, 187));
 
         this.add(statsPanel);
+        this.quantitySet = new GenomeQuantitySet();
+
         Animals = new ArrayList<>();
     }
 
@@ -62,6 +67,9 @@ public class StatsPanel extends JPanel implements IChangeObserver {
             average = Math.ceil(average * 100) / 100;
             this.avgLife.setText(String.valueOf(average));
         }
+
+        this.dominant.setText(this.quantitySet.getDominant());
+
     }
 
     @Override
@@ -75,6 +83,7 @@ public class StatsPanel extends JPanel implements IChangeObserver {
             Animals.add(thisAnimal);
             childrenNumber += thisAnimal.parents.size();
             energySum += thisAnimal.getEnergy();
+            this.quantitySet.add(((Animal) element).getGenome());
         }
     }
 
@@ -88,6 +97,7 @@ public class StatsPanel extends JPanel implements IChangeObserver {
             childrenNumber -= thisAnimal.parents.size();
             childrenNumber -= thisAnimal.children.size();
             energySum -= thisAnimal.getEnergy();
+
         }
     }
 

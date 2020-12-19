@@ -9,8 +9,9 @@ public class Animal extends AbstractWorldMapElement {
 
     private MapDirection direction;
     private final GrassField map;
-    private final Genome genome;
     private final int moveEnergy;
+
+    private final Genome genome;
 
     public int startEnergy;
     private int energy;
@@ -159,5 +160,9 @@ public class Animal extends AbstractWorldMapElement {
     public void changeEnergy(int change){
         this.energy += change;
         this.alertObserversEnergy(change);
+    }
+
+    public Genome getGenome(){
+        return genome;
     }
 }
