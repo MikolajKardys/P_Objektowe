@@ -28,11 +28,11 @@ public class StatsPanel extends JPanel implements IChangeObserver {
 
     private final GenomeQuantitySet quantitySet;
 
-    public StatsPanel(int statsWidth, int totalHeight) {
-        this.setPreferredSize(new Dimension(statsWidth, totalHeight));
+    public StatsPanel(int statsWidth) {
+        this.setPreferredSize(new Dimension(statsWidth, -1));
         this.setBackground(new Color(187, 187, 187));
-
         this.add(statsPanel);
+
         this.quantitySet = new GenomeQuantitySet();
 
         Animals = new ArrayList<>();

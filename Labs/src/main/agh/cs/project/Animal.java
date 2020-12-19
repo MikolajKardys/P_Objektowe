@@ -144,7 +144,7 @@ public class Animal extends AbstractWorldMapElement {
 
     @Override
     public String toString(){
-        return this.energy + "   " + this.genome.toString() + " " + this.parents.size() + " " + this.children.size();
+        return this.position.toString();
     }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////

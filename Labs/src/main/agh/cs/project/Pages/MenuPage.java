@@ -68,20 +68,34 @@ public class MenuPage implements ActionListener {
                 int height = Integer.parseInt(heightField.getText());
                 int animalNumber = Integer.parseInt(animalNumberField.getText());
                 if (jungeRatio < 0 || jungeRatio > 1){
-                    JOptionPane.showMessageDialog(frame, "Jungle ratio must be between 0 and 1!!!");
+                    JOptionPane.showMessageDialog(frame, "Jungle ratio must be between 0 and 1!!!", "Error!", JOptionPane.ERROR_MESSAGE);
                 }
                 else if(animalNumber > width * height){
-                    JOptionPane.showMessageDialog(frame, "Too many animals to fit on the map!!!");
+                    JOptionPane.showMessageDialog(frame, "Too many animals to fit on the map!!!", "Error!", JOptionPane.ERROR_MESSAGE);
                 }
                 else {
-                    int startEnergy = Integer.parseInt(startEnergyField.getText());
-                    int moveEnergy = Integer.parseInt(moveEnergyField.getText());
-                    int plantEnergy = Integer.parseInt(plantEnergyField.getText());
-                    new ProjectEngine(height, width, animalNumber, startEnergy, moveEnergy, plantEnergy, jungeRatio);
+                    String [] options = {"Yes", "No"};
+                    int x;
+                    if (width > 100 || height > 60){
+                        x = JOptionPane.showOptionDialog(frame,
+                                "Selected size is over display bounds (width <= 100, height <= 60) and map will not be displayed. Do you wish to continue?",
+                                "Over display bounds",
+                                JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE,
+                                null, options, options[0]);
+                    }
+                    else {
+                        x = 0;
+                    }
+                    if (x == 0){
+                        int startEnergy = Integer.parseInt(startEnergyField.getText());
+                        int moveEnergy = Integer.parseInt(moveEnergyField.getText());
+                        int plantEnergy = Integer.parseInt(plantEnergyField.getText());
+                        new ProjectEngine(height, width, animalNumber, startEnergy, moveEnergy, plantEnergy, jungeRatio);
+                    }
                 }
             }
             else{
-                JOptionPane.showMessageDialog(frame, "Incorrect simulation parameters!!!");
+                JOptionPane.showMessageDialog(frame, "Incorrect simulation parameters!!!","Error!", JOptionPane.ERROR_MESSAGE);
             }
 
         }

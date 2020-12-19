@@ -10,8 +10,12 @@ import java.awt.event.*;
 public class SimulationPage {
     private final MapPanel map;
     private final StatsPanel stats;
+    private final AnimalPanel curAnimal;
 
     private final GrassField field;
+
+    private boolean isRunning;
+    private final JFrame f;
 
     public SimulationPage(GrassField field, ProjectEngine engine){
         Color borderColor = new Color(131, 125, 74);
@@ -43,7 +47,7 @@ public class SimulationPage {
         int totalHeight = Math.max(mapHeight, minMapHeight) + 100;
         int totalWidth = Math.max(mapWidth, minMapWidth) + statsWidth;
 
-        JFrame f = new JFrame("Simulation Map");
+        this.f = new JFrame("Simulation Map");
         f.setSize(totalWidth, totalHeight);
         f.setFocusableWindowState(true);
         f.setResizable(false);
@@ -54,9 +58,16 @@ public class SimulationPage {
         contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.LINE_AXIS));
 
 //Początek lewej strony
+        JPanel left = new JPanel();
+        left.setPreferredSize(new Dimension(statsWidth, totalHeight));
+        left.setLayout(new BoxLayout(left, BoxLayout.PAGE_AXIS));
+        contentPane.add(left);
 
-        this.stats = new StatsPanel(statsWidth, totalHeight);
-        contentPane.add(stats);
+        this.stats = new StatsPanel(statsWidth);
+        left.add(stats);
+
+        this.curAnimal = new AnimalPanel(statsWidth);
+        left.add(curAnimal);
 
 //Początek prawej strony
 
@@ -85,11 +96,14 @@ public class SimulationPage {
         delayPanel.setAlignmentY(Component.BOTTOM_ALIGNMENT);
         right.add(buttonPanel);
 
+        this.isRunning = false;
+
         buttonPanel.stopButton.addActionListener(e -> {
             synchronized (engine) {
                 if (buttonPanel.stopButton.getText().equals("Stop Simulation")) {
                     buttonPanel.stopButton.setText("Resume Simulation");
                     delayPanel.delayText.setEnabled(true);
+                    this.isRunning = false;
                     engine.pause();
                 } else {
                     try {
@@ -98,11 +112,12 @@ public class SimulationPage {
                             buttonPanel.stopButton.setText("Stop Simulation");
                             engine.unpause(delay);
                             delayPanel.delayText.setEnabled(false);
+                            this.isRunning = true;
                         } else {
-                            JOptionPane.showMessageDialog(f, "Delay value must be a positive integer!!!");
+                            JOptionPane.showMessageDialog(f, "Delay value must be a positive integer!!!", "Error!", JOptionPane.ERROR_MESSAGE);
                         }
                     } catch (NumberFormatException ignored) {
-                        JOptionPane.showMessageDialog(f, "Invalid delay value!!!");
+                        JOptionPane.showMessageDialog(f, "Invalid delay value!!!", "Error!", JOptionPane.ERROR_MESSAGE);
                     }
                 }
             }
@@ -130,13 +145,20 @@ public class SimulationPage {
     }
 
     public void actionPerformed(ActionEvent e){
-        JButton source = (JButton) e.getSource();
-        Vector2d position = Vector2d.fromString(source.getName());
-        System.out.print(field.objectAt(position) + "    ");
-        if (field.objectAt(position) instanceof AnimalSortedList){
-            System.out.print(((AnimalSortedList) field.objectAt(position)).getTopTwo());
+        if (!isRunning){
+            JButton source = (JButton) e.getSource();
+            Vector2d position = Vector2d.fromString(source.getName());
+            if (field.objectAt(position) instanceof AnimalSortedList){
+                Animal selected = ((AnimalSortedList) field.objectAt(position)).getAllTop().get(0);
+                this.curAnimal.selectedAnimal(selected);
+            }
+            else {
+                JOptionPane.showMessageDialog(f, "There aren't any animals on this field!!!", "Error!", JOptionPane.ERROR_MESSAGE);
+            }
         }
-        System.out.print("\n");
+        else {
+            JOptionPane.showMessageDialog(f, "Can't select animal while the simulation is running!!!", "Error!", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }
 
