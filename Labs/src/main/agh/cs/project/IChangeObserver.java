@@ -8,5 +8,6 @@ public interface IChangeObserver {
     void removedElement(AbstractWorldMapElement element);
 
     void energyChanged(Animal animal, int change);
+
 }
 

@@ -13,6 +13,8 @@ public class Animal extends AbstractWorldMapElement {
 
     private final Genome genome;
 
+    public boolean isSelected;
+
     public int startEnergy;
     private int energy;
     public int lifeLength = 0;
@@ -44,6 +46,14 @@ public class Animal extends AbstractWorldMapElement {
         bParent.children.add(this);
 
         this.addObserver(map);
+
+        if (aParent.observers.size() > 1){
+            this.addObserver(aParent.observers.get(1));
+        }
+        else if (bParent.observers.size() > 1){
+            this.addObserver(bParent.observers.get(1));
+        }
+
         this.alertObserversAdded();
     }
 
@@ -57,7 +67,10 @@ public class Animal extends AbstractWorldMapElement {
 
         this.children = new ArrayList<>();
         this.parents = new ArrayList<>();
+
+        this.isSelected = false;
     }
+
 
     public ArrayList<EventType> newMove(){
         ArrayList<EventType> possibleEvents = new ArrayList<>();
@@ -101,6 +114,10 @@ public class Animal extends AbstractWorldMapElement {
 
     public void addObserver(IChangeObserver observer) {
         observers.add(observer);
+    }
+
+    public void removeObserver(IChangeObserver observer) {
+        observers.remove(observer);
     }
 
     private void alertObserversMoved(Vector2d oldPosition) {

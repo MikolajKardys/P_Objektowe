@@ -73,8 +73,7 @@ public class StatsPanel extends JPanel implements IChangeObserver {
     }
 
     @Override
-    public void changedPosition(Animal element, Vector2d oldPosition) {
-    }
+    public void changedPosition(Animal element, Vector2d oldPosition) { }
 
     @Override
     public void addedElement(AbstractWorldMapElement element) {
@@ -97,7 +96,7 @@ public class StatsPanel extends JPanel implements IChangeObserver {
             childrenNumber -= thisAnimal.parents.size();
             childrenNumber -= thisAnimal.children.size();
             energySum -= thisAnimal.getEnergy();
-
+            this.quantitySet.remove(((Animal) element).getGenome());
         }
     }
 

@@ -57,44 +57,32 @@ public class SimulationPage {
         contentPane.setBackground(borderColor);
         contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.LINE_AXIS));
 
-//Początek lewej strony
-        JPanel left = new JPanel();
-        left.setPreferredSize(new Dimension(statsWidth, totalHeight));
-        left.setLayout(new BoxLayout(left, BoxLayout.PAGE_AXIS));
-        contentPane.add(left);
-
-        this.stats = new StatsPanel(statsWidth);
-        left.add(stats);
-
-        this.curAnimal = new AnimalPanel(statsWidth);
-        left.add(curAnimal);
-
 //Początek prawej strony
 
-        JPanel right = new JPanel();
-        right.setBackground(borderColor);
-        right.setLayout(new BoxLayout(right, BoxLayout.Y_AXIS));
-        right.setPreferredSize(new Dimension(Math.max(mapWidth, minMapWidth), totalHeight));
-        right.setMaximumSize(new Dimension(Math.max(mapWidth, minMapWidth), totalHeight));
-        contentPane.add(right);
+        JPanel left = new JPanel();
+        left.setBackground(borderColor);
+        left.setLayout(new BoxLayout(left, BoxLayout.Y_AXIS));
+        left.setPreferredSize(new Dimension(Math.max(mapWidth, minMapWidth), totalHeight));
+        left.setMaximumSize(new Dimension(Math.max(mapWidth, minMapWidth), totalHeight));
+        contentPane.add(left);
 
         if (!tooBig) {
             this.map = new MapPanel(this, field, mapWidth, mapHeight, fieldSize);    //mapa
-            right.add(this.map);
+            left.add(this.map);
         }
         else {
             this.map = null;
         }
-        right.add(Box.createVerticalGlue());
+        left.add(Box.createVerticalGlue());
 
         DelayPanel delayPanel = new DelayPanel(minMapWidth, mapHeight, totalHeight);     //panel opóźnienia
         delayPanel.setBackground(borderColor);
-        right.add(delayPanel);
+        left.add(delayPanel);
 
         ButtonPanel buttonPanel = new ButtonPanel();
         buttonPanel.setBackground(borderColor);
         delayPanel.setAlignmentY(Component.BOTTOM_ALIGNMENT);
-        right.add(buttonPanel);
+        left.add(buttonPanel);
 
         this.isRunning = false;
 
@@ -122,6 +110,18 @@ public class SimulationPage {
                 }
             }
         });
+
+        //Początek lewej strony
+        JPanel right = new JPanel();
+        right.setPreferredSize(new Dimension(statsWidth, totalHeight));
+        right.setLayout(new BoxLayout(right, BoxLayout.PAGE_AXIS));
+        contentPane.add(right);
+
+        this.stats = new StatsPanel(statsWidth);
+        right.add(stats);
+
+        this.curAnimal = new AnimalPanel(statsWidth, buttonPanel.stopButton);
+        right.add(curAnimal);
 
         f.setVisible(true);
 
