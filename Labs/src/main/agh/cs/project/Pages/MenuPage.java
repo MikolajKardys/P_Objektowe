@@ -1,10 +1,9 @@
 package agh.cs.project.Pages;
 
-import agh.cs.project.Parameters;
-import agh.cs.project.ProjectEngine;
+import agh.cs.project.InputFile.Parameters;
+import agh.cs.project.Sources.ProjectEngine;
 
 import javax.swing.*;
-import javax.swing.plaf.synth.SynthDesktopIconUI;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -76,6 +75,9 @@ public class MenuPage implements ActionListener {
                 int animalNumber = Integer.parseInt(animalNumberField.getText());
                 if (jungeRatio < 0 || jungeRatio > 1){
                     JOptionPane.showMessageDialog(frame, "Jungle ratio must be between 0 and 1!!!", "Error!", JOptionPane.ERROR_MESSAGE);
+                }
+                else if (width <= 0 || height <= 0){
+                    JOptionPane.showMessageDialog(frame, "Please select positive width and height!!!", "Error!", JOptionPane.ERROR_MESSAGE);
                 }
                 else if(animalNumber > width * height){
                     JOptionPane.showMessageDialog(frame, "Too many animals to fit on the map!!!", "Error!", JOptionPane.ERROR_MESSAGE);

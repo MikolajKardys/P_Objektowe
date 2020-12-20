@@ -1,5 +1,6 @@
 package agh.cs.project;
 
+import agh.cs.project.InputFile.Parameters;
 import agh.cs.project.Pages.MenuPage;
 
 

@@ -1,9 +1,0 @@
-{
-  "width": 10,
-  "height": 10,
-  "number of animals": 40,
-  "energy animals start with": 100,
-  "energy consumed by moving": 5,
-  "energy restored by eating plants": 50,
-  "ratio of the jungle": 0.1
-}

@@ -1,7 +1,7 @@
 package agh.cs.project.Pages.SimulationPagePanels;
 
-import agh.cs.project.*;
 import agh.cs.project.Pages.SimulationPage;
+import agh.cs.project.Sources.*;
 
 import javax.swing.*;
 import javax.swing.border.MatteBorder;

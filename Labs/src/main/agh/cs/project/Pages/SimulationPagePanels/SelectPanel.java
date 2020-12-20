@@ -1,6 +1,7 @@
 package agh.cs.project.Pages.SimulationPagePanels;
 
-import agh.cs.project.Animal;
+import agh.cs.project.Pages.SimulationPagePanels.Stats.StatsPanel;
+import agh.cs.project.Sources.Animal;
 
 import javax.swing.*;
 import java.awt.*;
@@ -48,9 +49,7 @@ public class SelectPanel extends AbstractSimulationPagePanel {
     @Override
     public void enableElements(boolean enable) {
         if (!enable){
-            this.genome.setText("None");
-            this.clear.setEnabled(false);
-            this.track.setEnabled(false);
+            clearSelection();
         }
     }
 

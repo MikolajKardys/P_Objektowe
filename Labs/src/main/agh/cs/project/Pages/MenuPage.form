@@ -91,7 +91,7 @@
           <dragEnabled value="false"/>
           <horizontalAlignment value="11"/>
           <margin top="2" left="6" bottom="2" right="6"/>
-          <text value="10"/>
+          <text value=""/>
         </properties>
       </component>
       <component id="bda48" class="javax.swing.JTextField" binding="heightField">
@@ -105,7 +105,7 @@
         <properties>
           <horizontalAlignment value="11"/>
           <margin top="2" left="6" bottom="2" right="6"/>
-          <text value="10"/>
+          <text value=""/>
         </properties>
       </component>
       <component id="353e4" class="javax.swing.JTextField" binding="animalNumberField">
@@ -119,7 +119,7 @@
         <properties>
           <horizontalAlignment value="4"/>
           <margin top="2" left="6" bottom="2" right="6"/>
-          <text value="10"/>
+          <text value=""/>
         </properties>
       </component>
       <component id="67bd8" class="javax.swing.JTextField" binding="startEnergyField">
@@ -133,7 +133,7 @@
         <properties>
           <horizontalAlignment value="11"/>
           <margin top="2" left="6" bottom="2" right="6"/>
-          <text value="100"/>
+          <text value=""/>
         </properties>
       </component>
       <component id="7d1cd" class="javax.swing.JTextField" binding="moveEnergyField">
@@ -147,7 +147,7 @@
         <properties>
           <horizontalAlignment value="11"/>
           <margin top="2" left="6" bottom="2" right="6"/>
-          <text value="5"/>
+          <text value=""/>
         </properties>
       </component>
       <component id="8d3b" class="javax.swing.JTextField" binding="plantEnergyField">
@@ -161,7 +161,7 @@
         <properties>
           <horizontalAlignment value="11"/>
           <margin top="2" left="6" bottom="2" right="6"/>
-          <text value="50"/>
+          <text value=""/>
         </properties>
       </component>
       <component id="3ca63" class="javax.swing.JTextField" binding="jungeRatio">
@@ -175,7 +175,7 @@
         <properties>
           <horizontalAlignment value="11"/>
           <margin top="2" left="6" bottom="2" right="6"/>
-          <text value="0.1"/>
+          <text value=""/>
         </properties>
       </component>
       <component id="6c7e8" class="javax.swing.JLabel">

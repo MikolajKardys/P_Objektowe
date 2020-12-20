@@ -1,7 +1,8 @@
 package agh.cs.project.Pages;
 
-import agh.cs.project.*;
 import agh.cs.project.Pages.SimulationPagePanels.*;
+import agh.cs.project.Pages.SimulationPagePanels.Stats.StatsPanel;
+import agh.cs.project.Sources.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -177,7 +178,6 @@ public class SimulationPage {
         if (!isRunning){
             JButton source = (JButton) e.getSource();
             Vector2d position = Vector2d.fromString(source.getName());
-            System.out.println("Pressed");
             if (field.objectAt(position) instanceof AnimalSortedList){
                 Animal selected = ((AnimalSortedList) field.objectAt(position)).getAllTop().get(0);
                 this.selectAnimal.selectedAnimal(selected);

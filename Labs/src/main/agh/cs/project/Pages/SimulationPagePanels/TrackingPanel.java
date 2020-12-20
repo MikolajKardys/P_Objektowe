@@ -1,9 +1,9 @@
 package agh.cs.project.Pages.SimulationPagePanels;
 
-import agh.cs.project.AbstractWorldMapElement;
-import agh.cs.project.Animal;
-import agh.cs.project.IChangeObserver;
-import agh.cs.project.Vector2d;
+import agh.cs.project.Sources.AbstractWorldMapElement;
+import agh.cs.project.Sources.Animal;
+import agh.cs.project.Sources.IChangeObserver;
+import agh.cs.project.Sources.Vector2d;
 
 import javax.swing.*;
 import java.awt.*;

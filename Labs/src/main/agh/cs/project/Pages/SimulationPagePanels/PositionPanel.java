@@ -1,6 +1,6 @@
 package agh.cs.project.Pages.SimulationPagePanels;
 
-import agh.cs.project.GrassField;
+import agh.cs.project.Sources.GrassField;
 import agh.cs.project.Pages.SimulationPage;
 
 import javax.swing.*;
