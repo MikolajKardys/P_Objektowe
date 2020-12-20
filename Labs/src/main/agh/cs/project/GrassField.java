@@ -2,15 +2,13 @@ package agh.cs.project;
 
 import agh.cs.project.Pages.SimulationPage;
 import agh.cs.project.Pages.SimulationPagePanels.MapPanel;
-import agh.cs.project.Pages.SimulationPagePanels.StatsPanel;
 
 import java.util.*;
 
 public class GrassField implements IChangeObserver {
     private final Map<Vector2d, Grass> GrassMap = new HashMap<>();
     private final FieldMap Animals = new FieldMap();
-    private final MapPanel mapUpdater;
-    private final StatsPanel statsUpdater;
+    private final SimulationPage mainPanel;
     private final Jungle jungle;
     private final int maxFields;
     private int takenFields;
@@ -28,9 +26,7 @@ public class GrassField implements IChangeObserver {
         this.jungleGrassNumber = 0;
         this.maxFields = width * height - this.jungle.maxFields;
 
-        SimulationPage thisPage = new SimulationPage(this, engine);
-        this.mapUpdater = thisPage.getMap();
-        this.statsUpdater = thisPage.getStats();
+        this.mainPanel = new SimulationPage(this, engine);
     }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -169,7 +165,7 @@ public class GrassField implements IChangeObserver {
 
         if (element instanceof Animal) {
             this.place((Animal) element);
-            this.statsUpdater.addedElement(element);
+            this.mainPanel.getStats().addedElement(element);
         }
         else {
             if ( positionInJungle(position) ){
@@ -191,7 +187,7 @@ public class GrassField implements IChangeObserver {
             else {
                 if ( isFree(position) ) this.takenFields--;
             }
-            this.statsUpdater.removedElement(element);
+            this.mainPanel.getStats().removedElement(element);
         }
         else {
             this.GrassMap.remove( position );
@@ -201,7 +197,7 @@ public class GrassField implements IChangeObserver {
 
     @Override
     public void energyChanged(Animal animal, int change){
-        this.statsUpdater.energyChanged(animal, change);
+        this.mainPanel.getStats().energyChanged(animal, change);
     }
 
 ///////////////////////////////////////////////////////////////////////////////////
@@ -227,10 +223,22 @@ public class GrassField implements IChangeObserver {
     }
 
     public void updateStats(){
-        this.statsUpdater.allUpdate(this);
+        this.mainPanel.getStats().allUpdate(this);
     }
 
     public void repaint(){
-        if (this.mapUpdater != null) this.mapUpdater.repaint();
+        if (this.mainPanel.getMap() instanceof MapPanel) ((MapPanel) this.mainPanel.getMap()).repaint();
+    }
+
+    public void highLight(Vector2d position) {
+        this.mainPanel.getMap().highLight(position.x, position.y);
+    }
+
+    public void removeHighLight(Vector2d position) {
+        this.mainPanel.getMap().removeHighLight(position.x, position.y);
+    }
+
+    public void terminated(){
+        this.mainPanel.terminated();
     }
 }

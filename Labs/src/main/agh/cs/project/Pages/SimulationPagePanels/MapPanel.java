@@ -4,10 +4,11 @@ import agh.cs.project.*;
 import agh.cs.project.Pages.SimulationPage;
 
 import javax.swing.*;
+import javax.swing.border.MatteBorder;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class MapPanel extends JPanel {
+public class MapPanel extends JPanel implements IMapViz{
     private final GrassField field;
     private final int fieldSize;
 
@@ -40,6 +41,14 @@ public class MapPanel extends JPanel {
                 this.add(newButton);
             }
         }
+    }
+
+    public void highLight(int indX, int indY){
+        this.fields[indX][indY].setBorder(new MatteBorder(4, 4, 4, 4, Color.blue));
+    }
+
+    public void removeHighLight(int indX, int indY){
+        this.fields[indX][indY].setBorder(UIManager.getBorder("Button.border"));
     }
 
     @Override

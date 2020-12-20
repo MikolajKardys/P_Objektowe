@@ -3,7 +3,7 @@ package agh.cs.project.Pages.SimulationPagePanels;
 import javax.swing.*;
 import java.awt.*;
 
-public class DelayPanel extends JPanel {
+public class DelayPanel extends AbstractSimulationPagePanel {
     public final JTextField delayText;
 
     public DelayPanel(int minMapWidth, int mapHeight, int totalHeight){
@@ -24,5 +24,10 @@ public class DelayPanel extends JPanel {
         this.delayText.setHorizontalAlignment(0);
         this.delayText.setEnabled(true);
         this.add(this.delayText);
+    }
+
+    @Override
+    public void enableElements(boolean enable) {
+        this.delayText.setEnabled(enable);
     }
 }

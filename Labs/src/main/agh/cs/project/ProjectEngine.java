@@ -18,9 +18,9 @@ public class ProjectEngine implements ActionListener {
     private final int energyToSurvive;
     private final int plantEnergy;
     private final GrassField field;
+    private boolean terminated;
 
     private boolean paused = true;
-    private int delay;
 
     private final Timer timer;
 
@@ -49,6 +49,8 @@ public class ProjectEngine implements ActionListener {
         field.repaint();
 
         timer = new Timer(200, this);
+
+        this.terminated = false;
     }
 
     public void pause(){
@@ -57,7 +59,6 @@ public class ProjectEngine implements ActionListener {
 
     public void unpause(int delay){
         this.paused = false;
-        this.delay = delay;
         this.notifyAll();
         this.start(delay);
     }
@@ -74,9 +75,13 @@ public class ProjectEngine implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        if (terminated){
+            return;
+        }
         if (this.Animals.size() == 0){
-            this.pause();
             this.cancel();
+            this.terminated = true;
+            this.field.terminated();
         }
         else if (this.paused){
             this.cancel();

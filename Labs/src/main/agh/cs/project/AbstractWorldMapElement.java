@@ -10,8 +10,6 @@ abstract public class AbstractWorldMapElement {
     public Vector2d getPosition() {
         return this.position;
     }
-
-
 }
 //Zdecydowałem się dodać tą klasę, ale odpuściłem sobie interfejs, bo byłaby w nim jedna metoda, a nie wykluczam, że w
 //toku przyszych laboratoriów na tyle uprościmy funkcję toString że też się tu będzie mogła znaleźć

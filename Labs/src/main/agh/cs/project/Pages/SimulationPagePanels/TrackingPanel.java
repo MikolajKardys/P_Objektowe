@@ -9,37 +9,60 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class AnimalPanel extends JPanel implements IChangeObserver {
+public class TrackingPanel extends AbstractSimulationPagePanel implements IChangeObserver {
     private JPanel animalPanel;
     private JPanel statsPanel;
     private JLabel descendants;
     private JLabel genome;
     private JLabel duration;
     private JLabel children;
+    private JButton clearSelection;
+    private JLabel start;
+    private JLabel isAlive;
 
     private Animal curAnimal;
     private int watchedFor;
     private int curChildren;
-    private ArrayList<Animal> curDesc;
+    private final ArrayList<Animal> curDesc;
 
     private final JButton stopButton;
 
-    public AnimalPanel(int statsWidth, JButton stopButton){
+    public TrackingPanel(int statsWidth, JButton stopButton){
         this.setPreferredSize(new Dimension(statsWidth, -1));
         this.setBackground(new Color(187, 187, 187));
+        this.setAlignmentY(TOP_ALIGNMENT);
 
         this.curAnimal = null;
         this.curChildren = 0;
         this.curDesc = new ArrayList<>();
 
+        this.clearSelection.setEnabled(false);
+
         this.stopButton = stopButton;
 
         this.add(statsPanel);
+
+        this.clearSelection.addActionListener(e -> {
+            String [] options = {"Yes", "No"};
+            int x;
+            x = JOptionPane.showOptionDialog(this,
+                    "Are you sure you want to reset tracking values? Current values will be lost.",
+                    "Warning",
+                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE,
+                    null, options, options[0]);
+            if (x == 0){
+                if (this.curAnimal != null) this.clearSelection(false);
+                this.clearBoard();
+                this.clearSelection.setEnabled(false);
+            }
+        });
     }
 
     public void clearBoard(){
         this.watchedFor = 0;
 
+        this.isAlive.setText("Now tracking");
+        this.start.setText("0");
         this.genome.setText("None");
         this.duration.setText("0");
         this.descendants.setText("0");
@@ -64,7 +87,24 @@ public class AnimalPanel extends JPanel implements IChangeObserver {
         this.curDesc.clear();
     }
 
-    public void selectedAnimal(Animal animal){
+    public void selectedAnimal(Animal animal, int start){
+        int x;
+        if (this.clearSelection.isEnabled()){
+            String [] options = {"Yes", "No"};
+            x = JOptionPane.showOptionDialog(this,
+                    "Are you sure you want to overwrite current tracking values? Current values will be lost.",
+                    "Warning",
+                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE,
+                    null, options, options[0]);
+        }
+        else {
+            x = 0;
+        }
+        if (x == 1) return;
+
+        if (this.curAnimal != null) this.clearSelection(false);
+        this.clearBoard();
+
         if (curAnimal != null){
             this.clearSelection(false);
         }
@@ -75,7 +115,10 @@ public class AnimalPanel extends JPanel implements IChangeObserver {
 
         this.clearBoard();
 
+        this.start.setText(String.valueOf(start));
         this.genome.setText(animal.getGenome().toLongString());
+
+        this.clearSelection.setEnabled(true);
     }
 
     @Override
@@ -105,14 +148,23 @@ public class AnimalPanel extends JPanel implements IChangeObserver {
     public void removedElement(AbstractWorldMapElement element) {
         Animal animal = (Animal) element;
         if (animal.isSelected){
-            this.stopButton.doClick();
-
+            this.isAlive.setText("Now tracking(Dead)");
             this.watchedFor++;
             this.duration.setText(String.valueOf(this.watchedFor));
 
             this.clearSelection(true);
 
-            //JOptionPane.showMessageDialog(this, "Selected animal has died.");
+
+            String [] options = {"Yes", "No"};
+            int x = JOptionPane.showOptionDialog(this,
+                    "The animal you were tracking has died. Do you wish to stop the simulation after this day has ended?",
+                    "Warning",
+                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE,
+                    null, options, options[0]);
+            if (x == 0){
+                stopButton.doClick();
+            }
+
         }
         else {
             for (Animal parent : animal.parents){
@@ -130,4 +182,11 @@ public class AnimalPanel extends JPanel implements IChangeObserver {
     @Override
     public void energyChanged(Animal animal, int change) { }
 
+    @Override
+    public void enableElements(boolean enable) {
+        if (!enable) this.clearSelection.setEnabled(false);
+        else{
+            if (!this.genome.getText().equals("None"))this.clearSelection.setEnabled(true);
+        }
+    }
 }

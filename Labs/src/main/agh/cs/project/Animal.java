@@ -182,4 +182,12 @@ public class Animal extends AbstractWorldMapElement {
     public Genome getGenome(){
         return genome;
     }
+
+    public void highLight(){
+        this.map.highLight(this.position);
+    }
+
+    public void removeHighLight(){
+        this.map.removeHighLight(this.position);
+    }
 }

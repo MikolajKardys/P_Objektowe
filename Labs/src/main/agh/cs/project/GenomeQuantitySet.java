@@ -54,8 +54,8 @@ public class GenomeQuantitySet{
         }
     }
 
-    public String getDominant(){
-        if (this.quantitySet.size() == 0) return "None";
-        return this.quantitySet.first().genome.toLongString();
+    public Genome getDominant(){
+        if (this.quantitySet.size() == 0) return null;
+        return this.quantitySet.first().genome;
     }
 }

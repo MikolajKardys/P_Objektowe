@@ -6,11 +6,13 @@ import agh.cs.project.Pages.SimulationPagePanels.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 
 public class SimulationPage {
-    private final MapPanel map;
+    private final IMapViz map;
     private final StatsPanel stats;
-    private final AnimalPanel curAnimal;
+    private final SelectPanel selectAnimal;
+    private final JButton stopButton;
 
     private final GrassField field;
 
@@ -20,6 +22,7 @@ public class SimulationPage {
     public SimulationPage(GrassField field, ProjectEngine engine){
         Color borderColor = new Color(131, 125, 74);
 
+        ArrayList<AbstractSimulationPagePanel> enableList = new ArrayList<>();
 
         boolean tooBig = engine.tooBig;
         this.field = field;
@@ -57,7 +60,7 @@ public class SimulationPage {
         contentPane.setBackground(borderColor);
         contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.LINE_AXIS));
 
-//Początek prawej strony
+//Początek lewej strony
 
         JPanel left = new JPanel();
         left.setBackground(borderColor);
@@ -68,10 +71,11 @@ public class SimulationPage {
 
         if (!tooBig) {
             this.map = new MapPanel(this, field, mapWidth, mapHeight, fieldSize);    //mapa
-            left.add(this.map);
+            left.add((MapPanel)this.map);
         }
         else {
-            this.map = null;
+            this.map = new PositionPanel(this, field, mapHeight);
+            left.add((PositionPanel)this.map);
         }
         left.add(Box.createVerticalGlue());
 
@@ -79,49 +83,36 @@ public class SimulationPage {
         delayPanel.setBackground(borderColor);
         left.add(delayPanel);
 
-        ButtonPanel buttonPanel = new ButtonPanel();
+        StartButtonPanel buttonPanel = new StartButtonPanel();
         buttonPanel.setBackground(borderColor);
+        this.stopButton = buttonPanel.stopButton;
+
         delayPanel.setAlignmentY(Component.BOTTOM_ALIGNMENT);
+        enableList.add(delayPanel);
         left.add(buttonPanel);
 
         this.isRunning = false;
 
-        buttonPanel.stopButton.addActionListener(e -> {
-            synchronized (engine) {
-                if (buttonPanel.stopButton.getText().equals("Stop Simulation")) {
-                    buttonPanel.stopButton.setText("Resume Simulation");
-                    delayPanel.delayText.setEnabled(true);
-                    this.isRunning = false;
-                    engine.pause();
-                } else {
-                    try {
-                        int delay = Integer.parseInt(delayPanel.delayText.getText());
-                        if (delay > 0) {
-                            buttonPanel.stopButton.setText("Stop Simulation");
-                            engine.unpause(delay);
-                            delayPanel.delayText.setEnabled(false);
-                            this.isRunning = true;
-                        } else {
-                            JOptionPane.showMessageDialog(f, "Delay value must be a positive integer!!!", "Error!", JOptionPane.ERROR_MESSAGE);
-                        }
-                    } catch (NumberFormatException ignored) {
-                        JOptionPane.showMessageDialog(f, "Invalid delay value!!!", "Error!", JOptionPane.ERROR_MESSAGE);
-                    }
-                }
-            }
-        });
+//Początek prawej strony
 
-        //Początek lewej strony
         JPanel right = new JPanel();
         right.setPreferredSize(new Dimension(statsWidth, totalHeight));
         right.setLayout(new BoxLayout(right, BoxLayout.PAGE_AXIS));
         contentPane.add(right);
 
         this.stats = new StatsPanel(statsWidth);
+        enableList.add(stats);
         right.add(stats);
 
-        this.curAnimal = new AnimalPanel(statsWidth, buttonPanel.stopButton);
-        right.add(curAnimal);
+        TrackingPanel trackAnimal = new TrackingPanel(statsWidth, buttonPanel.stopButton);
+        enableList.add(trackAnimal);
+
+        this.selectAnimal = new SelectPanel(statsWidth, trackAnimal, stats);
+        enableList.add(selectAnimal);
+
+
+        right.add(selectAnimal);
+        right.add(trackAnimal);
 
         f.setVisible(true);
 
@@ -132,11 +123,49 @@ public class SimulationPage {
             }
         });
 
+//Listener guzika
+
+        this.stopButton.addActionListener(e -> {
+            synchronized (engine) {
+                if (this.stopButton.getText().equals("Stop Simulation")) {
+                    this.stopButton.setText("Resume Simulation");
+                    delayPanel.delayText.setEnabled(true);
+                    this.isRunning = false;
+                    engine.pause();
+                    for (AbstractSimulationPagePanel panel : enableList){
+                        panel.enableElements(true);
+                    }
+                } else {
+                    if (stats.highlighted){
+                        JOptionPane.showMessageDialog(f, "Please remove highlight before continuing!!!", "Error!", JOptionPane.ERROR_MESSAGE);
+                    }
+                    else {
+                        try {
+                            int delay = Integer.parseInt(delayPanel.delayText.getText());
+                            if (delay > 0) {
+                                for (AbstractSimulationPagePanel panel : enableList){
+                                    panel.enableElements(false);
+                                }
+                                this.stopButton.setText("Stop Simulation");
+                                engine.unpause(delay);
+                                delayPanel.delayText.setEnabled(false);
+                                this.isRunning = true;
+                            } else {
+                                JOptionPane.showMessageDialog(f, "Delay value must be a positive integer!!!", "Error!", JOptionPane.ERROR_MESSAGE);
+                            }
+                        } catch (NumberFormatException ignored) {
+                            JOptionPane.showMessageDialog(f, "Invalid delay value!!!", "Error!", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
+                }
+            }
+        });
+
     }
 
 //Metody
 
-    public MapPanel getMap (){
+    public IMapViz getMap (){
         return this.map;
     }
 
@@ -148,9 +177,10 @@ public class SimulationPage {
         if (!isRunning){
             JButton source = (JButton) e.getSource();
             Vector2d position = Vector2d.fromString(source.getName());
+            System.out.println("Pressed");
             if (field.objectAt(position) instanceof AnimalSortedList){
                 Animal selected = ((AnimalSortedList) field.objectAt(position)).getAllTop().get(0);
-                this.curAnimal.selectedAnimal(selected);
+                this.selectAnimal.selectedAnimal(selected);
             }
             else {
                 JOptionPane.showMessageDialog(f, "There aren't any animals on this field!!!", "Error!", JOptionPane.ERROR_MESSAGE);
@@ -159,6 +189,12 @@ public class SimulationPage {
         else {
             JOptionPane.showMessageDialog(f, "Can't select animal while the simulation is running!!!", "Error!", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    public void terminated(){
+        JOptionPane.showMessageDialog(f, "All animals have died. Simulation has terminated.", "End of simulation", JOptionPane.WARNING_MESSAGE);
+        this.stopButton.doClick();
+        this.stopButton.setEnabled(false);
     }
 }
 

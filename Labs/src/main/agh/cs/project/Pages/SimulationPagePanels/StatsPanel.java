@@ -6,7 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class StatsPanel extends JPanel implements IChangeObserver {
+public class StatsPanel extends AbstractSimulationPagePanel implements IChangeObserver {
 
     private JPanel statsPanel;
     private JLabel day;
@@ -17,6 +17,7 @@ public class StatsPanel extends JPanel implements IChangeObserver {
     private JLabel avgLife;
     private JLabel avgChildren;
     private JLabel dominant;
+    private JButton highlight;
 
     private int days = 0;
 
@@ -28,18 +29,50 @@ public class StatsPanel extends JPanel implements IChangeObserver {
 
     private final GenomeQuantitySet quantitySet;
 
+    public boolean highlighted;
+
     public StatsPanel(int statsWidth) {
-        this.setPreferredSize(new Dimension(statsWidth, -1));
+        this.setPreferredSize(new Dimension(statsWidth, 100));
+        this.setMinimumSize(new Dimension(statsWidth, 100));
         this.setBackground(new Color(187, 187, 187));
         this.add(statsPanel);
 
         this.quantitySet = new GenomeQuantitySet();
 
         Animals = new ArrayList<>();
+
+        this.highlighted = false;
+
+        this.highlight.addActionListener(e -> {
+            Genome dominant = quantitySet.getDominant();
+            if (dominant != null){
+                if (highlight.getText().equals("Highlight animals with this genome")){
+                    for (Animal animal : Animals){
+                        if (animal.getGenome().compare(dominant) == 0){
+                            animal.highLight();
+                        }
+                    }
+                    highlight.setText("Remove highlight");
+                    this.highlighted = true;
+                }
+                else {
+                    highlight.setText("Highlight animals with this genome");
+                    for (Animal animal : Animals){
+                        if (animal.getGenome().compare(dominant) == 0){
+                            animal.removeHighLight();
+                        }
+                    }
+                    this.highlighted = false;
+                }
+
+            }
+
+
+        });
     }
 
     public void allUpdate(GrassField field) {
-        days++;
+        this.days++;
         this.day.setText(String.valueOf(days));
 
         this.animalNumber.setText(String.valueOf(Animals.size()));
@@ -49,11 +82,11 @@ public class StatsPanel extends JPanel implements IChangeObserver {
         this.savannaGrass.setText(String.valueOf(field.grassCount() - field.jungleGrassNumber));
 
         if (Animals.size() > 0){
-            double average = (double) energySum / (double) Animals.size();          //
+            double average = (double) energySum / (double) Animals.size();
             average = Math.ceil(average * 100) / 100;
             this.avgEnergy.setText(String.valueOf(average));
 
-            average = (double) childrenNumber / (double) Animals.size();             //
+            average = (double) childrenNumber / (double) Animals.size();
             average = Math.ceil(average * 100) / 100;
             this.avgChildren.setText(String.valueOf(average));
         }
@@ -68,8 +101,16 @@ public class StatsPanel extends JPanel implements IChangeObserver {
             this.avgLife.setText(String.valueOf(average));
         }
 
-        this.dominant.setText(this.quantitySet.getDominant());
+        if (this.quantitySet.getDominant() != null){
+            this.dominant.setText(this.quantitySet.getDominant().toLongString());
+        }
+        else {
+            this.dominant.setText("None");
+        }
+    }
 
+    public int getDay(){
+        return days;
     }
 
     @Override
@@ -79,9 +120,9 @@ public class StatsPanel extends JPanel implements IChangeObserver {
     public void addedElement(AbstractWorldMapElement element) {
         if (element instanceof Animal) {
             Animal thisAnimal = (Animal) element;
-            Animals.add(thisAnimal);
-            childrenNumber += thisAnimal.parents.size();
-            energySum += thisAnimal.getEnergy();
+            this.Animals.add(thisAnimal);
+            this.childrenNumber += thisAnimal.parents.size();
+            this.energySum += thisAnimal.getEnergy();
             this.quantitySet.add(((Animal) element).getGenome());
         }
     }
@@ -90,18 +131,27 @@ public class StatsPanel extends JPanel implements IChangeObserver {
     public void removedElement(AbstractWorldMapElement element) {
         if (element instanceof Animal) {
             Animal thisAnimal = (Animal) element;
-            Animals.remove(thisAnimal);
-            lifeLengthSum += thisAnimal.lifeLength;
-            deadNumber++;
-            childrenNumber -= thisAnimal.parents.size();
-            childrenNumber -= thisAnimal.children.size();
-            energySum -= thisAnimal.getEnergy();
+            this.Animals.remove(thisAnimal);
+            this.lifeLengthSum += thisAnimal.lifeLength + 1;
+            this.deadNumber++;
+            this.childrenNumber -= thisAnimal.parents.size();
+            this.childrenNumber -= thisAnimal.children.size();
+            this.energySum -= thisAnimal.getEnergy();
             this.quantitySet.remove(((Animal) element).getGenome());
         }
     }
 
     @Override
     public void energyChanged(Animal animal, int change){
-        energySum += change;
+        this.energySum += change;
+    }
+
+
+    @Override
+    public void enableElements(boolean enable) {
+        if (!this.dominant.getText().equals("None")) this.highlight.setEnabled(enable);
+        else {
+            this.highlight.setEnabled(false);
+        }
     }
 }
