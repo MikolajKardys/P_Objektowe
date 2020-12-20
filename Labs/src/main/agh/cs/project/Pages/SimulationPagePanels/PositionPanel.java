@@ -27,8 +27,8 @@ public class PositionPanel extends JPanel implements IMapViz{
 
         selectButton.addActionListener(e -> {
             try{
-                int y = Integer.parseInt(xField.getText());
-                int x = Integer.parseInt(yField.getText());
+                int x = Integer.parseInt(xField.getText());
+                int y = Integer.parseInt(yField.getText());
                 if (x < 0 || y < 0 || x >= field.width || y >= field.height){
                     String permittedRange = "x in (0, " + field.width + "), y in (0, " + field.height + ")";
                     JOptionPane.showMessageDialog(this, "Coordinates outside of permitted range: " + permittedRange + "!!!",

@@ -12,15 +12,14 @@ public class Animal extends AbstractWorldMapElement {
     private final int moveEnergy;
 
     private final Genome genome;
+    private boolean isSelected;
 
-    public boolean isSelected;
-
-    public int startEnergy;
+    private int startEnergy;
     private int energy;
-    public int lifeLength = 0;
+    private int lifeLength = 0;
 
-    public final ArrayList<Animal> parents;
-    public final ArrayList<Animal> children;
+    private final ArrayList<Animal> parents;
+    private final ArrayList<Animal> children;
 
     public Animal(GrassField map, Vector2d initialPosition, int energy, int moveEnergy) {
         this(map, initialPosition, energy, moveEnergy, new Genome());
@@ -71,6 +70,40 @@ public class Animal extends AbstractWorldMapElement {
         this.isSelected = false;
     }
 
+    public int getEnergy() {
+        return energy;
+    }
+
+    public Genome getGenome(){
+        return genome;
+    }
+
+    public void select(boolean doSelect){
+        this.isSelected = doSelect;
+    }
+    public boolean isSelected(){
+        return isSelected;
+    }
+
+    public boolean canBreed(){
+        return this.energy > this.startEnergy / 2;
+    }
+
+    public int getLifeLength(){
+        return this.lifeLength;
+    }
+
+    public int getChildNumber(){
+        return this.children.size();
+    }
+
+    public int getParentNumber(){
+        return this.parents.size();
+    }
+
+    public ArrayList<Animal> getParents(){
+        return this.parents;
+    }
 
     public ArrayList<EventType> newMove(){
         ArrayList<EventType> possibleEvents = new ArrayList<>();
@@ -170,17 +203,9 @@ public class Animal extends AbstractWorldMapElement {
         ((AnimalSortedList) this.map.objectAt(this.position)).sort();
     }
 
-    public int getEnergy() {
-        return energy;
-    }
-
     public void changeEnergy(int change){
         this.energy += change;
         this.alertObserversEnergy(change);
-    }
-
-    public Genome getGenome(){
-        return genome;
     }
 
     public void highLight(){
@@ -190,4 +215,5 @@ public class Animal extends AbstractWorldMapElement {
     public void removeHighLight(){
         this.map.removeHighLight(this.position);
     }
+
 }

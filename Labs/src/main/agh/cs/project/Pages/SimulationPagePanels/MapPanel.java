@@ -6,7 +6,7 @@ import agh.cs.project.Sources.*;
 import javax.swing.*;
 import javax.swing.border.MatteBorder;
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.List;
 
 public class MapPanel extends JPanel implements IMapViz{
     private final GrassField field;
@@ -66,7 +66,7 @@ public class MapPanel extends JPanel implements IMapViz{
 
         //Paint Grass
         g.setColor(grassColor);
-        ArrayList<Grass> grassList = field.getGrasses();
+        List<Grass> grassList = field.getGrasses();
         for (Grass grass : grassList) {
             if (grass != null) {
                 int y = grass.getPosition().x * fieldSize;
@@ -76,7 +76,7 @@ public class MapPanel extends JPanel implements IMapViz{
         }
 
         //Paint Animals
-        ArrayList<AnimalSortedList> animalLists = field.getAnimals();
+        List<AnimalSortedList> animalLists = field.getAnimals();
         for (AnimalSortedList animals : animalLists) {
             Animal animal = animals.getAllTop().get(0);
             int y = animal.getPosition().x * fieldSize;

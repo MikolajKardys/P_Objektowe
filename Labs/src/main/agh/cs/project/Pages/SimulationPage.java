@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class SimulationPage {
     private final IMapViz map;
@@ -23,7 +24,7 @@ public class SimulationPage {
     public SimulationPage(GrassField field, ProjectEngine engine){
         Color borderColor = new Color(131, 125, 74);
 
-        ArrayList<AbstractSimulationPagePanel> enableList = new ArrayList<>();
+        List<AbstractSimulationPagePanel> enableList = new ArrayList<AbstractSimulationPagePanel>();
 
         boolean tooBig = engine.tooBig;
         this.field = field;
@@ -86,7 +87,7 @@ public class SimulationPage {
 
         StartButtonPanel buttonPanel = new StartButtonPanel();
         buttonPanel.setBackground(borderColor);
-        this.stopButton = buttonPanel.stopButton;
+        this.stopButton = buttonPanel.getStopButton();
 
         delayPanel.setAlignmentY(Component.BOTTOM_ALIGNMENT);
         enableList.add(delayPanel);
@@ -105,7 +106,7 @@ public class SimulationPage {
         enableList.add(stats);
         right.add(stats);
 
-        TrackingPanel trackAnimal = new TrackingPanel(statsWidth, buttonPanel.stopButton);
+        TrackingPanel trackAnimal = new TrackingPanel(statsWidth, buttonPanel.getStopButton());
         enableList.add(trackAnimal);
 
         this.selectAnimal = new SelectPanel(statsWidth, trackAnimal, stats);
@@ -126,36 +127,34 @@ public class SimulationPage {
 
 //Listenery guzików
 
-        buttonPanel.statsButton.addActionListener(e ->{
-            stats.loadFile();
-        });
+        buttonPanel.getStatsButton().addActionListener(e -> stats.loadFile());
 
         this.stopButton.addActionListener(e -> {
             synchronized (engine) {
-                if (this.stopButton.getText().equals("Stop Simulation")) {
+                if (this.isRunning) {
                     this.stopButton.setText("Resume Simulation");
-                    delayPanel.delayText.setEnabled(true);
+                    delayPanel.getDelayText().setEnabled(true);
                     this.isRunning = false;
                     engine.pause();
                     for (AbstractSimulationPagePanel panel : enableList){
                         panel.enableElements(true);
                     }
-                    buttonPanel.statsButton.setEnabled(true);
+                    buttonPanel.getStatsButton().setEnabled(true);
                 } else {
-                    if (stats.highlighted){
+                    if (stats.isHighlighted()){
                         JOptionPane.showMessageDialog(f, "Please remove highlight before continuing!!!", "Error!", JOptionPane.ERROR_MESSAGE);
                     }
                     else {
                         try {
-                            int delay = Integer.parseInt(delayPanel.delayText.getText());
+                            int delay = Integer.parseInt(delayPanel.getDelayText().getText());
                             if (delay > 0) {
                                 for (AbstractSimulationPagePanel panel : enableList){
                                     panel.enableElements(false);
                                 }
-                                buttonPanel.statsButton.setEnabled(false);
+                                buttonPanel.getStatsButton().setEnabled(false);
                                 this.stopButton.setText("Stop Simulation");
                                 engine.unpause(delay);
-                                delayPanel.delayText.setEnabled(false);
+                                delayPanel.getDelayText().setEnabled(false);
                                 this.isRunning = true;
                             } else {
                                 JOptionPane.showMessageDialog(f, "Delay value must be a positive integer!!!", "Error!", JOptionPane.ERROR_MESSAGE);

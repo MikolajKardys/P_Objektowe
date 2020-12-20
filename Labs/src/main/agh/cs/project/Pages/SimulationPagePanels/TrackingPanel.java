@@ -74,7 +74,7 @@ public class TrackingPanel extends AbstractSimulationPagePanel implements IChang
             this.curAnimal.removeObserver(this);
         }
 
-        this.curAnimal.isSelected = false;
+        this.curAnimal.select(false);
         this.curAnimal = null;
 
         this.watchedFor = 0;
@@ -110,7 +110,7 @@ public class TrackingPanel extends AbstractSimulationPagePanel implements IChang
         }
 
         this.curAnimal = animal;
-        this.curAnimal.isSelected = true;
+        this.curAnimal.select(true);
         this.curAnimal.addObserver(this);
 
         this.clearBoard();
@@ -123,7 +123,7 @@ public class TrackingPanel extends AbstractSimulationPagePanel implements IChang
 
     @Override
     public void changedPosition(Animal element, Vector2d oldPosition) {
-        if (element.isSelected) {
+        if (element.isSelected()) {
             this.watchedFor++;
             this.duration.setText(String.valueOf(this.watchedFor));
         }
@@ -133,8 +133,8 @@ public class TrackingPanel extends AbstractSimulationPagePanel implements IChang
     public void addedElement(AbstractWorldMapElement element) {
         Animal newAnimal = (Animal) element;
 
-        for (Animal parent : newAnimal.parents){
-            if (parent.isSelected){
+        for (Animal parent : newAnimal.getParents()){
+            if (parent.isSelected()){
                 this.curChildren++;
                 this.children.setText(String.valueOf(curChildren));
             }
@@ -147,7 +147,7 @@ public class TrackingPanel extends AbstractSimulationPagePanel implements IChang
     @Override
     public void removedElement(AbstractWorldMapElement element) {
         Animal animal = (Animal) element;
-        if (animal.isSelected){
+        if (animal.isSelected()){
             this.isAlive.setText("Now tracking(Dead)");
             this.watchedFor++;
             this.duration.setText(String.valueOf(this.watchedFor));
@@ -167,8 +167,8 @@ public class TrackingPanel extends AbstractSimulationPagePanel implements IChang
 
         }
         else {
-            for (Animal parent : animal.parents){
-                if (parent.isSelected){
+            for (Animal parent : animal.getParents()){
+                if (parent.isSelected()){
                     this.curChildren--;
                     this.children.setText(String.valueOf(curChildren));
                 }

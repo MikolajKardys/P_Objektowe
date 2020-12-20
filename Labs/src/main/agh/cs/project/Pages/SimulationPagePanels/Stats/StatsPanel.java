@@ -33,7 +33,7 @@ public class StatsPanel extends AbstractSimulationPagePanel implements IChangeOb
 
     private final TextStatsTracker textTracker;
 
-    public boolean highlighted;
+    private boolean highlighted;
 
     public StatsPanel(int statsWidth) {
         this.setPreferredSize(new Dimension(statsWidth, 100));
@@ -85,11 +85,11 @@ public class StatsPanel extends AbstractSimulationPagePanel implements IChangeOb
         this.animalNumber.setText(String.valueOf(Animals.size()));
         update[0] = Animals.size();
 
-        this.jungleGrass.setText(String.valueOf(field.jungleGrassNumber));
-        update[1] = field.jungleGrassNumber;
+        this.jungleGrass.setText(String.valueOf(field.getJungleGrassNumber()));
+        update[1] = field.getJungleGrassNumber();
 
-        this.steppeGrass.setText(String.valueOf(field.grassCount() - field.jungleGrassNumber));
-        update[2] = field.grassCount() - field.jungleGrassNumber;
+        this.steppeGrass.setText(String.valueOf(field.grassCount() - field.getJungleGrassNumber()));
+        update[2] = field.grassCount() - field.getJungleGrassNumber();
 
         if (Animals.size() > 0){
             double average = (double) energySum / (double) Animals.size();
@@ -134,6 +134,10 @@ public class StatsPanel extends AbstractSimulationPagePanel implements IChangeOb
         this.textTracker.writeToFile(fileName);
     }
 
+    public boolean isHighlighted(){
+        return highlighted;
+    }
+
     @Override
     public void changedPosition(Animal element, Vector2d oldPosition) { }
 
@@ -142,7 +146,7 @@ public class StatsPanel extends AbstractSimulationPagePanel implements IChangeOb
         if (element instanceof Animal) {
             Animal thisAnimal = (Animal) element;
             this.Animals.add(thisAnimal);
-            this.childrenNumber += thisAnimal.parents.size();
+            this.childrenNumber += thisAnimal.getParentNumber();
             this.energySum += thisAnimal.getEnergy();
             this.quantitySet.add(((Animal) element).getGenome());
         }
@@ -153,10 +157,10 @@ public class StatsPanel extends AbstractSimulationPagePanel implements IChangeOb
         if (element instanceof Animal) {
             Animal thisAnimal = (Animal) element;
             this.Animals.remove(thisAnimal);
-            this.lifeLengthSum += thisAnimal.lifeLength + 1;
+            this.lifeLengthSum += thisAnimal.getLifeLength() + 1;
             this.deadNumber++;
-            this.childrenNumber -= thisAnimal.parents.size();
-            this.childrenNumber -= thisAnimal.children.size();
+            this.childrenNumber -= thisAnimal.getParentNumber();
+            this.childrenNumber -= thisAnimal.getChildNumber();
             this.energySum -= thisAnimal.getEnergy();
             this.quantitySet.remove(((Animal) element).getGenome());
         }

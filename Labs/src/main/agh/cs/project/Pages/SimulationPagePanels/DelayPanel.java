@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class DelayPanel extends AbstractSimulationPagePanel {
-    public final JTextField delayText;
+    private final JTextField delayText;
 
     public DelayPanel(int minMapWidth, int mapHeight, int totalHeight){
         this.setMinimumSize(new Dimension(minMapWidth, -1));
@@ -24,6 +24,10 @@ public class DelayPanel extends AbstractSimulationPagePanel {
         this.delayText.setHorizontalAlignment(0);
         this.delayText.setEnabled(true);
         this.add(this.delayText);
+    }
+
+    public JTextField getDelayText(){
+        return delayText;
     }
 
     @Override

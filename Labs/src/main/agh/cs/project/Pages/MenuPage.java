@@ -22,7 +22,7 @@ public class MenuPage implements ActionListener {
     private JTextField jungeRatio;
     private JButton loadButton;
 
-    private Parameters parameters;
+    private final Parameters parameters;
 
     public MenuPage(){
         this.frame = new JFrame();

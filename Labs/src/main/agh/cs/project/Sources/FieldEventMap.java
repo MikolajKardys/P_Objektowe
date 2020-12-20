@@ -30,7 +30,7 @@ public class FieldEventMap extends FieldMap{
             if (breedingAnimals != null) {
                 Animal aParent = breedingAnimals.get(0);
                 Animal bParent = breedingAnimals.get(1);
-                if (bParent.getEnergy() >= bParent.startEnergy / 2) {
+                if (bParent.canBreed()) {
                     Animal newAnimal = new Animal(aParent, bParent);
                     newTab.add(newAnimal);
                     aParent.sortThisField();

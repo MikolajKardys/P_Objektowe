@@ -8,8 +8,8 @@ import java.io.FileReader;
 
 public class Parameters {
 
-    String [] parametrs;
-    String [] keyWords;
+    private final String [] parametrs;
+    private final String [] keyWords;
 
     public Parameters() {
         parametrs = new String [7];

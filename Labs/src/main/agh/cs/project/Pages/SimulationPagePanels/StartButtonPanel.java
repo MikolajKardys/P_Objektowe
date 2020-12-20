@@ -4,8 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 
 public class StartButtonPanel extends JPanel {
-    public final JButton stopButton;
-    public final JButton statsButton;
+    private final JButton stopButton;
+    private final JButton statsButton;
+
     public StartButtonPanel(){         //guzik start/stop
         this.stopButton = new JButton("Resume Simulation");
         stopButton.setPreferredSize(new Dimension(200, 30));
@@ -16,5 +17,13 @@ public class StartButtonPanel extends JPanel {
         statsButton.setPreferredSize(new Dimension(200, 30));
         statsButton.setMinimumSize(new Dimension(200, 30));
         this.add(statsButton);
+    }
+
+    public JButton getStopButton(){
+        return stopButton;
+    }
+
+    public JButton getStatsButton(){
+        return statsButton;
     }
 }

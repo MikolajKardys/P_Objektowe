@@ -12,10 +12,10 @@ public class GrassField implements IChangeObserver {
     private final Jungle jungle;
     private final int maxFields;
     private int takenFields;
+    private int jungleGrassNumber;
 
     public final int width;
     public final int height;
-    public int jungleGrassNumber;
 
     public GrassField(int width, int height, float jungleRatio, ProjectEngine engine) {
         this.width = width;
@@ -240,5 +240,9 @@ public class GrassField implements IChangeObserver {
 
     public void terminated(){
         this.mainPanel.terminated();
+    }
+
+    public int getJungleGrassNumber(){
+        return this.jungleGrassNumber;
     }
 }
