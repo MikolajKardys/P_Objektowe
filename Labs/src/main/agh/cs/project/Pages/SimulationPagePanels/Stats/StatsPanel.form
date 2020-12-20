@@ -3,7 +3,7 @@
   <grid id="27dc6" binding="statsPanel" layout-manager="GridLayoutManager" row-count="20" column-count="6" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
-      <xy x="20" y="20" width="414" height="478"/>
+      <xy x="20" y="20" width="423" height="478"/>
     </constraints>
     <properties>
       <background color="-4473925"/>
@@ -13,7 +13,7 @@
     <children>
       <component id="3521b" class="javax.swing.JLabel">
         <constraints>
-          <grid row="1" column="0" row-span="1" col-span="6" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="1" column="1" row-span="1" col-span="4" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <background color="-4473925"/>
@@ -129,7 +129,7 @@
           <text value="Grass number in junge:"/>
         </properties>
       </component>
-      <component id="1998b" class="javax.swing.JLabel" binding="savannaGrass">
+      <component id="1998b" class="javax.swing.JLabel" binding="steppeGrass">
         <constraints>
           <grid row="9" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -151,7 +151,7 @@
         </constraints>
         <properties>
           <foreground color="-16777216"/>
-          <text value="Grass number in savanna:"/>
+          <text value="Grass number on steppe:"/>
         </properties>
       </component>
       <component id="8806" class="javax.swing.JLabel" binding="avgEnergy">

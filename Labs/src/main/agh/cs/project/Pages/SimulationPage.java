@@ -124,7 +124,11 @@ public class SimulationPage {
             }
         });
 
-//Listener guzika
+//Listenery guzików
+
+        buttonPanel.statsButton.addActionListener(e ->{
+            stats.loadFile();
+        });
 
         this.stopButton.addActionListener(e -> {
             synchronized (engine) {
@@ -136,6 +140,7 @@ public class SimulationPage {
                     for (AbstractSimulationPagePanel panel : enableList){
                         panel.enableElements(true);
                     }
+                    buttonPanel.statsButton.setEnabled(true);
                 } else {
                     if (stats.highlighted){
                         JOptionPane.showMessageDialog(f, "Please remove highlight before continuing!!!", "Error!", JOptionPane.ERROR_MESSAGE);
@@ -147,6 +152,7 @@ public class SimulationPage {
                                 for (AbstractSimulationPagePanel panel : enableList){
                                     panel.enableElements(false);
                                 }
+                                buttonPanel.statsButton.setEnabled(false);
                                 this.stopButton.setText("Stop Simulation");
                                 engine.unpause(delay);
                                 delayPanel.delayText.setEnabled(false);
