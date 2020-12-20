@@ -1,0 +1,11 @@
+-------------------------Average Statistics-------------------------
+Day:                                                            4224
+Average of animal number:                                       13.809659
+Average of grass number in jungle:                              3.3678977
+Average of grass number on steppe:                              12.092803
+Average of average energy for living animal:                    465.07605
+Average of average life length for dead animal:                 82.53846
+Average of average number of children per living animal:        0.7764607
+
+All dominant genome:                                            00001112233333444444555566777777
+

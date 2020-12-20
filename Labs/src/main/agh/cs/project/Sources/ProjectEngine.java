@@ -70,7 +70,6 @@ public class ProjectEngine implements ActionListener {
 
     public void cancel(){
         timer.stop();
-        System.out.println("Terminated");
     }
 
     @Override
@@ -88,7 +87,7 @@ public class ProjectEngine implements ActionListener {
         }
         else {
             int ind = 0;
-            while (ind < Animals.size()) {
+            while (ind < Animals.size()) {            //Usuwamy, bo zwierze które nie może się ruszyć i tak już nic nie zrobi
                 Animal curAnimal = Animals.get(ind);
                 if (curAnimal.getEnergy() < this.energyToSurvive) {
                     Animals.remove(ind);

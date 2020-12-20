@@ -86,7 +86,7 @@ public class TextStatsTracker extends JComponent{
             printWriter.print("Average of average life length for dead animal:                 " + avgLifeAverage + "\n");
             printWriter.print("Average of average number of children per living animal:        " + avgChildrenAverage + "\n\n");
 
-            printWriter.print("All dominant genome:                                            " + dominant + "\n\n");
+            printWriter.print("Most common dominant genome:        " + dominant + "\n\n");
 
             printWriter.close();
         } catch (IOException e) {
