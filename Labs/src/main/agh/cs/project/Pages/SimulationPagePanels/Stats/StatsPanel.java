@@ -48,7 +48,7 @@ public class StatsPanel extends AbstractSimulationPagePanel implements IChangeOb
         this.highlighted = false;
 
         this.textTracker = new TextStatsTracker();
-        this.textTracker.update(days, new double [] {0, 0, 0, 0, 0, 0});
+        this.textTracker.update(days, new double [] {0, 0, 0, 0, 0, 0}, null);
 
         this.highlight.addActionListener(e -> {
             Genome dominant = quantitySet.getDominant();
@@ -114,14 +114,15 @@ public class StatsPanel extends AbstractSimulationPagePanel implements IChangeOb
             update[4] = average;
         }
 
-        if (this.quantitySet.getDominant() != null){
-            this.dominant.setText(this.quantitySet.getDominant().toLongString());
+        Genome dominantGenome = this.quantitySet.getDominant();
+        if (dominantGenome != null){
+            this.dominant.setText(dominantGenome.toLongString());
         }
         else {
             this.dominant.setText("None");
         }
 
-        this.textTracker.update(days, update);
+        this.textTracker.update(days, update, dominantGenome);
     }
 
     public int getDay(){
