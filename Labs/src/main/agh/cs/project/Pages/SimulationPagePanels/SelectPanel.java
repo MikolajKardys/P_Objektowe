@@ -19,6 +19,8 @@ public class SelectPanel extends AbstractSimulationPagePanel {
         this.setBackground(new Color(187, 187, 187));
         this.add(selectPanel);
 
+        this.genome.setOpaque(true);
+
         this.track.setEnabled(false);
         this.clear.setEnabled(false);
 
@@ -30,6 +32,7 @@ public class SelectPanel extends AbstractSimulationPagePanel {
     public void clearSelection() {
         this.curAnimal = null;
         this.genome.setText("None");
+        this.genome.setBackground(new Color(187, 187, 187));
         this.track.setEnabled(false);
         this.clear.setEnabled(false);
     }
@@ -37,6 +40,7 @@ public class SelectPanel extends AbstractSimulationPagePanel {
     public void selectedAnimal(Animal animal) {
         this.curAnimal = animal;
         this.genome.setText(animal.getGenome().toLongString());
+        this.genome.setBackground(animal.getHealthColor());
         this.track.setEnabled(true);
         this.clear.setEnabled(true);
     }

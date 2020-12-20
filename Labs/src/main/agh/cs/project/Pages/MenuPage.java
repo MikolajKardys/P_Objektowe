@@ -1,8 +1,10 @@
 package agh.cs.project.Pages;
 
+import agh.cs.project.Parameters;
 import agh.cs.project.ProjectEngine;
 
 import javax.swing.*;
+import javax.swing.plaf.synth.SynthDesktopIconUI;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,6 +21,9 @@ public class MenuPage implements ActionListener {
     private JTextField moveEnergyField;
     private JTextField plantEnergyField;
     private JTextField jungeRatio;
+    private JButton loadButton;
+
+    private Parameters parameters;
 
     public MenuPage(){
         this.frame = new JFrame();
@@ -35,7 +40,9 @@ public class MenuPage implements ActionListener {
         this.frame.setVisible(true);
 
         this.runButton.addActionListener(this);
+        this.loadButton.addActionListener(this);
 
+        this.parameters = new Parameters();
     }
 
     private boolean areArgumentsCorrect(){
@@ -98,6 +105,16 @@ public class MenuPage implements ActionListener {
                 JOptionPane.showMessageDialog(frame, "Incorrect simulation parameters!!!","Error!", JOptionPane.ERROR_MESSAGE);
             }
 
+        }
+        if (e.getSource() == this.loadButton){
+            String [] params = parameters.getParameters();
+            this.widthField.setText(params[0]);
+            this.heightField.setText(params[1]);
+            this.animalNumberField.setText(params[2]);
+            this.startEnergyField.setText(params[3]);
+            this.moveEnergyField.setText(params[4]);
+            this.plantEnergyField.setText(params[5]);
+            this.jungeRatio.setText(params[6]);
         }
     }
 
