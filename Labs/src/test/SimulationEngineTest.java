@@ -11,14 +11,15 @@ public class SimulationEngineTest{
         Vector2d [] positions = {new Vector2d(2,2), new Vector2d(3,4) };                //Zwierzęta
         IEngine engine = new SimulationEngine(directions, map, positions);
         engine.run();
+        System.out.print(map.toString());
         String expected = " y\\x  0 1 2 3 4 5 6 7 8 910" + System.lineSeparator() +
                 "  6: -----------------------" + System.lineSeparator() +
-                "  5: | | | |^| | | | | | | |" + System.lineSeparator() +
+                "  5: | | | |\uD83E\uDC51| | | | | | | |" + System.lineSeparator() +
                 "  4: | | | | | | | | | | | |" + System.lineSeparator() +
                 "  3: | | | | | | | | | | | |" + System.lineSeparator() +
                 "  2: | | | | | | | | | | | |" + System.lineSeparator() +
                 "  1: | | | | | | | | | | | |" + System.lineSeparator() +
-                "  0: | | |v| | | | | | | | |" + System.lineSeparator() +
+                "  0: | | |\uD83E\uDC53| | | | | | | | |" + System.lineSeparator() +
                 " -1: -----------------------" + System.lineSeparator();
         assertEquals(expected, map.toString());
     }
@@ -33,8 +34,8 @@ public class SimulationEngineTest{
                 "  6: -------------" + System.lineSeparator() +
                 "  5: | | | | | | |" + System.lineSeparator() +
                 "  4: | | | | | | |" + System.lineSeparator() +
-                "  3: | | |v| | | |" + System.lineSeparator() +
-                "  2: | | | |^| | |" + System.lineSeparator() +
+                "  3: | | |\uD83E\uDC53| | | |" + System.lineSeparator() +
+                "  2: | | | |\uD83E\uDC51| | |" + System.lineSeparator() +
                 "  1: | | | | | | |" + System.lineSeparator() +
                 "  0: | | | | | | |" + System.lineSeparator() +
                 " -1: -------------" + System.lineSeparator();
@@ -49,10 +50,10 @@ public class SimulationEngineTest{
         engine.run();
         String expected = " y\\x  0 1 2 3" + System.lineSeparator() +
                 "  4: ---------" + System.lineSeparator() +
-                "  3: | | | |^|" + System.lineSeparator() +
+                "  3: | | | |\uD83E\uDC51|" + System.lineSeparator() +
                 "  2: | | | | |" + System.lineSeparator() +
                 "  1: | | | | |" + System.lineSeparator() +
-                "  0: | | | |v|" + System.lineSeparator() +
+                "  0: | | | |\uD83E\uDC53|" + System.lineSeparator() +
                 " -1: ---------" + System.lineSeparator();
         assertEquals(expected, map.toString());
     }

@@ -6,17 +6,17 @@ import static org.junit.Assert.assertEquals;
 public class MapDirectionTest {
     @Test
     public void next_check() {
-        assertEquals(MapDirection.NORTH.next(), MapDirection.EAST);
-        assertEquals(MapDirection.EAST.next(), MapDirection.SOUTH);
-        assertEquals(MapDirection.SOUTH.next(), MapDirection.WEST);
-        assertEquals(MapDirection.WEST.next(), MapDirection.NORTH);
+        assertEquals(MapDirection.Dir_0.next(), MapDirection.Dir_2);
+        assertEquals(MapDirection.Dir_2.next(), MapDirection.Dir_4);
+        assertEquals(MapDirection.Dir_4.next(), MapDirection.Dir_6);
+        assertEquals(MapDirection.Dir_6.next(), MapDirection.Dir_0);
     }
     @Test
     public void previous_check() {
-        assertEquals(MapDirection.NORTH.previous(), MapDirection.WEST);
-        assertEquals(MapDirection.EAST.previous(), MapDirection.NORTH);
-        assertEquals(MapDirection.SOUTH.previous(), MapDirection.EAST);
-        assertEquals(MapDirection.WEST.previous(), MapDirection.SOUTH);
+        assertEquals(MapDirection.Dir_0.previous(), MapDirection.Dir_6);
+        assertEquals(MapDirection.Dir_2.previous(), MapDirection.Dir_0);
+        assertEquals(MapDirection.Dir_4.previous(), MapDirection.Dir_2);
+        assertEquals(MapDirection.Dir_6.previous(), MapDirection.Dir_4);
     }
 
 }
