@@ -17,7 +17,7 @@ public class Parameters {
     }
 
     public String [] getParameters(){
-        this.reloadParameters();
+        reloadParameters();
         return parametrs;
     }
 

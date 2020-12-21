@@ -7,6 +7,9 @@ import javax.swing.*;
 import java.awt.*;
 
 public class PositionPanel extends JPanel implements IMapViz{
+
+//Zastępczy panel, jeśli mapa jest za duża żeby ją wyświetlić
+
     private JPanel positionPanel;
     private JTextField xField;
     private JButton selectButton;
@@ -18,24 +21,24 @@ public class PositionPanel extends JPanel implements IMapViz{
     private final Color steppeColor = new Color(182, 227, 83);
 
     public PositionPanel(SimulationPage mainPage, GrassField field, int mapHeight){
-        this.setPreferredSize(new Dimension(-1, mapHeight));
-        this.setBackground(steppeColor);
-        this.add(positionPanel);
+        setPreferredSize(new Dimension(-1, mapHeight));
+        setBackground(steppeColor);
+        add(positionPanel);
 
-        this.highlightedString = "";
-        this.highlighted.setText(highlightedString);
+        highlightedString = "";
+        highlighted.setText(highlightedString);
 
         selectButton.addActionListener(e -> {
             try{
                 int x = Integer.parseInt(xField.getText());
                 int y = Integer.parseInt(yField.getText());
                 if (x < 0 || y < 0 || x >= field.width || y >= field.height){
-                    String permittedRange = "x in (0, " + field.width + "), y in (0, " + field.height + ")";
+                    String permittedRange = "x in (0, " + (field.width - 1) + "), y in (0, " + (field.height - 1) + ")";
                     JOptionPane.showMessageDialog(this, "Coordinates outside of permitted range: " + permittedRange + "!!!",
                             "Error!", JOptionPane.ERROR_MESSAGE);
                 }
                 else {
-                    this.selectButton.setName(x + " " + y);
+                    selectButton.setName(x + " " + y);
                     mainPage.actionPerformed(e);
                 }
 
@@ -50,14 +53,14 @@ public class PositionPanel extends JPanel implements IMapViz{
     @Override
     public void highLight(int indX, int indY) {
         highlightedString += "(" + indX + "," + indY + ")   ";
-        this.highlighted.setText(highlightedString);
+        highlighted.setText(highlightedString);
     }
 
     @Override
     public void removeHighLight(int indX, int indY) {
         if (!highlightedString.equals("")){
-            this.highlightedString = "";
-            this.highlighted.setText(highlightedString);
+            highlightedString = "";
+            highlighted.setText(highlightedString);
         }
 
     }

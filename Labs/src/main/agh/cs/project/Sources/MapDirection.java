@@ -1,6 +1,9 @@
 package agh.cs.project.Sources;
 
 public enum MapDirection{
+
+//Tym przechowujący możliwe zwroty zwierzęcia i metody służące do łatwiejszego ich interpretowania
+
     Dir_0,
     Dir_1,
     Dir_2,
@@ -9,6 +12,7 @@ public enum MapDirection{
     Dir_5,
     Dir_6,
     Dir_7;
+
     public static MapDirection newMapDirection(int ordinal){
         return MapDirection.valueOf("Dir_" + ordinal);
     }
@@ -18,12 +22,14 @@ public enum MapDirection{
     public Vector2d toUnitVector(){
         int [] tabX = {0, 1, 1, 1, 0, -1, -1, -1};
         int [] tabY = {1, 1, 0, -1, -1, -1, 0, 1};
-        return new Vector2d(tabX[this.ordinal()], tabY[this.ordinal()]);
+        return new Vector2d(tabX[ordinal()], tabY[ordinal()]);
     }
 
+
+    //Zmienia kierunek o podaną wartość MoveDirection
     public MapDirection turn(MoveDirection turn){
         int turnNumber = turn.ordinal();
-        int direction = (this.ordinal() + turnNumber) % this.numNumber;
+        int direction = (ordinal() + turnNumber) % numNumber;
         return MapDirection.valueOf("Dir_" + direction);
     }
 }

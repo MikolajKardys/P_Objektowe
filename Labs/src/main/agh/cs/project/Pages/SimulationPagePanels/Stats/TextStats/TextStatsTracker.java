@@ -10,6 +10,8 @@ import java.io.PrintWriter;
 
 public class TextStatsTracker extends JComponent{
 
+//Klasa obsługująca wypisywanie uśrednionych statystyk do pliku
+
     private long days;
     private double animalNumberTotal;
     private double jungleGrassTotal;
@@ -31,7 +33,7 @@ public class TextStatsTracker extends JComponent{
         avgChildrenTotal = 0;
         dominant = "None";
 
-        this.quantitySet = new GenomeQuantitySet();
+        quantitySet = new GenomeQuantitySet();
     }
 
     public void update(int days, double [] updateNumbers, Genome genome){
@@ -47,7 +49,7 @@ public class TextStatsTracker extends JComponent{
             quantitySet.add(genome);
         }
         if (quantitySet.getDominant() != null){
-            dominant = quantitySet.getDominant().toLongString();
+            dominant = quantitySet.getDominant().toString();
         }
         else{
             dominant = "None";

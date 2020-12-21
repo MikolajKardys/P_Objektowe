@@ -10,6 +10,8 @@ import java.util.ArrayList;
 
 public class StatsPanel extends AbstractSimulationPagePanel implements IChangeObserver {
 
+//Fragment okienka obsługujący wyświetlanie statystyk; ich liczenie nie jest trudne, więc robimy je już tutaj
+
     private JPanel statsPanel;
     private JLabel day;
     private JLabel animalNumber;
@@ -36,21 +38,21 @@ public class StatsPanel extends AbstractSimulationPagePanel implements IChangeOb
     private boolean highlighted;
 
     public StatsPanel(int statsWidth) {
-        this.setPreferredSize(new Dimension(statsWidth, 100));
-        this.setMinimumSize(new Dimension(statsWidth, 100));
-        this.setBackground(new Color(187, 187, 187));
-        this.add(statsPanel);
+        setPreferredSize(new Dimension(statsWidth, 100));
+        setMinimumSize(new Dimension(statsWidth, 100));
+        setBackground(new Color(187, 187, 187));
+        add(statsPanel);
 
-        this.quantitySet = new GenomeQuantitySet();
+        quantitySet = new GenomeQuantitySet();
 
         Animals = new ArrayList<>();
 
-        this.highlighted = false;
+        highlighted = false;
 
-        this.textTracker = new TextStatsTracker();
-        this.textTracker.update(days, new double [] {0, 0, 0, 0, 0, 0}, null);
+        textTracker = new TextStatsTracker();
+        textTracker.update(days, new double [] {0, 0, 0, 0, 0, 0}, null);
 
-        this.highlight.addActionListener(e -> {
+        highlight.addActionListener(e -> {
             Genome dominant = quantitySet.getDominant();
             if (dominant != null){
                 if (highlight.getText().equals("Highlight animals with this genome")){
@@ -60,7 +62,7 @@ public class StatsPanel extends AbstractSimulationPagePanel implements IChangeOb
                         }
                     }
                     highlight.setText("Remove highlight");
-                    this.highlighted = true;
+                    highlighted = true;
                 }
                 else {
                     highlight.setText("Highlight animals with this genome");
@@ -69,7 +71,7 @@ public class StatsPanel extends AbstractSimulationPagePanel implements IChangeOb
                             animal.removeHighLight();
                         }
                     }
-                    this.highlighted = false;
+                    highlighted = false;
                 }
 
             }
@@ -79,50 +81,50 @@ public class StatsPanel extends AbstractSimulationPagePanel implements IChangeOb
     public void allUpdate(GrassField field) {
         double [] update = {0, 0, 0, 0, 0, 0};
 
-        this.days++;
-        this.day.setText(String.valueOf(days));
+        days++;
+        day.setText(String.valueOf(days));
 
-        this.animalNumber.setText(String.valueOf(Animals.size()));
+        animalNumber.setText(String.valueOf(Animals.size()));
         update[0] = Animals.size();
 
-        this.jungleGrass.setText(String.valueOf(field.getJungleGrassNumber()));
+        jungleGrass.setText(String.valueOf(field.getJungleGrassNumber()));
         update[1] = field.getJungleGrassNumber();
 
-        this.steppeGrass.setText(String.valueOf(field.grassCount() - field.getJungleGrassNumber()));
+        steppeGrass.setText(String.valueOf(field.grassCount() - field.getJungleGrassNumber()));
         update[2] = field.grassCount() - field.getJungleGrassNumber();
 
         if (Animals.size() > 0){
             double average = (double) energySum / (double) Animals.size();
             average = Math.ceil(average * 100) / 100;
-            this.avgEnergy.setText(String.valueOf(average));
+            avgEnergy.setText(String.valueOf(average));
             update[3] = average;
 
             average = (double) childrenNumber / (double) Animals.size();
             average = Math.ceil(average * 100) / 100;
-            this.avgChildren.setText(String.valueOf(average));
+            avgChildren.setText(String.valueOf(average));
             update[5] = average;
         }
         else{
-            this.avgEnergy.setText("0");
-            this.avgChildren.setText("0");
+            avgEnergy.setText("0");
+            avgChildren.setText("0");
         }
 
         if (deadNumber > 0){
             double average = (double) lifeLengthSum / (double) deadNumber;
             average = Math.ceil(average * 100) / 100;
-            this.avgLife.setText(String.valueOf(average));
+            avgLife.setText(String.valueOf(average));
             update[4] = average;
         }
 
-        Genome dominantGenome = this.quantitySet.getDominant();
+        Genome dominantGenome = quantitySet.getDominant();
         if (dominantGenome != null){
-            this.dominant.setText(dominantGenome.toLongString());
+            dominant.setText(dominantGenome.toString());
         }
         else {
-            this.dominant.setText("None");
+            dominant.setText("None");
         }
 
-        this.textTracker.update(days, update, dominantGenome);
+        textTracker.update(days, update, dominantGenome);
     }
 
     public int getDay(){
@@ -131,7 +133,7 @@ public class StatsPanel extends AbstractSimulationPagePanel implements IChangeOb
 
     public void loadFile(){
         String fileName =  JOptionPane.showInputDialog("Enter desired name of output file.");
-        this.textTracker.writeToFile(fileName);
+        textTracker.writeToFile(fileName);
     }
 
     public boolean isHighlighted(){
@@ -145,10 +147,10 @@ public class StatsPanel extends AbstractSimulationPagePanel implements IChangeOb
     public void addedElement(AbstractWorldMapElement element) {
         if (element instanceof Animal) {
             Animal thisAnimal = (Animal) element;
-            this.Animals.add(thisAnimal);
-            this.childrenNumber += thisAnimal.getParentNumber();
-            this.energySum += thisAnimal.getEnergy();
-            this.quantitySet.add(((Animal) element).getGenome());
+            Animals.add(thisAnimal);
+            childrenNumber += thisAnimal.getParentNumber();
+            energySum += thisAnimal.getEnergy();
+            quantitySet.add(((Animal) element).getGenome());
         }
     }
 
@@ -156,27 +158,27 @@ public class StatsPanel extends AbstractSimulationPagePanel implements IChangeOb
     public void removedElement(AbstractWorldMapElement element) {
         if (element instanceof Animal) {
             Animal thisAnimal = (Animal) element;
-            this.Animals.remove(thisAnimal);
-            this.lifeLengthSum += thisAnimal.getLifeLength() + 1;
-            this.deadNumber++;
-            this.childrenNumber -= thisAnimal.getParentNumber();
-            this.childrenNumber -= thisAnimal.getChildNumber();
-            this.energySum -= thisAnimal.getEnergy();
-            this.quantitySet.remove(((Animal) element).getGenome());
+            Animals.remove(thisAnimal);
+            lifeLengthSum += thisAnimal.getLifeLength() + 1;
+            deadNumber++;
+            childrenNumber -= thisAnimal.getParentNumber();
+            childrenNumber -= thisAnimal.getChildNumber();
+            energySum -= thisAnimal.getEnergy();
+            quantitySet.remove(((Animal) element).getGenome());
         }
     }
 
     @Override
     public void energyChanged(Animal animal, int change){
-        this.energySum += change;
+        energySum += change;
     }
 
 
     @Override
     public void enableElements(boolean enable) {
-        if (!this.dominant.getText().equals("None")) this.highlight.setEnabled(enable);
+        if (!dominant.getText().equals("None")) highlight.setEnabled(enable);
         else {
-            this.highlight.setEnabled(false);
+            highlight.setEnabled(false);
         }
     }
 }

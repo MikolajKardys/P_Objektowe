@@ -10,7 +10,9 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class TrackingPanel extends AbstractSimulationPagePanel implements IChangeObserver {
-    private JPanel animalPanel;
+
+//Część okienka pokazująca wymagane statystyki dla obecnie śledzonego zwierzęcia
+
     private JPanel statsPanel;
     private JLabel descendants;
     private JLabel genome;
@@ -27,22 +29,24 @@ public class TrackingPanel extends AbstractSimulationPagePanel implements IChang
 
     private final JButton stopButton;
 
+//Panel przechowujący
+
     public TrackingPanel(int statsWidth, JButton stopButton){
-        this.setPreferredSize(new Dimension(statsWidth, -1));
-        this.setBackground(new Color(187, 187, 187));
-        this.setAlignmentY(TOP_ALIGNMENT);
+        setPreferredSize(new Dimension(statsWidth, -1));
+        setBackground(new Color(187, 187, 187));
+        setAlignmentY(TOP_ALIGNMENT);
 
-        this.curAnimal = null;
-        this.curChildren = 0;
-        this.curDesc = new ArrayList<>();
+        curAnimal = null;
+        curChildren = 0;
+        curDesc = new ArrayList<>();
 
-        this.clearSelection.setEnabled(false);
+        clearSelection.setEnabled(false);
 
         this.stopButton = stopButton;
 
-        this.add(statsPanel);
+        add(statsPanel);
 
-        this.clearSelection.addActionListener(e -> {
+        clearSelection.addActionListener(e -> {
             String [] options = {"Yes", "No"};
             int x;
             x = JOptionPane.showOptionDialog(this,
@@ -51,45 +55,45 @@ public class TrackingPanel extends AbstractSimulationPagePanel implements IChang
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE,
                     null, options, options[0]);
             if (x == 0){
-                if (this.curAnimal != null) this.clearSelection(false);
-                this.clearBoard();
-                this.clearSelection.setEnabled(false);
+                if (curAnimal != null) clearSelection(false);
+                clearBoard();
+                clearSelection.setEnabled(false);
             }
         });
     }
 
     public void clearBoard(){
-        this.watchedFor = 0;
+        watchedFor = 0;
 
-        this.isAlive.setText("Now tracking");
-        this.start.setText("0");
-        this.genome.setText("None");
-        this.duration.setText("0");
-        this.descendants.setText("0");
-        this.children.setText("0");
+        isAlive.setText("Now tracking");
+        start.setText("0");
+        genome.setText("None");
+        duration.setText("0");
+        descendants.setText("0");
+        children.setText("0");
     }
 
     public void clearSelection(boolean removing){
         if (!removing){
-            this.curAnimal.removeObserver(this);
+            curAnimal.removeObserver(this);
         }
 
-        this.curAnimal.select(false);
-        this.curAnimal = null;
+        curAnimal.select(false);
+        curAnimal = null;
 
-        this.watchedFor = 0;
+        watchedFor = 0;
 
-        this.curChildren = 0;
+        curChildren = 0;
 
         for (Animal child : curDesc){
             child.removeObserver(this);
         }
-        this.curDesc.clear();
+        curDesc.clear();
     }
 
-    public void selectedAnimal(Animal animal, int start){
+    public void selectedAnimal(Animal animal, int startDay){
         int x;
-        if (this.clearSelection.isEnabled()){
+        if (clearSelection.isEnabled()){
             String [] options = {"Yes", "No"};
             x = JOptionPane.showOptionDialog(this,
                     "Are you sure you want to overwrite current tracking values? Current values will be lost.",
@@ -102,30 +106,30 @@ public class TrackingPanel extends AbstractSimulationPagePanel implements IChang
         }
         if (x == 1) return;
 
-        if (this.curAnimal != null) this.clearSelection(false);
-        this.clearBoard();
+        if (curAnimal != null) clearSelection(false);
+        clearBoard();
 
         if (curAnimal != null){
-            this.clearSelection(false);
+            clearSelection(false);
         }
 
-        this.curAnimal = animal;
-        this.curAnimal.select(true);
-        this.curAnimal.addObserver(this);
+        curAnimal = animal;
+        curAnimal.select(true);
+        curAnimal.addObserver(this);
 
-        this.clearBoard();
+        clearBoard();
 
-        this.start.setText(String.valueOf(start));
-        this.genome.setText(animal.getGenome().toLongString());
+        start.setText(String.valueOf(startDay));
+        genome.setText(animal.getGenome().toString());
 
-        this.clearSelection.setEnabled(true);
+        clearSelection.setEnabled(true);
     }
 
     @Override
     public void changedPosition(Animal element, Vector2d oldPosition) {
         if (element.isSelected()) {
-            this.watchedFor++;
-            this.duration.setText(String.valueOf(this.watchedFor));
+            watchedFor++;
+            duration.setText(String.valueOf(watchedFor));
         }
     }
 
@@ -135,24 +139,24 @@ public class TrackingPanel extends AbstractSimulationPagePanel implements IChang
 
         for (Animal parent : newAnimal.getParents()){
             if (parent.isSelected()){
-                this.curChildren++;
-                this.children.setText(String.valueOf(curChildren));
+                curChildren++;
+                children.setText(String.valueOf(curChildren));
             }
         }
 
-        this.curDesc.add(newAnimal);
-        this.descendants.setText(String.valueOf(curDesc.size()));
+        curDesc.add(newAnimal);
+        descendants.setText(String.valueOf(curDesc.size()));
     }
 
     @Override
     public void removedElement(AbstractWorldMapElement element) {
         Animal animal = (Animal) element;
         if (animal.isSelected()){
-            this.isAlive.setText("Now tracking(Dead)");
-            this.watchedFor++;
-            this.duration.setText(String.valueOf(this.watchedFor));
+            isAlive.setText("Now tracking(Dead)");
+            watchedFor++;
+            duration.setText(String.valueOf(watchedFor));
 
-            this.clearSelection(true);
+            clearSelection(true);
 
 
             String [] options = {"Yes", "No"};
@@ -169,13 +173,13 @@ public class TrackingPanel extends AbstractSimulationPagePanel implements IChang
         else {
             for (Animal parent : animal.getParents()){
                 if (parent.isSelected()){
-                    this.curChildren--;
-                    this.children.setText(String.valueOf(curChildren));
+                    curChildren--;
+                    children.setText(String.valueOf(curChildren));
                 }
             }
 
-            this.curDesc.remove(element);
-            this.descendants.setText(String.valueOf(curDesc.size()));
+            curDesc.remove(element);
+            descendants.setText(String.valueOf(curDesc.size()));
         }
     }
 
@@ -184,9 +188,9 @@ public class TrackingPanel extends AbstractSimulationPagePanel implements IChang
 
     @Override
     public void enableElements(boolean enable) {
-        if (!enable) this.clearSelection.setEnabled(false);
+        if (!enable) clearSelection.setEnabled(false);
         else{
-            if (!this.genome.getText().equals("None"))this.clearSelection.setEnabled(true);
+            if (!genome.getText().equals("None"))clearSelection.setEnabled(true);
         }
     }
 }

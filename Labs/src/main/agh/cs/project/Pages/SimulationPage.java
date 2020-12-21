@@ -10,7 +10,10 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SimulationPage {
+public class SimulationPage implements ActionListener{
+
+//Klasa nadzorująca komunikację między symulacją a jej reprezentacją, statystykami etc.
+
     private final IMapViz map;
     private final StatsPanel stats;
     private final SelectPanel selectAnimal;
@@ -24,24 +27,24 @@ public class SimulationPage {
     public SimulationPage(GrassField field, ProjectEngine engine){
         Color borderColor = new Color(131, 125, 74);
 
-        List<AbstractSimulationPagePanel> enableList = new ArrayList<AbstractSimulationPagePanel>();
+        List<AbstractSimulationPagePanel> enableList = new ArrayList<>();
 
         boolean tooBig = engine.tooBig;
         this.field = field;
 
         int minMapHeight = 650;
         int minMapWidth = 400;
-        int statsWidth = 400;    //trzeba ustawić w formularzu
+        int statsWidth = 400;
 
         int fieldSize;
         int mapWidth;
         int mapHeight;
         if (!tooBig){
-            fieldSize = Math.min(600 / field.width, 1100 / field.height);
+            fieldSize = Math.min(650 / field.height, 1100 / field.width);
             fieldSize = Math.min(100, fieldSize);
             fieldSize = Math.max(fieldSize, 10);
-            mapHeight = fieldSize * field.width;
-            mapWidth = (int) (mapHeight * ((float) field.height / (float) field.width));
+            mapHeight = fieldSize * field.height;
+            mapWidth = (int) (mapHeight * ((float) field.width / (float) field.height));
         }
         else {
             fieldSize = 50;
@@ -52,7 +55,7 @@ public class SimulationPage {
         int totalHeight = Math.max(mapHeight, minMapHeight) + 100;
         int totalWidth = Math.max(mapWidth, minMapWidth) + statsWidth;
 
-        this.f = new JFrame("Simulation Map");
+        f = new JFrame("Simulation Map");
         f.setSize(totalWidth, totalHeight);
         f.setFocusableWindowState(true);
         f.setResizable(false);
@@ -72,12 +75,12 @@ public class SimulationPage {
         contentPane.add(left);
 
         if (!tooBig) {
-            this.map = new MapPanel(this, field, mapWidth, mapHeight, fieldSize);    //mapa
-            left.add((MapPanel)this.map);
+            map = new MapPanel(this, field, mapWidth, mapHeight, fieldSize);    //mapa
+            left.add((MapPanel)map);
         }
         else {
-            this.map = new PositionPanel(this, field, mapHeight);
-            left.add((PositionPanel)this.map);
+            map = new PositionPanel(this, field, mapHeight);
+            left.add((PositionPanel)map);
         }
         left.add(Box.createVerticalGlue());
 
@@ -87,13 +90,13 @@ public class SimulationPage {
 
         StartButtonPanel buttonPanel = new StartButtonPanel();
         buttonPanel.setBackground(borderColor);
-        this.stopButton = buttonPanel.getStopButton();
+        stopButton = buttonPanel.getStopButton();
 
         delayPanel.setAlignmentY(Component.BOTTOM_ALIGNMENT);
         enableList.add(delayPanel);
         left.add(buttonPanel);
 
-        this.isRunning = false;
+        isRunning = false;
 
 //Początek prawej strony
 
@@ -102,14 +105,14 @@ public class SimulationPage {
         right.setLayout(new BoxLayout(right, BoxLayout.PAGE_AXIS));
         contentPane.add(right);
 
-        this.stats = new StatsPanel(statsWidth);
+        stats = new StatsPanel(statsWidth);
         enableList.add(stats);
         right.add(stats);
 
         TrackingPanel trackAnimal = new TrackingPanel(statsWidth, buttonPanel.getStopButton());
         enableList.add(trackAnimal);
 
-        this.selectAnimal = new SelectPanel(statsWidth, trackAnimal, stats);
+        selectAnimal = new SelectPanel(statsWidth, trackAnimal, stats);
         enableList.add(selectAnimal);
 
 
@@ -125,16 +128,16 @@ public class SimulationPage {
             }
         });
 
-//Listenery guzików
+//Listenery guzików; zadeklarowane tu, żeby nie mieszały się z tymi odpowiedzialnymi za wybór zwierząt
 
         buttonPanel.getStatsButton().addActionListener(e -> stats.loadFile());
 
-        this.stopButton.addActionListener(e -> {
+        stopButton.addActionListener(e -> {
             synchronized (engine) {
-                if (this.isRunning) {
-                    this.stopButton.setText("Resume Simulation");
+                if (isRunning) {
+                    stopButton.setText("Resume Simulation");
                     delayPanel.getDelayText().setEnabled(true);
-                    this.isRunning = false;
+                    isRunning = false;
                     engine.pause();
                     for (AbstractSimulationPagePanel panel : enableList){
                         panel.enableElements(true);
@@ -152,10 +155,10 @@ public class SimulationPage {
                                     panel.enableElements(false);
                                 }
                                 buttonPanel.getStatsButton().setEnabled(false);
-                                this.stopButton.setText("Stop Simulation");
+                                stopButton.setText("Stop Simulation");
                                 engine.unpause(delay);
                                 delayPanel.getDelayText().setEnabled(false);
-                                this.isRunning = true;
+                                isRunning = true;
                             } else {
                                 JOptionPane.showMessageDialog(f, "Delay value must be a positive integer!!!", "Error!", JOptionPane.ERROR_MESSAGE);
                             }
@@ -172,20 +175,29 @@ public class SimulationPage {
 //Metody
 
     public IMapViz getMap (){
-        return this.map;
+        return map;
     }
 
     public StatsPanel getStats (){
-        return this.stats;
+        return stats;
     }
 
+    public void terminated(){
+        JOptionPane.showMessageDialog(f, "All animals have died. Simulation has terminated.", "End of simulation", JOptionPane.WARNING_MESSAGE);
+        stopButton.doClick();
+        stopButton.setEnabled(false);
+    }
+
+//
+
+    @Override
     public void actionPerformed(ActionEvent e){
         if (!isRunning){
             JButton source = (JButton) e.getSource();
-            Vector2d position = Vector2d.fromString(source.getName());
+            Vector2d position = new Vector2d(source.getName());
             if (field.objectAt(position) instanceof AnimalSortedList){
                 Animal selected = ((AnimalSortedList) field.objectAt(position)).getAllTop().get(0);
-                this.selectAnimal.selectedAnimal(selected);
+                selectAnimal.selectedAnimal(selected);
             }
             else {
                 JOptionPane.showMessageDialog(f, "There aren't any animals on this field!!!", "Error!", JOptionPane.ERROR_MESSAGE);
@@ -194,12 +206,6 @@ public class SimulationPage {
         else {
             JOptionPane.showMessageDialog(f, "Can't select animal while the simulation is running!!!", "Error!", JOptionPane.ERROR_MESSAGE);
         }
-    }
-
-    public void terminated(){
-        JOptionPane.showMessageDialog(f, "All animals have died. Simulation has terminated.", "End of simulation", JOptionPane.WARNING_MESSAGE);
-        this.stopButton.doClick();
-        this.stopButton.setEnabled(false);
     }
 }
 

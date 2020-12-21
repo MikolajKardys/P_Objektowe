@@ -9,6 +9,9 @@ import java.awt.*;
 import java.util.List;
 
 public class MapPanel extends JPanel implements IMapViz{
+
+//Fragment okienka obsługujący faktyczną mapę
+
     private final GrassField field;
     private final int fieldSize;
 
@@ -22,33 +25,33 @@ public class MapPanel extends JPanel implements IMapViz{
         this.field = field;
         this.fieldSize = fieldSize;
 
-        this.setBackground(steppeColor);
-        this.setPreferredSize(new Dimension(mapWidth, mapHeight));
-        this.setMinimumSize(new Dimension(mapWidth, mapHeight));
-        this.setMaximumSize(new Dimension(mapWidth, mapHeight));
-        this.setAlignmentX(CENTER_ALIGNMENT);
+        setBackground(steppeColor);
+        setPreferredSize(new Dimension(mapWidth, mapHeight));
+        setMinimumSize(new Dimension(mapWidth, mapHeight));
+        setMaximumSize(new Dimension(mapWidth, mapHeight));
+        setAlignmentX(CENTER_ALIGNMENT);
 
-        this.fields = new JButton[field.width][field.height];
-        this.setLayout(new GridLayout(field.width, field.height));
-        for(int x = 0; x < field.width; x++) {
-            for(int y = 0; y < field.height; y++){
+        fields = new JButton[field.height][field.width];
+        setLayout(new GridLayout(field.height, field.width));
+        for(int x = 0; x < field.height; x++) {
+            for(int y = 0; y < field.width; y++){
                 JButton newButton = new JButton();
-                this.fields[x][y] = newButton;
+                fields[x][y] = newButton;
                 newButton.setOpaque(false);
                 newButton.setName(x + " " + y);
                 newButton.setContentAreaFilled(false);
                 newButton.addActionListener(mainPage::actionPerformed);
-                this.add(newButton);
+                add(newButton);
             }
         }
     }
 
     public void highLight(int indX, int indY){
-        this.fields[indX][indY].setBorder(new MatteBorder(4, 4, 4, 4, Color.blue));
+        fields[indX][indY].setBorder(new MatteBorder(4, 4, 4, 4, Color.blue));
     }
 
     public void removeHighLight(int indX, int indY){
-        this.fields[indX][indY].setBorder(UIManager.getBorder("Button.border"));
+        fields[indX][indY].setBorder(UIManager.getBorder("Button.border"));
     }
 
     @Override
@@ -58,10 +61,10 @@ public class MapPanel extends JPanel implements IMapViz{
         //Paint Jungle
         Vector2d jungleLower = field.getJungleLowerCorner();
         Vector2d jungleUpper = field.getJungleUpperCorner();
-        int jungleX = jungleUpper.y - jungleLower.y + 1;
-        int jungleY = jungleUpper.x - jungleLower.x + 1;
+        int jungleX = jungleUpper.x - jungleLower.x + 1;
+        int jungleY = jungleUpper.y - jungleLower.y + 1;
         g.setColor(jungeColor);
-        g.fillRect(jungleLower.y * fieldSize, jungleLower.x * fieldSize,
+        g.fillRect(jungleLower.x * fieldSize, jungleLower.y * fieldSize,
                 jungleX * fieldSize, jungleY * fieldSize);
 
         //Paint Grass
@@ -69,8 +72,8 @@ public class MapPanel extends JPanel implements IMapViz{
         List<Grass> grassList = field.getGrasses();
         for (Grass grass : grassList) {
             if (grass != null) {
-                int y = grass.getPosition().x * fieldSize;
-                int x = grass.getPosition().y * fieldSize;
+                int x = grass.getPosition().x * fieldSize;
+                int y = grass.getPosition().y * fieldSize;
                 g.fillRect(x, y, fieldSize, fieldSize);
             }
         }
@@ -79,8 +82,8 @@ public class MapPanel extends JPanel implements IMapViz{
         List<AnimalSortedList> animalLists = field.getAnimals();
         for (AnimalSortedList animals : animalLists) {
             Animal animal = animals.getAllTop().get(0);
-            int y = animal.getPosition().x * fieldSize;
-            int x = animal.getPosition().y * fieldSize;
+            int x = animal.getPosition().x * fieldSize;
+            int y = animal.getPosition().y * fieldSize;
             g.setColor(animal.getHealthColor());
             g.fillRect(x, y, fieldSize, fieldSize);
         }
