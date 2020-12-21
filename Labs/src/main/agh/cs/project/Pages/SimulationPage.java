@@ -40,7 +40,7 @@ public class SimulationPage implements ActionListener{
         int mapWidth;
         int mapHeight;
         if (!tooBig){
-            fieldSize = Math.min(650 / field.height, 1100 / field.width);
+            fieldSize = Math.min(600 / field.height, 1100 / field.width);
             fieldSize = Math.min(100, fieldSize);
             fieldSize = Math.max(fieldSize, 10);
             mapHeight = fieldSize * field.height;
