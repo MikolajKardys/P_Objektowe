@@ -8,8 +8,10 @@ import java.io.FileReader;
 
 public class Parameters {
 
-    String [] parametrs;
-    String [] keyWords;
+//Klasa wczytująca parametry z pliku JSON
+
+    private final String [] parametrs;
+    private final String [] keyWords;
 
     public Parameters() {
         parametrs = new String [7];
@@ -17,7 +19,7 @@ public class Parameters {
     }
 
     public String [] getParameters(){
-        this.reloadParameters();
+        reloadParameters();
         return parametrs;
     }
 

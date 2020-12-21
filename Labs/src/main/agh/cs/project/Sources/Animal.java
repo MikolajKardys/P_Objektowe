@@ -12,22 +12,21 @@ public class Animal extends AbstractWorldMapElement {
     private final int moveEnergy;
 
     private final Genome genome;
+    private boolean isSelected;
 
-    public boolean isSelected;
-
-    public int startEnergy;
+    private int startEnergy;
     private int energy;
-    public int lifeLength = 0;
+    private int lifeLength = 0;
 
-    public final ArrayList<Animal> parents;
-    public final ArrayList<Animal> children;
+    private final ArrayList<Animal> parents;
+    private final ArrayList<Animal> children;
 
     public Animal(GrassField map, Vector2d initialPosition, int energy, int moveEnergy) {
         this(map, initialPosition, energy, moveEnergy, new Genome());
-        this.startEnergy = energy;
+        startEnergy = energy;
 
-        this.addObserver(map);
-        this.alertObserversAdded();
+        addObserver(map);
+        alertObserversAdded();
     }
 
     public Animal(Animal aParent, Animal bParent){
@@ -38,66 +37,113 @@ public class Animal extends AbstractWorldMapElement {
 
         aParent.changeEnergy(-(aParent.energy / 4));
         bParent.changeEnergy(-(bParent.energy / 4));
-        this.startEnergy = aParent.startEnergy;
+        startEnergy = aParent.startEnergy;
 
-        this.parents.add(aParent);
-        this.parents.add(bParent);
+        parents.add(aParent);
+        parents.add(bParent);
         aParent.children.add(this);
         bParent.children.add(this);
 
-        this.addObserver(map);
+        addObserver(map);
 
         if (aParent.observers.size() > 1){
-            this.addObserver(aParent.observers.get(1));
+            addObserver(aParent.observers.get(1));
         }
         else if (bParent.observers.size() > 1){
-            this.addObserver(bParent.observers.get(1));
+            addObserver(bParent.observers.get(1));
         }
 
-        this.alertObserversAdded();
+        alertObserversAdded();
     }
 
     private Animal(GrassField map, Vector2d initialPosition, int energy, int moveEnergy, Genome genome) {
         super(initialPosition);
         this.map = map;
-        this.direction = MapDirection.newMapDirection((int)(Math.random() * 8));
+        direction = MapDirection.newMapDirection((int)(Math.random() * 8));
         this.energy = energy;
         this.moveEnergy = moveEnergy;
         this.genome = genome;
 
-        this.children = new ArrayList<>();
-        this.parents = new ArrayList<>();
+        children = new ArrayList<>();
+        parents = new ArrayList<>();
 
-        this.isSelected = false;
+        isSelected = false;
     }
 
+/////////////////////////////////////////////////////////////////////////////////////
 
-    public ArrayList<EventType> newMove(){
+//Gettery
+
+    public int getEnergy() {
+        return energy;
+    }
+
+    public Genome getGenome(){
+        return genome;
+    }
+
+    public void select(boolean doSelect){
+        isSelected = doSelect;
+    }
+    public boolean isSelected(){
+        return isSelected;
+    }
+
+    public boolean canBreed(){
+        return energy > startEnergy / 2;
+    }
+
+    public int getLifeLength(){
+        return lifeLength;
+    }
+
+    public int getChildNumber(){
+        return children.size();
+    }
+
+    public int getParentNumber(){
+        return parents.size();
+    }
+
+    public ArrayList<Animal> getParents(){
+        return parents;
+    }
+
+///////////////////////////////////////////////////////////////////////////////////////
+
+//Metody do obsługi stanu zwierzęcia w symulacji
+
+    public ArrayList<EventType> move(){
         ArrayList<EventType> possibleEvents = new ArrayList<>();
-        this.changeEnergy(-moveEnergy);
+        changeEnergy(-moveEnergy);
 
-        int randomTurn = this.genome.getRandomGene();
+        int randomTurn = genome.getRandomGene();
         MoveDirection turn = MoveDirection.valueOf("TURN_" + randomTurn);
 
-        Vector2d oldPosition = this.getPosition();
-        this.direction = this.direction.turn(turn);
-        Vector2d finalPosition = this.position.add(this.direction.toUnitVector());
+        Vector2d oldPosition = getPosition();
+        direction = direction.turn(turn);
+        Vector2d finalPosition = position.add(direction.toUnitVector());
 
         finalPosition = map.convertToMovable(finalPosition);
-        if (this.map.isAnimalAt(finalPosition)){
+        if (map.isAnimalAt(finalPosition)){
             possibleEvents.add(EventType.Breading);
         }
-        this.position = finalPosition;
+        position = finalPosition;
 
-        this.alertObserversMoved(oldPosition);
+        alertObserversMoved(oldPosition);
 
-        if (this.map.isGrassAt(this.position)){      //try to eat
+        if (map.isGrassAt(position)){      //try to eat
             possibleEvents.add(EventType.Eating);
         }
 
         lifeLength++;
 
         return possibleEvents;
+    }
+
+    public void changeEnergy(int change){
+        energy += change;
+        alertObserversEnergy(change);
     }
 
     public void kill(){
@@ -107,10 +153,12 @@ public class Animal extends AbstractWorldMapElement {
         for (Animal child : children){
             child.parents.remove(this);
         }
-        this.alertObserversDied();
+        alertObserversDied();
     }
 
 //////////////////////////////////////////////////////////////////////////////////////
+
+//Metody do obsługi observerów
 
     public void addObserver(IChangeObserver observer) {
         observers.add(observer);
@@ -146,48 +194,42 @@ public class Animal extends AbstractWorldMapElement {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//Merody do obsługi graficznej reprezentacji zwierzęcia
+
     public Color getHealthColor(){
         float healthScale = startEnergy;
-        if (this.energy >= healthScale){
+        if (energy >= healthScale){
             return new Color(0, 255, 0);
         }
-        if (this.energy >= (healthScale / 2)){
-            float healthPart = (this.energy - (healthScale / 2)) / (healthScale / 2);
+        if (energy <= 0){
+            return new Color(255, 0, 0);
+        }
+        if (energy >= (healthScale / 2)){
+            float healthPart = (energy - (healthScale / 2)) / (healthScale / 2);
             return new Color((int)(255 * (1 - healthPart)), 255, 0);
         }
-        float healthPart = (float)(this.energy) / (healthScale / 2);
+        float healthPart = (float)(energy) / (healthScale / 2);
         return new Color(255, (int)(255 * healthPart), 0);
     }
 
     @Override
     public String toString(){
-        return this.position.toString();
+        return position.toString();
+    }
+
+    public void highLight(){
+        map.highLight(position);
+    }
+
+    public void removeHighLight(){
+        map.removeHighLight(position);
     }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public void sortThisField(){
-        ((AnimalSortedList) this.map.objectAt(this.position)).sort();
+        ((AnimalSortedList) map.objectAt(position)).sort();
     }
 
-    public int getEnergy() {
-        return energy;
-    }
 
-    public void changeEnergy(int change){
-        this.energy += change;
-        this.alertObserversEnergy(change);
-    }
-
-    public Genome getGenome(){
-        return genome;
-    }
-
-    public void highLight(){
-        this.map.highLight(this.position);
-    }
-
-    public void removeHighLight(){
-        this.map.removeHighLight(this.position);
-    }
 }

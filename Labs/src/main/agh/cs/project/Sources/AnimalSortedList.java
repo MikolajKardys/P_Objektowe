@@ -3,53 +3,55 @@ package agh.cs.project.Sources;
 import java.util.*;
 
 public class AnimalSortedList extends ArrayList<Animal>{
+
+//Struktura przechowująca zwierzęta posortowane po energii
+
     private static class compareHealth implements Comparator<Animal>{
         public int compare (Animal a, Animal b){
-            if (b.getEnergy() == a.getEnergy()){
-                return b.hashCode() - a.hashCode();
-            }
             return b.getEnergy() - a.getEnergy();
-
         }
     }
 
+    //Tworzy listę i od razu dodaje pierwszy element
     public AnimalSortedList(Animal firstAnimal){
-        super();
-        this.add(firstAnimal);
+        add(firstAnimal);
     }
 
+    //Zwraca listę wszystkich zwierząt o najwyższej energii
     public ArrayList<Animal> getAllTop(){
-        if (this.size() == 0){
+        if (size() == 0){
             return null;
         }
-        AnimalSortedList allTop = new AnimalSortedList(this.get(0));
+        AnimalSortedList allTop = new AnimalSortedList(get(0));
         int i = 1;
-        while (i < this.size() && this.get(i).getEnergy() == allTop.get(0).getEnergy()){
-            allTop.add(this.get(i));
+        while (i < size() && get(i).getEnergy() == allTop.get(0).getEnergy()){
+            allTop.add(get(i));
             i++;
         }
         return allTop;
     }
 
+    //Zwraca pierwsze dwa elementy z góry listy
     public ArrayList<Animal> getTopTwo(){
-        if (this.size() < 2){
+        if (size() < 2){
             return null;
         }
-        ArrayList<Animal> topTwo = this.getAllTop();
+        ArrayList<Animal> topTwo = getAllTop();
         if (topTwo.size() == 1){
-            topTwo.add(this.get(1));
+            topTwo.add(get(1));
         }
         return topTwo;
     }
 
     public void sort(){
-        this.sort(new compareHealth());
+        sort(new compareHealth());
     }
 
+    //Wstawia do posortowanej listy
     @Override
     public boolean add(Animal newAnimal){
         int ind = 0;
-        while (ind < this.size() && newAnimal.getEnergy() < this.get(ind).getEnergy()){
+        while (ind < size() && newAnimal.getEnergy() < get(ind).getEnergy()){
             ind++;
         }
         super.add(ind, newAnimal);

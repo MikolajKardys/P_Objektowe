@@ -4,12 +4,18 @@ import java.util.*;
 
 public class GenomeQuantitySet{
 
+//Multizbiór genów; dla każdy gen jest przechowywany wraz z ilością jego wystąpień; posortowany malejąco po ilości wystąpień
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//Klasy pomocnicze
+
     private static class GenomeQuantitySetElement{
         public Genome genome;
         public int muliple;
         public GenomeQuantitySetElement(Genome genome){
             this.genome = genome;
-            this.muliple = 1;
+            muliple = 1;
         }
     }
 
@@ -23,39 +29,45 @@ public class GenomeQuantitySet{
         }
     }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     private final SortedSet<GenomeQuantitySetElement> quantitySet;
 
     public GenomeQuantitySet(){
-        this.quantitySet = new TreeSet<>(new compareGenomes());
+        quantitySet = new TreeSet<>(new compareGenomes());
     }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public void add(Genome genome) {
         GenomeQuantitySetElement newElement = new GenomeQuantitySetElement(genome);
         for (GenomeQuantitySetElement element : quantitySet) {
             if (element.genome.compare(newElement.genome) == 0) {
-                this.quantitySet.remove(element);
+                quantitySet.remove(element);
                 element.muliple++;
-                this.quantitySet.add(element);
+                quantitySet.add(element);
                 return;
             }
         }
-        this.quantitySet.add(newElement);
+        quantitySet.add(newElement);
     }
 
     public void remove(Genome genome) {
         GenomeQuantitySetElement newElement = new GenomeQuantitySetElement(genome);
         for (GenomeQuantitySetElement element : quantitySet) {
             if (element.genome.compare(newElement.genome) == 0) {
-                this.quantitySet.remove(element);
+                quantitySet.remove(element);
                 element.muliple--;
-                if (element.muliple > 0) this.quantitySet.add(element);
+                if (element.muliple > 0) quantitySet.add(element);
                 return;
             }
         }
     }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     public Genome getDominant(){
-        if (this.quantitySet.size() == 0) return null;
-        return this.quantitySet.first().genome;
+        if (quantitySet.size() == 0) return null;
+        return quantitySet.first().genome;
     }
 }

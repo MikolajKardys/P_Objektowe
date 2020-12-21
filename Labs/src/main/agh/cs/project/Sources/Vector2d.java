@@ -8,22 +8,23 @@ public class Vector2d {
     public final int x;
     public final int y;
 
+    public Vector2d(String name){                    //Jedyny dodatek; kreuje wektor ze stringa postaci "x y"
+        Scanner scanner = new Scanner(name);
+        this.x = scanner.nextInt();
+        this.y = scanner.nextInt();
+    }
+
     public Vector2d(int x, int y) {
         this.x = x;
         this.y = y;
     }
 
     public String toString() {
-        return "(" + this.x + "," + this.y + ")";
-    }
-
-    public static Vector2d fromString(String name){
-        Scanner scanner = new Scanner(name);
-        return new Vector2d(scanner.nextInt(), scanner.nextInt());
+        return "(" + x + "," + y + ")";
     }
 
     public Vector2d add(Vector2d other) {
-        return new Vector2d(this.x + other.x, this.y + other.y);
+        return new Vector2d(x + other.x, y + other.y);
     }
 
     public boolean equals(Object other) {
@@ -32,25 +33,23 @@ public class Vector2d {
         if (!(other instanceof Vector2d))
             return false;
         Vector2d other_vec = (Vector2d) other;
-        return this.x == other_vec.x && this.y == other_vec.y;
+        return x == other_vec.x && y == other_vec.y;
     }
 
     public Vector2d opposite() {
-        return new Vector2d(this.x * (-1), this.y * (-1));
+        return new Vector2d(x * (-1), y * (-1));
     }
 
     public boolean precedes(Vector2d other) {
-        if (this.x <= other.x && this.y <= other.y) return true;
-        return false;
+        return x <= other.x && y <= other.y;
     }
 
     public boolean follows(Vector2d other) {
-        if (this.x >= other.x && this.y >= other.y) return true;
-        return false;
+        return x >= other.x && y >= other.y;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.x, this.y);
+        return Objects.hash(x, y);
     }
 }

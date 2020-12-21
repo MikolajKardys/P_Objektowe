@@ -1,60 +1,51 @@
 package agh.cs.project.Sources;
 
-import java.util.Arrays;
 import java.util.Random;
 
 public class Genome {
+
+//Struktura przechowująca i wykonująca potrzebne operacje na genomach
+
     private final int [] genes = new int [32];
-    private final int [] quantities = new int [] {0, 0, 0, 0, 0, 0, 0, 0};
     private final static Random random = new Random();
 
-    public Genome() {
+    public Genome() {                         //konstruktor losowego genomu
+        int [] quantities = new int [] {0, 0, 0, 0, 0, 0, 0, 0};
         for (int i = 0; i < 32; i++){
             int randInd = (int)(Math.random() * 8);
             quantities[randInd]++;
         }
-        this.genomeFromQuantities();
+        genomeFromQuantities(quantities);
     }
-    public Genome (Genome genomeA, Genome genomeB){
-        int [] firstParent;
-        int [] secondParent;
+    public Genome (Genome genomeA, Genome genomeB){ //konstruktor genomu odziedziczonego po rodzicach
+        int [] firstParentGenes;
+        int [] secondParentGenes;
         int whichParent = (int)(Math.random() * 2);
         if (whichParent == 0){
-            firstParent = genomeA.genes;
-            secondParent = genomeB.genes;
+            firstParentGenes = genomeA.genes;
+            secondParentGenes = genomeB.genes;
         }
         else {
-            firstParent = genomeB.genes;
-            secondParent = genomeA.genes;
+            firstParentGenes = genomeB.genes;
+            secondParentGenes = genomeA.genes;
         }
 
         int switchIndexOne = (int)(Math.random() * 30) + 1;
         int switchIndexTwo = (int)(Math.random() * 30) + 1;
         while (switchIndexTwo == switchIndexOne) switchIndexTwo = (int)(Math.random() * 30) + 1;
 
-        int [] curParent = firstParent;
+        int [] quantities = new int [] {0, 0, 0, 0, 0, 0, 0, 0};
+        int [] curParentGenes = firstParentGenes;
         for (int i = 0; i < 32; i++){
-            if (i == switchIndexOne) curParent = secondParent;
-            if (i == switchIndexTwo) curParent = firstParent;
-            quantities[curParent[i]]++;
+            if (i == switchIndexOne) curParentGenes = secondParentGenes;
+            if (i == switchIndexTwo) curParentGenes = firstParentGenes;
+            quantities[curParentGenes[i]]++;
         }
-
-        genomeFromQuantities();
+        genomeFromQuantities(quantities);
     }
 
-    public String toString(){
-        return Arrays.toString(this.quantities);
-    }
-
-    public String toLongString() {
-        StringBuilder s = new StringBuilder();
-        for (int i = 0; i < 32; i++){
-            s.append(this.genes[i]);
-        }
-        return s.toString();
-    }
-
-    private void genomeFromQuantities(){
+    //Ustawia odpowiedni genom za pomocą tablicy, w której quantities[i] jest równe ilości wystąpień i w genomie
+    private void genomeFromQuantities(int [] quantities){
         for (int i = 0; i < 8; i++){
             while (quantities[i] == 0){
                 int randInd = (int)(Math.random() * 8);
@@ -67,19 +58,33 @@ public class Genome {
         int ind = 0;
         for (int i = 0; i < 8; i++){
             for (int j = 0; j < quantities[i]; j++, ind++){
-                this.genes[ind] = i;
+                genes[ind] = i;
             }
         }
     }
 
-    public int getRandomGene(){
-        return this.genes[random.nextInt(genes.length)];
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    @Override
+    public String toString() {                             //zwraca genom jako 32-znakowy string
+        StringBuilder s = new StringBuilder();
+        for (int i = 0; i < 32; i++){
+            s.append(genes[i]);
+        }
+        return s.toString();
     }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public int getRandomGene(){
+        return genes[random.nextInt(genes.length)];
+    }
+
+    //prosty komparator, porównujący geny "alfabetycznie"
     public int compare(Genome other){
-        for (int i = 0; i < 8; i++){
-            if (this.quantities[i] != other.quantities[i]){
-                return this.quantities[i] - other.quantities[i];
+        for (int i = 0; i < 32; i++){
+            if (genes[i] != other.genes[i]){
+                return genes[i] - other.genes[i];
             }
         }
         return 0;

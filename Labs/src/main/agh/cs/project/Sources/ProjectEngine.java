@@ -8,6 +8,8 @@ import javax.swing.Timer;
 
 public class ProjectEngine implements ActionListener {
 
+//Silnik obsługujący symulacje dla danej mapy
+
     private final List<Animal> Animals = new ArrayList<>() {
         @Override
         public Animal remove(int index) {
@@ -15,7 +17,6 @@ public class ProjectEngine implements ActionListener {
             return super.remove(index);
         }
     };
-    private final int energyToSurvive;
     private final int plantEnergy;
     private final GrassField field;
     private boolean terminated;
@@ -27,10 +28,8 @@ public class ProjectEngine implements ActionListener {
     public final boolean tooBig;
 
     public ProjectEngine(int width, int height, int animalNumber, int startEnergy, int moveEnergy, int plantEnergy, float jungleRatio){
-        this.tooBig = ((width > 62) || (height > 100));
-
+        tooBig = ((width > 100) || (height > 60));
         GrassField field = new GrassField(width, height, jungleRatio, this);
-        this.energyToSurvive = moveEnergy;
         this.plantEnergy = plantEnergy;
         this.field = field;
 
@@ -50,17 +49,17 @@ public class ProjectEngine implements ActionListener {
 
         timer = new Timer(200, this);
 
-        this.terminated = false;
+        terminated = false;
     }
 
     public void pause(){
-        this.paused = true;
+        paused = true;
     }
 
     public void unpause(int delay){
-        this.paused = false;
-        this.notifyAll();
-        this.start(delay);
+        paused = false;
+        notifyAll();
+        start(delay);
     }
 
     public void start(int delay){
@@ -73,31 +72,32 @@ public class ProjectEngine implements ActionListener {
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
-        if (terminated){
+    public void actionPerformed(ActionEvent e) {         //Reprezentuje jedno pełne przejście epoki
+        if (terminated){                         //Sprawdzamy czy symulacja już się skończyła lub czy została zapauzowana
             return;
         }
-        if (this.Animals.size() == 0){
-            this.cancel();
-            this.terminated = true;
-            this.field.terminated();
+        if (Animals.size() == 0){
+            cancel();
+            terminated = true;
+            field.terminated();
         }
-        else if (this.paused){
-            this.cancel();
+        else if (paused){
+            cancel();
         }
         else {
             int ind = 0;
-            while (ind < Animals.size()) {            //Usuwamy, bo zwierze które nie może się ruszyć i tak już nic nie zrobi
+            while (ind < Animals.size()) {            //Usunięcie martwych zwierząt
                 Animal curAnimal = Animals.get(ind);
-                if (curAnimal.getEnergy() < this.energyToSurvive) {
+                if (curAnimal.getEnergy() <= 0) {
                     Animals.remove(ind);
                 } else ind++;
             }
 
-            FieldEventMap eatEventMap = new FieldEventMap(this.plantEnergy);
+            FieldEventMap eatEventMap = new FieldEventMap(plantEnergy);
             FieldEventMap breedEventMap = new FieldEventMap();
+
             for (Animal animal : Animals) {
-                ArrayList<EventType> events = animal.newMove();
+                ArrayList<EventType> events = animal.move();
                 if (events.contains(EventType.Eating)) {
                     eatEventMap.addAnimal(animal);
                 }
@@ -109,7 +109,7 @@ public class ProjectEngine implements ActionListener {
             eatEventMap.resolveEating();
 
             ArrayList<Animal> newAnimals = breedEventMap.resolveBreeding();
-            this.Animals.addAll(newAnimals);
+            Animals.addAll(newAnimals);
 
             field.growGrass();
 

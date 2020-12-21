@@ -164,7 +164,7 @@
           <text value=""/>
         </properties>
       </component>
-      <component id="3ca63" class="javax.swing.JTextField" binding="jungeRatio">
+      <component id="3ca63" class="javax.swing.JTextField" binding="jungeRatioField">
         <constraints>
           <grid row="6" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="4" fill="0" indent="0" use-parent-layout="false">
             <minimum-size width="75" height="-1"/>

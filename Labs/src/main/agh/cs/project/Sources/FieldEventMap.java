@@ -3,6 +3,9 @@ package agh.cs.project.Sources;
 import java.util.ArrayList;
 
 public class FieldEventMap extends FieldMap{
+
+//Struktura rozstrzygająca 3. i 4. etap każdej epoki
+
     private final int plantEnergy;
 
     public FieldEventMap(){
@@ -13,24 +16,24 @@ public class FieldEventMap extends FieldMap{
     }
 
     public void resolveEating(){
-        for (AnimalSortedList field : this.values()){
+        for (AnimalSortedList field : values()){
             ArrayList<Animal> hungryAnimals = field.getAllTop();
             int energyForEach = plantEnergy / hungryAnimals.size();
             for (Animal hippo : hungryAnimals){
                 hippo.changeEnergy(energyForEach);
             }
         }
-        this.clear();
+        clear();
     }
 
-    public ArrayList<Animal> resolveBreeding(){
+    public ArrayList<Animal> resolveBreeding(){             //Zwraca listę nowo powtałych zwierząt
         ArrayList<Animal> newTab = new ArrayList<>();
-        for (AnimalSortedList field : this.values()){
+        for (AnimalSortedList field : values()){
             ArrayList<Animal> breedingAnimals = field.getTopTwo();
             if (breedingAnimals != null) {
                 Animal aParent = breedingAnimals.get(0);
                 Animal bParent = breedingAnimals.get(1);
-                if (bParent.getEnergy() >= bParent.startEnergy / 2) {
+                if (bParent.canBreed()) {
                     Animal newAnimal = new Animal(aParent, bParent);
                     newTab.add(newAnimal);
                     aParent.sortThisField();

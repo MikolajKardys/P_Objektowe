@@ -7,6 +7,9 @@ import javax.swing.*;
 import java.awt.*;
 
 public class SelectPanel extends AbstractSimulationPagePanel {
+
+//Fragment okienka obsługujący obecnie zaznaczone zwierzę
+
     private JPanel selectPanel;
     private JLabel genome;
     private JButton track;
@@ -15,35 +18,35 @@ public class SelectPanel extends AbstractSimulationPagePanel {
     private Animal curAnimal;
 
     public SelectPanel(int statsWidth, TrackingPanel trackingPanel, StatsPanel stats) {
-        this.setMaximumSize(new Dimension(statsWidth, 200));
-        this.setAlignmentY(TOP_ALIGNMENT);
-        this.setBackground(new Color(187, 187, 187));
-        this.add(selectPanel);
+        setMaximumSize(new Dimension(statsWidth, 200));
+        setAlignmentY(TOP_ALIGNMENT);
+        setBackground(new Color(187, 187, 187));
+        add(selectPanel);
 
-        this.genome.setOpaque(true);
+        genome.setOpaque(true);
 
-        this.track.setEnabled(false);
-        this.clear.setEnabled(false);
+        track.setEnabled(false);
+        clear.setEnabled(false);
 
-        this.clear.addActionListener(e -> this.clearSelection());
+        clear.addActionListener(e -> clearSelection());
 
-        this.track.addActionListener(e -> trackingPanel.selectedAnimal(curAnimal, stats.getDay()));
+        track.addActionListener(e -> trackingPanel.selectedAnimal(curAnimal, stats.getDay()));
     }
 
     public void clearSelection() {
-        this.curAnimal = null;
-        this.genome.setText("None");
-        this.genome.setBackground(new Color(187, 187, 187));
-        this.track.setEnabled(false);
-        this.clear.setEnabled(false);
+        curAnimal = null;
+        genome.setText("None");
+        genome.setBackground(new Color(187, 187, 187));
+        track.setEnabled(false);
+        clear.setEnabled(false);
     }
 
     public void selectedAnimal(Animal animal) {
-        this.curAnimal = animal;
-        this.genome.setText(animal.getGenome().toLongString());
-        this.genome.setBackground(animal.getHealthColor());
-        this.track.setEnabled(true);
-        this.clear.setEnabled(true);
+        curAnimal = animal;
+        genome.setText(animal.getGenome().toString());
+        genome.setBackground(animal.getHealthColor());
+        track.setEnabled(true);
+        clear.setEnabled(true);
     }
 
     @Override
