@@ -8,6 +8,8 @@ import java.io.FileReader;
 
 public class Parameters {
 
+//Klasa wczytująca parametry z pliku JSON
+
     private final String [] parametrs;
     private final String [] keyWords;
 
