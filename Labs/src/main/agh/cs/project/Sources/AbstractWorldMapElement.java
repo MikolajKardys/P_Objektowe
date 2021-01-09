@@ -1,4 +1,4 @@
-package agh.cs.project.Sources;
+package agh.cs.project.Sources; // skoro ten pakiet zawiera źródła, to co zawierają pozostałe?
 
 abstract public class AbstractWorldMapElement {
     protected Vector2d position;

@@ -6,14 +6,14 @@ public class AnimalSortedList extends ArrayList<Animal>{
 
 //Struktura przechowująca zwierzęta posortowane po energii
 
-    private static class compareHealth implements Comparator<Animal>{
+    private static class compareHealth implements Comparator<Animal>{   // nazwa brzmi jak metoda + nazwy klas raczej PascalCase
         public int compare (Animal a, Animal b){
             return b.getEnergy() - a.getEnergy();
         }
     }
 
     //Tworzy listę i od razu dodaje pierwszy element
-    public AnimalSortedList(Animal firstAnimal){
+    public AnimalSortedList(Animal firstAnimal){    // zakłóca czytelność - konstruktor ArrayList ma inny parametr
         add(firstAnimal);
     }
 

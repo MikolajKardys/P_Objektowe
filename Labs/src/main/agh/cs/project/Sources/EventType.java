@@ -1,6 +1,6 @@
 package agh.cs.project.Sources;
 
 public enum EventType {
-    Eating,
+    Eating, // nazwy stałych raczej wielkimi literami
     Breading,
 }

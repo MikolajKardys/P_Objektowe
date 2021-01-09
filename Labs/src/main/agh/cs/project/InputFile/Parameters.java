@@ -1,5 +1,5 @@
 package agh.cs.project.InputFile;
-
+// json to nie źródło, nie powinien siedzieć w src
 import org.json.simple.parser.JSONParser;
 import org.json.simple.JSONObject;
 
@@ -47,7 +47,7 @@ public class Parameters {
                     }
                 }
             }
-        } catch (Exception e) {
+        } catch (Exception e) { // wszystkie wyjątki do jednego worka
             e.printStackTrace();
         }
     }

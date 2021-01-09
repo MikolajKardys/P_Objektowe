@@ -1,4 +1,4 @@
-package agh.cs.project.Sources;
+package agh.cs.project.Sources; // nazwy pakietów raczej małymi literami
 
 import java.awt.*;
 import java.util.ArrayList;

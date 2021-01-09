@@ -20,7 +20,7 @@ public class Genome {
     public Genome (Genome genomeA, Genome genomeB){ //konstruktor genomu odziedziczonego po rodzicach
         int [] firstParentGenes;
         int [] secondParentGenes;
-        int whichParent = (int)(Math.random() * 2);
+        int whichParent = (int)(Math.random() * 2); // ma Pan random
         if (whichParent == 0){
             firstParentGenes = genomeA.genes;
             secondParentGenes = genomeB.genes;
@@ -32,7 +32,7 @@ public class Genome {
 
         int switchIndexOne = (int)(Math.random() * 30) + 1;
         int switchIndexTwo = (int)(Math.random() * 30) + 1;
-        while (switchIndexTwo == switchIndexOne) switchIndexTwo = (int)(Math.random() * 30) + 1;
+        while (switchIndexTwo == switchIndexOne) switchIndexTwo = (int)(Math.random() * 30) + 1;    // do-while
 
         int [] quantities = new int [] {0, 0, 0, 0, 0, 0, 0, 0};
         int [] curParentGenes = firstParentGenes;
@@ -45,7 +45,7 @@ public class Genome {
     }
 
     //Ustawia odpowiedni genom za pomocą tablicy, w której quantities[i] jest równe ilości wystąpień i w genomie
-    private void genomeFromQuantities(int [] quantities){
+    private void genomeFromQuantities(int [] quantities){   // sugeruję naprawę genomu trzymać w osobnej metodzie
         for (int i = 0; i < 8; i++){
             while (quantities[i] == 0){
                 int randInd = (int)(Math.random() * 8);

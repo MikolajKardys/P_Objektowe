@@ -237,7 +237,7 @@ public class GrassField implements IChangeObserver {
 ///////////////////////////////////////////////////////////////////////////////////
 
 //metody do pośredniego kontatku między engine a wizualizacją
-
+// pomieszanie logiki aplikacji i wizualizacji
     public void repaint(){
         if (mainPanel.getMap() instanceof MapPanel) ((MapPanel) mainPanel.getMap()).repaint();
     }

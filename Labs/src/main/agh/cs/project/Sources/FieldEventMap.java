@@ -32,7 +32,7 @@ public class FieldEventMap extends FieldMap{
             ArrayList<Animal> breedingAnimals = field.getTopTwo();
             if (breedingAnimals != null) {
                 Animal aParent = breedingAnimals.get(0);
-                Animal bParent = breedingAnimals.get(1);
+                Animal bParent = breedingAnimals.get(1);    // a co z losowaniem rodziców w przypadku remisu?
                 if (bParent.canBreed()) {
                     Animal newAnimal = new Animal(aParent, bParent);
                     newTab.add(newAnimal);
